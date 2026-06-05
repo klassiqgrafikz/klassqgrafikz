@@ -117,9 +117,12 @@ function ContactPage() {
               <Label htmlFor="message">Message</Label>
               <Textarea id="message" name="message" rows={5} required maxLength={1000} className="mt-1" />
             </div>
-            <Button type="submit" disabled={submitting} className="w-full rounded-full gradient-primary text-primary-foreground shadow-glow">
-              {submitting ? "Sending..." : (<>Send <Send className="ml-2 h-4 w-4" /></>)}
+            <Button asChild type="button" className="w-full rounded-full gradient-primary text-primary-foreground shadow-glow">
+              <a href="https://wa.me/+2347050495704" target="_blank" rel="noreferrer">
+                {submitting ? "Sending..." : (<>Send <Send className="ml-2 h-4 w-4" /></>)}
+              </a>
             </Button>
+            <button type="submit" disabled={submitting} className="sr-only">submit</button>
           </div>
         </form>
       </section>
