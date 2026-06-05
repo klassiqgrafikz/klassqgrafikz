@@ -1,70 +1,52 @@
+# Admin Dashboard — KPIs
 
-# Klassiq Grafikz — Creative Agency Site
+Build a gated admin dashboard at `/_authenticated/_admin/dashboard` showing live KPIs for traffic, contact submissions, and new sign-ups, styled to match the Klassiq Grafikz dark/red aesthetic.
 
-A bookfua.com-inspired site: dark red/black cinematic theme, terminal boot loader, bold rotating-word hero, services grid with popularity bars, live visitor counter, Google-style review wall, and recent-work gallery. Branded for **Klassiq Grafikz** with a Shopify storefront, public accounts, and an admin dashboard.
+## Route structure
 
-## Visual Style (matches bookfua.com)
+- `src/routes/_authenticated/_admin/route.tsx` — pathless admin layout. `beforeLoad` calls a new server fn `requireAdmin()` (uses `requireSupabaseAuth` + `has_role(uid, 'admin')`) and `throw redirect({ to: '/' })` if not admin. Renders `<Outlet />`.
+- `src/routes/_authenticated/_admin/dashboard.tsx` — the dashboard page.
+- (The integration-managed `_authenticated/route.tsx` already gates sign-in.)
 
-- Dark mode default with a light toggle.
-- Palette: near-black background (#0a0000), deep red surfaces (#1a0606), brand red accent (#e10b1a), warm off-white text.
-- Bold uppercase display font (Anton / Bebas Neue) for hero headlines, clean sans (Inter) for body.
-- Subtle red glow halos, soft noise/grid texture on background, rounded glass cards.
-- Motion: terminal-style boot intro on first load, word swap in hero ("WE DESIGN, EDIT, ANIMATE, BRAND..."), scroll-reveal on sections, hover lift on cards.
+## Server functions (`src/lib/admin.functions.ts`)
 
-## Pages (TanStack Start routes)
+All use `.middleware([requireSupabaseAuth])` and verify `has_role(userId, 'admin')` first — throw `Error('Forbidden')` otherwise.
 
-- `/` — Boot loader → hero with rotating verbs + CTA, hero image card with star rating, quick-link tiles (Services, Reviews, Shop, AddUp, Contact), recent work marquee, popular services grid w/ popularity %, live traffic monitor, review wall, footer.
-- `/services` — Full list of services as cards (Flyer, Logos, Birthday designs, Shipping website, Flight trackable ticket, Banners, Photo editing local/foreign, etc.) each with description + "Request via WhatsApp/Contact" CTA.
-- `/shop` — Shopify-powered product grid, product detail, cart, checkout (Shopify Storefront).
-- `/reviews` — Full Google-style review wall + "Leave a review" form (logged-in users).
-- `/addup` — Lead-capture / newsletter / WhatsApp community signup.
-- `/contact` — Contact form (stored in Cloud) + WhatsApp/Instagram quick links.
-- `/auth` — Sign in / sign up (email+password and Google).
-- `/_authenticated/account` — User profile, their submitted reviews and contact requests.
-- `/_authenticated/_admin/dashboard` — Admin manages services, recent posts, reviews (approve/hide), contact submissions, traffic stats.
+- `getAdminKpis()` → returns:
+  - `traffic`: result of `get_traffic_stats()` RPC (online_now, today, this_week, this_month)
+  - `messages`: total contact_submissions, new in last 24h, new in last 7d
+  - `signups`: total profiles, new in last 24h, new in last 7d
+  - `reviews`: pending (is_approved=false) count
+- `listRecentMessages(limit=10)` → latest contact_submissions (name, email, service, message, created_at)
+- `listRecentSignups(limit=10)` → latest profiles (display_name, avatar_url, created_at)
+- `listVisitsSeries(days=14)` → grouped daily counts from page_visits for a small spark chart
 
-## Backend (Lovable Cloud)
+Uses `supabaseAdmin` (imported inside handlers) so we can read all rows regardless of RLS.
 
-Tables:
-- `profiles` (id → auth.users, display_name, avatar_url, created_at)
-- `user_roles` (id, user_id, role enum: admin|user) + `has_role()` security-definer fn
-- `services` (id, title, subtitle, popularity int, link, sort_order, is_active)
-- `reviews` (id, user_id nullable, author_name, body, rating, is_approved, created_at)
-- `recent_posts` (id, image_url, image_dark_url, link, sort_order)
-- `contact_submissions` (id, name, email, phone, message, service, created_at)
-- `page_visits` (id, path, session_id, created_at) for the real-time monitor
+## Dashboard UI
 
-RLS: public SELECT on services/recent_posts/approved reviews; authenticated INSERT on reviews/contact_submissions; admins full access (via `has_role`).
+Sections, top to bottom:
+1. **Header strip** — "Admin / Dashboard" with refresh button (invalidates queries).
+2. **KPI grid** (4 cards): Online Now, Visits Today, New Messages (24h), New Sign-ups (24h). Each card: big number, label, small delta vs previous period, glowing red accent line.
+3. **Traffic chart** — 14-day visits as a minimal bar/area sparkline (Recharts, already installed via shadcn chart).
+4. **Two-column lists**:
+   - Recent Messages (avatar initial, name, service tag, time-ago, expandable body)
+   - Recent Sign-ups (avatar, display name, time-ago)
+5. **Pending Reviews chip** — link to `/reviews` admin filter (future).
 
-Server functions (createServerFn):
-- `listServices`, `listApprovedReviews`, `listRecentPosts` (public)
-- `submitContact`, `submitReview` (auth)
-- Admin CRUD for services/posts/reviews/contact
-- `trackVisit` + `getTrafficStats` (online now, today, week, month)
+Components live in `src/components/admin/`:
+- `KpiCard.tsx`, `VisitsChart.tsx`, `RecentMessages.tsx`, `RecentSignups.tsx`
 
-## Shop
+Data fetched via TanStack Query (`useSuspenseQuery`) using server fns; loader primes cache with `ensureQueryData`. Refetch every 30s for traffic KPI.
 
-Enable Shopify integration (new dev store). Shop, product listing, cart, and checkout flow generated against Shopify.
+## Header link
 
-## Auth
+Add a small "Admin" link to `src/components/site/Header.tsx` visible only when the signed-in user has the admin role (check via a lightweight `getMyRoles()` server fn, cached in Query). Hidden for everyone else.
 
-Email/password + Google sign-in (via Lovable broker). Roles in `user_roles` table. Admin route gated by `_admin` layout calling `has_role`.
+## Out of scope (this step)
 
-## Build Order
+- CRUD for services / recent_posts / reviews approval UI (next step).
+- Pagination / filtering of messages.
+- Exporting data.
 
-1. Design system tokens in `src/styles.css` (dark red/black, brand red), fonts in root, layout shell with branded header/footer.
-2. Home page: boot loader, hero, quick tiles, popular services, traffic monitor, reviews carousel, recent posts marquee (using placeholder images).
-3. Static service/contact/addup pages.
-4. Enable Lovable Cloud → create tables, RLS, server fns; wire contact form, reviews, traffic counter.
-5. Auth (email + Google) and `/account`.
-6. Admin dashboard.
-7. Enable Shopify → build `/shop` with cart/checkout.
-8. Image generation for hero, service icons, recent-post placeholders.
-
-## Out of Scope
-
-- Tutorials section (skipped per your direction).
-- Paid digital downloads.
-- Multi-language.
-
-Ready to implement when you approve. I'll start by enabling Lovable Cloud and Shopify, then build the homepage and design system first so you can see the look ASAP.
+Ready to build when you approve.
