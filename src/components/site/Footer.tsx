@@ -45,9 +45,9 @@ export function Footer() {
         </div>
 
         <div>
-          <div className="mb-3 text-xs uppercase tracking-widest text-muted-foreground">Account</div>
+          <div className="mb-3 text-xs uppercase tracking-widest text-muted-foreground">More</div>
           <ul className="space-y-2 text-sm">
-            <li><Link to="/auth" className="hover:text-primary">Sign in</Link></li>
+            <li><Link to="/dashboard" className="hover:text-primary">Dashboard</Link></li>
             <li><Link to="/contact" className="hover:text-primary">Contact</Link></li>
           </ul>
         </div>
