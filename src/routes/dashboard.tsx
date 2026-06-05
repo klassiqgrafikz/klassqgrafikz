@@ -14,8 +14,8 @@ import {
   listVisitsSeries,
 } from "@/lib/admin.functions";
 
-export const Route = createFileRoute("/_authenticated/_admin/dashboard")({
-  head: () => ({ meta: [{ title: "Admin Dashboard — Klassiq Grafikz" }] }),
+export const Route = createFileRoute("/dashboard")({
+  head: () => ({ meta: [{ title: "Dashboard — Klassiq Grafikz" }] }),
   component: DashboardPage,
 });
 
@@ -44,7 +44,7 @@ function DashboardPage() {
       <div className="mx-auto max-w-6xl px-4 py-10 md:px-6">
         <div className="mb-8 flex items-end justify-between gap-4">
           <div>
-            <div className="text-[11px] uppercase tracking-[0.3em] text-primary">Admin</div>
+            <div className="text-[11px] uppercase tracking-[0.3em] text-primary">Overview</div>
             <h1 className="font-display text-4xl tracking-tight md:text-5xl">Dashboard</h1>
             <p className="mt-1 text-sm text-muted-foreground">Live traffic, leads, and audience growth.</p>
           </div>
@@ -59,32 +59,10 @@ function DashboardPage() {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <KpiCard
-            label="Online now"
-            value={k?.traffic.online_now ?? "—"}
-            icon={Activity}
-            hint="last 5 min"
-          />
-          <KpiCard
-            label="Visits today"
-            value={k?.traffic.today ?? "—"}
-            icon={Eye}
-            hint={`${k?.traffic.this_week ?? 0} this week`}
-          />
-          <KpiCard
-            label="Messages 24h"
-            value={k?.messages.last24 ?? "—"}
-            icon={Mail}
-            delta={k ? msgDelta : undefined}
-            hint={`${k?.messages.total ?? 0} total`}
-          />
-          <KpiCard
-            label="Sign-ups 24h"
-            value={k?.signups.last24 ?? "—"}
-            icon={UserPlus}
-            delta={k ? signupDelta : undefined}
-            hint={`${k?.signups.total ?? 0} total`}
-          />
+          <KpiCard label="Online now" value={k?.traffic.online_now ?? "—"} icon={Activity} hint="last 5 min" />
+          <KpiCard label="Visits today" value={k?.traffic.today ?? "—"} icon={Eye} hint={`${k?.traffic.this_week ?? 0} this week`} />
+          <KpiCard label="Messages 24h" value={k?.messages.last24 ?? "—"} icon={Mail} delta={k ? msgDelta : undefined} hint={`${k?.messages.total ?? 0} total`} />
+          <KpiCard label="Sign-ups 24h" value={k?.signups.last24 ?? "—"} icon={UserPlus} delta={k ? signupDelta : undefined} hint={`${k?.signups.total ?? 0} total`} />
         </div>
 
         <div className="mt-6">

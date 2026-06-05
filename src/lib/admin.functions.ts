@@ -1,85 +1,58 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-async function assertAdmin(userId: string) {
+export const getAdminKpis = createServerFn({ method: "GET" }).handler(async () => {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { data, error } = await supabaseAdmin.rpc("has_role", {
-    _user_id: userId,
-    _role: "admin",
-  });
-  if (error) throw new Error(error.message);
-  if (!data) throw new Error("Forbidden");
-}
 
-export const checkAdmin = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data } = await supabaseAdmin.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "admin",
-    });
-    return { isAdmin: Boolean(data) };
-  });
+  const now = Date.now();
+  const d1 = new Date(now - 24 * 60 * 60 * 1000).toISOString();
+  const d2 = new Date(now - 48 * 60 * 60 * 1000).toISOString();
+  const d7 = new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString();
 
-export const getAdminKpis = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
-    await assertAdmin(context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const [trafficRes, msgTotal, msg24, msgPrev24, msg7, signupTotal, signup24, signupPrev24, signup7, reviewsPending] =
+    await Promise.all([
+      supabaseAdmin.rpc("get_traffic_stats"),
+      supabaseAdmin.from("contact_submissions").select("*", { count: "exact", head: true }),
+      supabaseAdmin.from("contact_submissions").select("*", { count: "exact", head: true }).gte("created_at", d1),
+      supabaseAdmin
+        .from("contact_submissions")
+        .select("*", { count: "exact", head: true })
+        .gte("created_at", d2)
+        .lt("created_at", d1),
+      supabaseAdmin.from("contact_submissions").select("*", { count: "exact", head: true }).gte("created_at", d7),
+      supabaseAdmin.from("profiles").select("*", { count: "exact", head: true }),
+      supabaseAdmin.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", d1),
+      supabaseAdmin
+        .from("profiles")
+        .select("*", { count: "exact", head: true })
+        .gte("created_at", d2)
+        .lt("created_at", d1),
+      supabaseAdmin.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", d7),
+      supabaseAdmin.from("reviews").select("*", { count: "exact", head: true }).eq("is_approved", false),
+    ]);
 
-    const now = Date.now();
-    const d1 = new Date(now - 24 * 60 * 60 * 1000).toISOString();
-    const d2 = new Date(now - 48 * 60 * 60 * 1000).toISOString();
-    const d7 = new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString();
-
-    const [trafficRes, msgTotal, msg24, msgPrev24, msg7, signupTotal, signup24, signupPrev24, signup7, reviewsPending] =
-      await Promise.all([
-        supabaseAdmin.rpc("get_traffic_stats"),
-        supabaseAdmin.from("contact_submissions").select("*", { count: "exact", head: true }),
-        supabaseAdmin.from("contact_submissions").select("*", { count: "exact", head: true }).gte("created_at", d1),
-        supabaseAdmin
-          .from("contact_submissions")
-          .select("*", { count: "exact", head: true })
-          .gte("created_at", d2)
-          .lt("created_at", d1),
-        supabaseAdmin.from("contact_submissions").select("*", { count: "exact", head: true }).gte("created_at", d7),
-        supabaseAdmin.from("profiles").select("*", { count: "exact", head: true }),
-        supabaseAdmin.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", d1),
-        supabaseAdmin
-          .from("profiles")
-          .select("*", { count: "exact", head: true })
-          .gte("created_at", d2)
-          .lt("created_at", d1),
-        supabaseAdmin.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", d7),
-        supabaseAdmin.from("reviews").select("*", { count: "exact", head: true }).eq("is_approved", false),
-      ]);
-
-    const traffic = trafficRes.data?.[0] ?? { online_now: 0, today: 0, this_week: 0, this_month: 0 };
-    return {
-      traffic,
-      messages: {
-        total: msgTotal.count ?? 0,
-        last24: msg24.count ?? 0,
-        prev24: msgPrev24.count ?? 0,
-        last7: msg7.count ?? 0,
-      },
-      signups: {
-        total: signupTotal.count ?? 0,
-        last24: signup24.count ?? 0,
-        prev24: signupPrev24.count ?? 0,
-        last7: signup7.count ?? 0,
-      },
-      reviews: { pending: reviewsPending.count ?? 0 },
-    };
-  });
+  const traffic = trafficRes.data?.[0] ?? { online_now: 0, today: 0, this_week: 0, this_month: 0 };
+  return {
+    traffic,
+    messages: {
+      total: msgTotal.count ?? 0,
+      last24: msg24.count ?? 0,
+      prev24: msgPrev24.count ?? 0,
+      last7: msg7.count ?? 0,
+    },
+    signups: {
+      total: signupTotal.count ?? 0,
+      last24: signup24.count ?? 0,
+      prev24: signupPrev24.count ?? 0,
+      last7: signup7.count ?? 0,
+    },
+    reviews: { pending: reviewsPending.count ?? 0 },
+  };
+});
 
 export const listRecentMessages = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
   .inputValidator(z.object({ limit: z.number().min(1).max(50).default(10) }).optional())
-  .handler(async ({ context, data }) => {
-    await assertAdmin(context.userId);
+  .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const limit = data?.limit ?? 10;
     const { data: rows, error } = await supabaseAdmin
@@ -92,10 +65,8 @@ export const listRecentMessages = createServerFn({ method: "GET" })
   });
 
 export const listRecentSignups = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
   .inputValidator(z.object({ limit: z.number().min(1).max(50).default(10) }).optional())
-  .handler(async ({ context, data }) => {
-    await assertAdmin(context.userId);
+  .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const limit = data?.limit ?? 10;
     const { data: rows, error } = await supabaseAdmin
@@ -108,10 +79,8 @@ export const listRecentSignups = createServerFn({ method: "GET" })
   });
 
 export const listVisitsSeries = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
   .inputValidator(z.object({ days: z.number().min(1).max(60).default(14) }).optional())
-  .handler(async ({ context, data }) => {
-    await assertAdmin(context.userId);
+  .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const days = data?.days ?? 14;
     const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
