@@ -68,25 +68,25 @@ function ContactPage() {
             Tell us about your project. We reply fastest on WhatsApp — usually within minutes.
           </p>
           <div className="mt-8 space-y-3">
-            <a href="https://wa.me/" target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 transition hover:border-primary/60">
+            <a href="https://wa.me/+2347050495704" target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 transition hover:border-primary/60">
               <div className="grid h-10 w-10 place-items-center rounded-full gradient-primary text-primary-foreground"><MessageCircle className="h-5 w-5" /></div>
               <div>
                 <div className="font-medium">WhatsApp</div>
-                <div className="text-xs text-muted-foreground">Fastest reply · 24/7</div>
+                <div className="text-xs text-muted-foreground">+234 705 049 5704 · Fastest reply · 24/7</div>
               </div>
             </a>
-            <a href="mailto:hello@klassiqgrafikz.com" className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 transition hover:border-primary/60">
+            <a href="mailto:klassiqgrafikz.com" className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 transition hover:border-primary/60">
               <div className="grid h-10 w-10 place-items-center rounded-full gradient-primary text-primary-foreground"><Mail className="h-5 w-5" /></div>
               <div>
                 <div className="font-medium">Email</div>
-                <div className="text-xs text-muted-foreground">hello@klassiqgrafikz.com</div>
+                <div className="text-xs text-muted-foreground">klassiqgrafikz.com</div>
               </div>
             </a>
-            <a href="tel:+10000000000" className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 transition hover:border-primary/60">
+            <a href="tel:+2347050495704" className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 transition hover:border-primary/60">
               <div className="grid h-10 w-10 place-items-center rounded-full gradient-primary text-primary-foreground"><Phone className="h-5 w-5" /></div>
               <div>
                 <div className="font-medium">Call</div>
-                <div className="text-xs text-muted-foreground">Mon–Sat, 9am–6pm</div>
+                <div className="text-xs text-muted-foreground">07050495704 · Mon–Sat, 8am–10:30pm</div>
               </div>
             </a>
           </div>
@@ -117,9 +117,12 @@ function ContactPage() {
               <Label htmlFor="message">Message</Label>
               <Textarea id="message" name="message" rows={5} required maxLength={1000} className="mt-1" />
             </div>
-            <Button type="submit" disabled={submitting} className="w-full rounded-full gradient-primary text-primary-foreground shadow-glow">
-              {submitting ? "Sending..." : (<>Send <Send className="ml-2 h-4 w-4" /></>)}
+            <Button asChild type="button" className="w-full rounded-full gradient-primary text-primary-foreground shadow-glow">
+              <a href="https://wa.me/+2347050495704" target="_blank" rel="noreferrer">
+                {submitting ? "Sending..." : (<>Send <Send className="ml-2 h-4 w-4" /></>)}
+              </a>
             </Button>
+            <button type="submit" disabled={submitting} className="sr-only">submit</button>
           </div>
         </form>
       </section>
