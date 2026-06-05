@@ -1,7 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X, ShoppingBag } from "lucide-react";
+import { Menu, X, ShoppingBag, Shield } from "lucide-react";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
+import { checkAdmin } from "@/lib/admin.functions";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect } from "react";
 
 const nav = [
   { to: "/services", label: "Services" },
@@ -13,6 +18,20 @@ const nav = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [hasSession, setHasSession] = useState(false);
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setHasSession(!!data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => setHasSession(!!session));
+    return () => sub.subscription.unsubscribe();
+  }, []);
+  const checkAdminFn = useServerFn(checkAdmin);
+  const { data: adminData } = useQuery({
+    queryKey: ["me", "isAdmin"],
+    queryFn: () => checkAdminFn(),
+    enabled: hasSession,
+    staleTime: 60_000,
+  });
+  const isAdmin = adminData?.isAdmin === true;
   return (
     <header className="sticky top-4 z-50 mx-auto w-[calc(100%-1.5rem)] max-w-6xl">
       <div className="rounded-full border border-border bg-surface/80 px-4 py-3 backdrop-blur-xl shadow-card-soft md:px-6">
@@ -43,6 +62,14 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2">
+            {isAdmin && (
+              <Link
+                to="/dashboard"
+                className="hidden rounded-full border border-primary/50 px-3 py-1.5 text-xs uppercase tracking-wider text-primary md:inline-flex items-center gap-1.5 hover:bg-primary/10"
+              >
+                <Shield className="h-3.5 w-3.5" /> Admin
+              </Link>
+            )}
             <Link to="/shop" className="hidden md:block">
               <Button size="sm" className="rounded-full gradient-primary text-primary-foreground hover:opacity-90">
                 <ShoppingBag className="mr-1.5 h-4 w-4" /> Shop
