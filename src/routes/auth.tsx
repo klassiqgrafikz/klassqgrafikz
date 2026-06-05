@@ -29,7 +29,7 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/account" });
+      if (data.session) navigate({ to: "/" });
     });
   }, [navigate]);
 
@@ -47,7 +47,7 @@ function AuthPage() {
     setLoading(false);
     if (error) return toast.error(error.message);
     toast.success("Welcome back");
-    navigate({ to: "/account" });
+    navigate({ to: "/" });
   }
 
   async function handleSignUp(e: React.FormEvent<HTMLFormElement>) {
@@ -61,24 +61,36 @@ function AuthPage() {
       return;
     }
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: email.data,
       password: password.data,
       options: {
-        emailRedirectTo: `${window.location.origin}/account`,
+        emailRedirectTo: `${window.location.origin}/`,
         data: { display_name: name },
       },
     });
     setLoading(false);
     if (error) return toast.error(error.message);
-    toast.success("Account created — check your email to verify.");
+    if (data.session) {
+      toast.success("Welcome to Klassiq Grafikz");
+      navigate({ to: "/" });
+    } else {
+      toast.success("Account created — check your email to verify.");
+    }
   }
 
   async function handleGoogle() {
+    setLoading(true);
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin + "/account",
+      redirect_uri: window.location.origin,
     });
-    if (result.error) toast.error("Google sign-in failed");
+    if (result.error) {
+      setLoading(false);
+      toast.error("Google sign-in failed");
+      return;
+    }
+    if (result.redirected) return;
+    navigate({ to: "/" });
   }
 
   return (
