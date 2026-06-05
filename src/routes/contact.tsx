@@ -43,7 +43,10 @@ function ContactPage() {
     setSubmitting(true);
     try {
       const { supabase } = await import("@/integrations/supabase/client");
-      const { error } = await supabase.from("contact_submissions").insert(parsed.data);
+      const { data: { user } } = await supabase.auth.getUser();
+      const { error } = await supabase
+        .from("contact_submissions")
+        .insert({ ...parsed.data, user_id: user?.id ?? null });
       if (error) throw error;
       toast.success("Message sent — we'll be in touch shortly.");
       e.currentTarget.reset();
