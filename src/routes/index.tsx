@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   ArrowRight, Star, ChevronDown, Briefcase, Calendar, MessageSquare,
-  Wrench, Camera, GraduationCap, ShoppingBag, Sparkles,
+  Wrench, Camera, GraduationCap, Sparkles,
 } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { RotatingWord } from "@/components/site/RotatingWord";
