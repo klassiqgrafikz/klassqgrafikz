@@ -9,7 +9,7 @@ import { RotatingWord } from "@/components/site/RotatingWord";
 import { BootLoader } from "@/components/site/BootLoader";
 import { Button } from "@/components/ui/button";
 import { services, reviews } from "@/lib/site-data";
-import heroImg from "@/assets/hero-hand.jpg";
+import heroImg from "@/assets/hero-logo.jpeg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,7 +28,6 @@ const quickTiles = [
   { to: "/addup", label: "Events", Icon: Calendar },
   { to: "/reviews", label: "Reviews", Icon: Star },
   { to: "/contact", label: "Contact", Icon: MessageSquare },
-  { to: "/shop", label: "Shop", Icon: ShoppingBag },
   { to: "/services", label: "Tools", Icon: Wrench },
 ];
 
@@ -60,10 +59,8 @@ function Hero() {
         </div>
         <h1 className="mt-5 font-display text-5xl uppercase leading-[0.95] tracking-tight md:text-7xl">
           We <RotatingWord />,<br />
-          Teach, Edit,<br />
-          UI/UX <span className="text-muted-foreground">&lt;&gt;</span><br />
-          Animate &<br />
-          <span className="text-primary text-glow">Advertise</span>
+          <span className="text-primary text-glow">...we decorate</span><br />
+          <span className="text-primary text-glow">the world..</span>
         </h1>
         <p className="mt-6 max-w-md text-base text-muted-foreground">
           ...we decorate the world..

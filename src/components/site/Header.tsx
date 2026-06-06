@@ -1,13 +1,11 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X, ShoppingBag, LayoutDashboard } from "lucide-react";
+import { Menu, X, LayoutDashboard } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 
 const nav = [
   { to: "/services", label: "Services" },
   { to: "/reviews", label: "Reviews" },
   { to: "/addup", label: "AddUp" },
-  { to: "/shop", label: "Shop" },
   { to: "/contact", label: "Contact" },
 ];
 
@@ -48,11 +46,6 @@ export function Header() {
               className="hidden rounded-full border border-primary/50 px-3 py-1.5 text-xs uppercase tracking-wider text-primary md:inline-flex items-center gap-1.5 hover:bg-primary/10"
             >
               <LayoutDashboard className="h-3.5 w-3.5" /> Dashboard
-            </Link>
-            <Link to="/shop" className="hidden md:block">
-              <Button size="sm" className="rounded-full gradient-primary text-primary-foreground hover:opacity-90">
-                <ShoppingBag className="mr-1.5 h-4 w-4" /> Shop
-              </Button>
             </Link>
             <button
               className="grid h-9 w-9 place-items-center rounded-full border border-border bg-card md:hidden"

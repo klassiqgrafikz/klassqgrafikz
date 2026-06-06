@@ -18,8 +18,8 @@ export function Footer() {
             </div>
           </div>
           <p className="mt-4 max-w-md text-sm text-muted-foreground">
-            We design, edit, animate &amp; advertise. From flyers and logos to
-            shipping websites and flight-trackable tickets — we decorate the world.
+            Let's bring your visuals to reality — from flyers and logos to
+            shipping websites and flight-trackable tickets. ...we decorate the world..
           </p>
           <div className="mt-5 flex gap-2">
             <a href="https://instagram.com" target="_blank" rel="noreferrer" className="grid h-9 w-9 place-items-center rounded-full border border-border hover:bg-secondary">
