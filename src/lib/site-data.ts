@@ -8,7 +8,7 @@ export const services = [
   { title: "Photo/Doc Edit", subtitle: "Foreign & local photo retouching", popularity: 95 },
   { title: "Video Editing", subtitle: "Reels, ads & event highlights", popularity: 45 },
   { title: "ID & Biz Cards", subtitle: "Premium card stock & finishes", popularity: 33 },
-  { title: "UI/UX Designs", subtitle: "Websites & mobile app interfaces", popularity: 28 },
+  { title: "Lipsyncing Videos", subtitle: "Custom lipsync video productions", popularity: 75 },
   { title: "Cartoons / Sketch", subtitle: "Caricatures & sketch portraits", popularity: 22 },
 ];
 
