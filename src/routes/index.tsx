@@ -141,7 +141,9 @@ function Hero() {
             <Sparkles className="h-4 w-4 text-primary-foreground" />
           </div>
           <div className="absolute bottom-5 right-5 text-right">
-            <div className="text-[10px] uppercase tracking-[0.3em] text-foreground/80">Scroll Down</div>
+            <div className="text-[10px] uppercase tracking-[0.3em] text-foreground/80">
+              Scroll Down
+            </div>
             <ChevronDown className="ml-auto mt-1 h-6 w-6 animate-bounce text-foreground/80" />
           </div>
         </div>
@@ -182,7 +184,9 @@ function PopularServices() {
           <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
             Explore Our Most Popular
           </div>
-          <h2 className="mt-2 font-display text-4xl uppercase md:text-5xl">Products &amp; Services</h2>
+          <h2 className="mt-2 font-display text-4xl uppercase md:text-5xl">
+            Products &amp; Services
+          </h2>
         </div>
         <Link to="/services" className="hidden text-sm text-primary hover:underline md:block">
           See all <ArrowRight className="ml-1 inline h-3 w-3" />
@@ -264,7 +268,9 @@ function ProjectCarousel() {
     <section className="mx-auto mt-24 max-w-6xl px-6">
       <div className="flex items-end justify-between gap-4">
         <div>
-          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Featured Work</div>
+          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+            Featured Work
+          </div>
           <h2 className="mt-2 font-display text-4xl uppercase md:text-5xl">Project Gallery</h2>
         </div>
         <div className="hidden text-xs uppercase tracking-[0.3em] text-muted-foreground md:block">
@@ -313,12 +319,17 @@ function ReviewWall() {
   return (
     <section className="mx-auto mt-24 max-w-6xl px-6">
       <div className="text-center">
-        <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">What Clients Say</div>
+        <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+          What Clients Say
+        </div>
         <h2 className="mt-2 font-display text-4xl uppercase md:text-5xl">Customer Reviews</h2>
       </div>
       <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {reviews.slice(0, 6).map((r) => (
-          <div key={r.name} className="rounded-2xl border border-border bg-card p-6 shadow-card-soft">
+          <div
+            key={r.name}
+            className="rounded-2xl border border-border bg-card p-6 shadow-card-soft"
+          >
             <div className="flex gap-1 text-yellow-400">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star key={i} className="h-3.5 w-3.5 fill-current" />
@@ -357,12 +368,15 @@ function CTASection() {
           Let's <span className="text-primary text-glow">Decorate</span> Your World
         </h2>
         <p className="relative mx-auto mt-4 max-w-xl text-muted-foreground">
-          Tell us about your project — flyer, logo, full brand or a complete shipping website.
-          We'll respond fast on WhatsApp.
+          Tell us about your project — flyer, logo, full brand or a complete shipping website. We'll
+          respond fast on WhatsApp.
         </p>
         <div className="relative mt-8 flex flex-wrap justify-center gap-3">
           <Link to="/contact">
-            <Button size="lg" className="rounded-full gradient-primary text-primary-foreground shadow-glow">
+            <Button
+              size="lg"
+              className="rounded-full gradient-primary text-primary-foreground shadow-glow"
+            >
               Start a Project <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
