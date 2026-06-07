@@ -63,13 +63,6 @@ export function Header() {
                 {n.label}
               </Link>
             ))}
-            <Link
-              to="/dashboard"
-              onClick={() => setOpen(false)}
-              className="rounded-lg px-3 py-2 text-sm hover:bg-secondary"
-            >
-              Dashboard
-            </Link>
           </div>
         )}
       </div>
