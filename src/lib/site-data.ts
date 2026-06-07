@@ -13,12 +13,12 @@ export const services = [
 ];
 
 export const reviews = [
-  { initials: "AL", name: "Amanda L.", body: "Simply the best in town. The colors pop, the work is premium, and the team is incredibly helpful. 10/10 would recommend!" },
-  { initials: "RT", name: "Robert T.", body: "Great experience from start to finish. Affordable prices without compromising on quality. Their card packages are a steal." },
-  { initials: "TC", name: "Tech Corp", body: "We ordered custom flyers and IDs for our end-of-year party. Delivered early and the printing is sharp." },
-  { initials: "DC", name: "David Chen", body: "Needed a rush flight ticket design for a trip. Klassiq nailed it — looked completely real and trackable." },
-  { initials: "ER", name: "Emily R.", body: "The video editing for our YouTube channel was top notch. Retention increased by 40% thanks to their engaging edits." },
-  { initials: "JT", name: "James T.", body: "Our new website UI is sleek and converts visitors much better. The team really understood our brand identity." },
-  { initials: "LM", name: "Lisa M.", body: "Klassiq handled our entire rebranding. From logo to business cards, everything is cohesive and professional." },
-  { initials: "SJ", name: "Sarah Jenkins", body: "Amazing customer service! They patiently walked me through the design process for my wedding invitations." },
+  { initials: "IS", name: "Ife Stan", location: "Nigeria", body: "Person way sabi! Video and pictures editing active!!! This guy is too good. My content don blow since I use am. Highly recommended! ❤️" },
+  { initials: "OJ", name: "Olivia James", location: "United States", body: "Well detailed graphics designer... Recommendable. My brand logo and flyers came out very professional. Thank you Klassiq! ❤️" },
+  { initials: "CO", name: "Chinedu Okoro", location: "Lagos, Nigeria", body: "Baba na correct graphics designer o! From my business flyer to my WhatsApp status designs, everything dey burst brain. Keep it up bro!" },
+  { initials: "AB", name: "Aisha Bello", location: "Abuja, Nigeria", body: "Very creative and fast delivery. I needed urgent designs for my boutique and he delivered perfectly. God bless your hustle!" },
+  { initials: "MT", name: "Michael Thompson", location: "United Kingdom", body: "Excellent graphic designer! I hired Klassiq for my podcast thumbnails and social media branding. The quality is top-notch and communication was smooth despite the time difference. Will definitely work with him again. ❤️" },
+  { initials: "TA", name: "Tunde Adeyemi", location: "Canada", body: "Bro, your work is mad! I ordered a complete branding package (logo, business cards, Instagram templates) and the delivery was fast and clean. Na real talent!" },
+  { initials: "FY", name: "Fatima Yusuf", location: "Ghana", body: "Very professional and talented. My salon flyers and logo came out beautiful. I'm recommending Klassiq to all my friends in Accra. ❤️" },
+  { initials: "DO", name: "David Okeke", location: "Nigeria", body: "Best graphics designer I don work with this year. My YouTube thumbnails and video edits dey always get more views. Oga you too much! ❤️" },
 ];
