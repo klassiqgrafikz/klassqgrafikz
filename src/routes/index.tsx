@@ -51,7 +51,6 @@ const quickTiles = [
   { to: "/addup", label: "Events", Icon: Calendar },
   { to: "/reviews", label: "Reviews", Icon: Star },
   { to: "/contact", label: "Contact", Icon: MessageSquare },
-  { to: "/services", label: "Tools", Icon: Wrench },
 ];
 
 const projectSlides = [
