@@ -75,7 +75,6 @@ function Home() {
         <Hero />
         <QuickTiles />
         <PopularServices />
-        <TrafficMonitor />
         <ProjectCarousel />
         <ReviewWall />
         <CTASection />
