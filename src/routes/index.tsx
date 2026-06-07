@@ -316,38 +316,72 @@ function ProjectCarousel() {
 }
 
 function ReviewWall() {
+  const [activeReview, setActiveReview] = useState(0);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveReview((current) => (current + 1) % reviews.length);
+    }, 5000);
+    return () => window.clearInterval(timer);
+  }, []);
+
   return (
-    <section className="mx-auto mt-24 max-w-6xl px-6">
+    <section className="mx-auto mt-24 max-w-4xl px-6">
       <div className="text-center">
         <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
           What Clients Say
         </div>
         <h2 className="mt-2 font-display text-4xl uppercase md:text-5xl">Customer Reviews</h2>
       </div>
-      <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {reviews.slice(0, 6).map((r) => (
-          <div
+
+      <div className="mt-10 overflow-hidden rounded-3xl border border-border bg-card/70 shadow-card-soft backdrop-blur">
+        <div
+          className="flex transition-transform duration-700 ease-out will-change-transform"
+          style={{ transform: `translateX(-${activeReview * 100}%)` }}
+        >
+          {reviews.map((r) => (
+            <div
+              key={r.name}
+              className="min-w-full px-8 py-12 md:px-16 md:py-16"
+            >
+              <div className="flex flex-col items-center text-center">
+                <div className="grid h-20 w-20 place-items-center rounded-full gradient-primary text-xl font-display text-primary-foreground shadow-glow">
+                  {r.initials}
+                </div>
+                <div className="mt-5 flex gap-1 text-yellow-400">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-current" />
+                  ))}
+                </div>
+                <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/90 md:text-lg">
+                  "{r.body}"
+                </p>
+                <div className="mt-6">
+                  <div className="font-display text-lg uppercase">{r.name}</div>
+                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                    {r.location}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-6 flex items-center justify-center gap-2">
+        {reviews.map((r, index) => (
+          <button
             key={r.name}
-            className="rounded-2xl border border-border bg-card p-6 shadow-card-soft"
-          >
-            <div className="flex gap-1 text-yellow-400">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className="h-3.5 w-3.5 fill-current" />
-              ))}
-            </div>
-            <p className="mt-4 text-sm leading-relaxed text-foreground/90">"{r.body}"</p>
-            <div className="mt-5 flex items-center gap-3 border-t border-border pt-4">
-              <div className="grid h-10 w-10 place-items-center rounded-full gradient-primary text-sm font-display text-primary-foreground">
-                {r.initials}
-              </div>
-              <div>
-                <div className="text-sm font-medium">{r.name}</div>
-                <div className="text-xs text-muted-foreground">Verified · Google</div>
-              </div>
-            </div>
-          </div>
+            type="button"
+            aria-label={`Show review ${index + 1}`}
+            onClick={() => setActiveReview(index)}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              activeReview === index ? "w-10 bg-primary" : "w-4 bg-border"
+            }`}
+          />
         ))}
       </div>
+
       <div className="mt-8 text-center">
         <Link to="/reviews">
           <Button variant="outline" className="rounded-full">
