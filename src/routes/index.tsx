@@ -220,35 +220,6 @@ function PopularServices() {
   );
 }
 
-function TrafficMonitor() {
-  const stats = [
-    { label: "Currently Online", value: 7, live: true },
-    { label: "Today's Visits", value: 240 },
-    { label: "This Week", value: "4,100" },
-    { label: "This Month", value: "8,500" },
-  ];
-
-  return (
-    <section className="mx-auto mt-24 max-w-6xl px-6">
-      <div className="rounded-3xl border border-border bg-card p-8 shadow-card-soft">
-        <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-muted-foreground">
-          <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse-dot" />
-          Real-time Traffic Monitor
-        </div>
-        <div className="mt-6 grid gap-6 md:grid-cols-4">
-          {stats.map((s) => (
-            <div key={s.label}>
-              <div className="font-display text-5xl text-primary text-glow">{s.value}</div>
-              <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">
-                {s.label}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 function ProjectCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
