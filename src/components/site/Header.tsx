@@ -41,12 +41,6 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <Link
-              to="/dashboard"
-              className="hidden rounded-full border border-primary/50 px-3 py-1.5 text-xs uppercase tracking-wider text-primary md:inline-flex items-center gap-1.5 hover:bg-primary/10"
-            >
-              <LayoutDashboard className="h-3.5 w-3.5" /> Dashboard
-            </Link>
             <button
               className="grid h-9 w-9 place-items-center rounded-full border border-border bg-card md:hidden"
               onClick={() => setOpen((o) => !o)}
