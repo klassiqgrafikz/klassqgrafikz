@@ -14,42 +14,7 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
 });
 
-const schema = z.object({
-  name: z.string().trim().min(1).max(100),
-  email: z.string().trim().email().max(255),
-  phone: z.string().trim().max(40).optional(),
-  service: z.string().trim().max(80).optional(),
-  message: z.string().trim().min(1).max(1000),
-});
-
 function ContactPage() {
-  const [submitting, setSubmitting] = useState(false);
-
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const parsed = schema.safeParse(Object.fromEntries(fd.entries()));
-    if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? "Invalid input");
-      return;
-    }
-    setSubmitting(true);
-    try {
-      const { supabase } = await import("@/integrations/supabase/client");
-      const { data: { user } } = await supabase.auth.getUser();
-      const { error } = await supabase
-        .from("contact_submissions")
-        .insert({ ...parsed.data, user_id: user?.id ?? null });
-      if (error) throw error;
-      toast.success("Message sent — we'll be in touch shortly.");
-      e.currentTarget.reset();
-    } catch (err) {
-      console.error(err);
-      toast.error("Could not send right now. Try WhatsApp instead.");
-    } finally {
-      setSubmitting(false);
-    }
-  }
 
   return (
     <SiteLayout>
