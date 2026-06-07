@@ -7,7 +7,6 @@ import {
   Briefcase,
   Calendar,
   MessageSquare,
-  Wrench,
   GraduationCap,
   Sparkles,
 } from "lucide-react";
