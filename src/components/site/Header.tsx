@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X, LayoutDashboard } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
 const nav = [
