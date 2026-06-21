@@ -8,9 +8,9 @@ export const Route = createFileRoute("/reviews")({
   head: () => ({
     meta: [
       { title: "Reviews — Klassiq Grafikz" },
-      { name: "description", content: "Read what clients say about Klassiq Grafikz Studios." },
+      { name: "description", content: "Verified client reviews of Klassiq Grafikz Studios from around the world." },
       { property: "og:title", content: "Reviews — Klassiq Grafikz" },
-      { property: "og:description", content: "Verified Google reviews from happy Klassiq Grafikz clients." },
+      { property: "og:description", content: "Real reviews from clients of Klassiq Grafikz Studios." },
     ],
   }),
   component: ReviewsPage,
@@ -21,37 +21,48 @@ function ReviewsPage() {
     <SiteLayout>
       <section className="mx-auto mt-16 max-w-6xl px-6">
         <div className="text-center">
-          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Word on the street</div>
-          <h1 className="mt-3 font-display text-5xl uppercase md:text-7xl">Reviews</h1>
-          <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-            Real people, real projects. Join hundreds of satisfied clients who trust Klassiq with their brand.
+          <div className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
+            Word on the street
+          </div>
+          <h1 className="mt-3 font-display text-5xl font-semibold tracking-tight md:text-7xl">
+            Trusted by 320+ brands.
+          </h1>
+          <p className="mx-auto mt-5 max-w-xl text-muted-foreground">
+            Real people, real projects — from Lagos and Accra to London and Toronto.
           </p>
-          <Link to="/contact" className="mt-6 inline-block">
-            <Button className="rounded-full gradient-primary text-primary-foreground shadow-glow">
-              Leave a Review
+          <Link to="/contact" className="mt-7 inline-block">
+            <Button className="h-11 rounded-full bg-foreground px-5 text-sm font-medium text-background hover:bg-foreground/90">
+              Leave a review
             </Button>
           </Link>
         </div>
 
-        <div className="mt-12 columns-1 gap-4 md:columns-2 lg:columns-3 [&>*]:mb-4 [&>*]:break-inside-avoid">
+        <div className="mt-14 columns-1 gap-5 md:columns-2 lg:columns-3 [&>*]:mb-5 [&>*]:break-inside-avoid">
           {reviews.map((r) => (
-            <div key={r.name} className="rounded-2xl border border-border bg-card p-6">
-              <div className="flex gap-1 text-yellow-400">
+            <figure
+              key={r.name}
+              className="rounded-3xl border border-border bg-card/60 p-7 backdrop-blur transition hover:border-primary/50"
+            >
+              <div className="flex gap-0.5 text-primary">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star key={i} className="h-3.5 w-3.5 fill-current" />
                 ))}
               </div>
-              <p className="mt-4 text-sm leading-relaxed text-foreground/90">"{r.body}"</p>
-              <div className="mt-5 flex items-center gap-3 border-t border-border pt-4">
-                <div className="grid h-10 w-10 place-items-center rounded-full gradient-primary text-sm font-display text-primary-foreground">
+              <blockquote className="mt-5 text-sm leading-relaxed text-foreground/90">
+                "{r.body}"
+              </blockquote>
+              <figcaption className="mt-6 flex items-center gap-3 border-t border-border/60 pt-5">
+                <div className="grid h-10 w-10 place-items-center rounded-full gradient-primary text-xs font-semibold text-primary-foreground">
                   {r.initials}
                 </div>
                 <div>
                   <div className="text-sm font-medium">{r.name}</div>
-                  <div className="text-xs text-muted-foreground">Verified · Google</div>
+                  <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                    {r.location}
+                  </div>
                 </div>
-              </div>
-            </div>
+              </figcaption>
+            </figure>
           ))}
         </div>
       </section>
