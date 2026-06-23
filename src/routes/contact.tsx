@@ -26,9 +26,9 @@ const channels = [
   {
     Icon: Mail,
     title: "Email",
-    sub: "hello@klassiqgrafikz.com",
+    sub: "klassiqgrafikz@gmail.com",
     note: "For briefs, proposals & invoices",
-    href: "mailto:hello@klassiqgrafikz.com",
+    href: "mailto:klassiqgrafikz@gmail.com",
   },
   {
     Icon: Phone,
