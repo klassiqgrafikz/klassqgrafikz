@@ -24,15 +24,15 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { BootLoader } from "@/components/site/BootLoader";
 import { Button } from "@/components/ui/button";
 import { reviews } from "@/lib/site-data";
-import project1 from "@/assets/uploads/project-1.jpg.asset.json";
-import project2 from "@/assets/uploads/project-2.png.asset.json";
-import project3 from "@/assets/uploads/project-3.png.asset.json";
-import project4 from "@/assets/uploads/project-4.png.asset.json";
-import project5 from "@/assets/uploads/project-5.jpg.asset.json";
-import project6 from "@/assets/uploads/project-6.png.asset.json";
-import project7 from "@/assets/uploads/project-7.png.asset.json";
-import project8 from "@/assets/uploads/project-8.png.asset.json";
-import project9 from "@/assets/uploads/project-9.png.asset.json";
+const project1 = { url: "/images/project-1.jpg" };
+const project2 = { url: "/images/project-2.png" };
+const project3 = { url: "/images/project-3.png" };
+const project4 = { url: "/images/project-4.png" };
+const project5 = { url: "/images/project-5.jpg" };
+const project6 = { url: "/images/project-6.png" };
+const project7 = { url: "/images/project-7.png" };
+const project8 = { url: "/images/project-8.png" };
+const project9 = { url: "/images/project-9.png" };
 
 export const Route = createFileRoute("/")({
   head: () => ({
