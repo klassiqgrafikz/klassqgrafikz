@@ -13,6 +13,8 @@ import {
   Truck,
   Plane,
   Compass,
+  ChevronLeft,
+  ChevronRight,
   PenTool,
   Rocket,
   Send,
@@ -326,6 +328,25 @@ function ProjectShowcase() {
               </div>
             ))}
           </div>
+
+          <button
+            type="button"
+            aria-label="Previous slide"
+            onClick={() =>
+              setActiveIndex((c) => (c - 1 + projectSlides.length) % projectSlides.length)
+            }
+            className="absolute left-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-border bg-background/70 text-foreground backdrop-blur transition hover:bg-background hover:text-primary md:left-5 md:h-12 md:w-12"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            type="button"
+            aria-label="Next slide"
+            onClick={() => setActiveIndex((c) => (c + 1) % projectSlides.length)}
+            className="absolute right-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-border bg-background/70 text-foreground backdrop-blur transition hover:bg-background hover:text-primary md:right-5 md:h-12 md:w-12"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
         </div>
 
         <div className="mt-5 flex items-center justify-between gap-4 px-2">
