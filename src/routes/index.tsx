@@ -13,6 +13,8 @@ import {
   Truck,
   Plane,
   Compass,
+  ChevronLeft,
+  ChevronRight,
   PenTool,
   Rocket,
   Send,
