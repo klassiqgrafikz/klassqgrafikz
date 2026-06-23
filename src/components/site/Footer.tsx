@@ -16,7 +16,7 @@ export function Footer() {
               <div>
                 <div className="font-display text-lg font-semibold tracking-tight">Klassiq Grafikz</div>
                 <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-                  Creative Studio · est. 2021
+                  Creative Studio · est. 2019
                 </div>
               </div>
             </div>
@@ -43,7 +43,7 @@ export function Footer() {
                 <Instagram className="h-3.5 w-3.5" /> Instagram
               </a>
               <a
-                href="mailto:hello@klassiqgrafikz.com"
+                href="mailto:klassiqgrafikz@gmail.com"
                 className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/60 px-3.5 py-2 text-xs font-medium transition hover:border-primary/60 hover:text-foreground"
               >
                 <Mail className="h-3.5 w-3.5" /> Email
