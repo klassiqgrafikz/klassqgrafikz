@@ -1,0 +1,2 @@
+CREATE POLICY "Public read branding" ON storage.objects FOR SELECT TO anon, authenticated USING (bucket_id = 'branding');
+CREATE POLICY "Service role manages branding" ON storage.objects FOR ALL TO service_role USING (bucket_id = 'branding') WITH CHECK (bucket_id = 'branding');
