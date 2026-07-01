@@ -124,8 +124,26 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <BrandInjector />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>
   );
+}
+
+function BrandInjector() {
+  useEffect(() => {
+    let cancelled = false;
+    import("@/lib/cms.functions").then(({ getSiteSettings }) => {
+      getSiteSettings().then((s) => {
+        if (cancelled) return;
+        if (s?.primary_color) {
+          document.documentElement.style.setProperty("--primary", s.primary_color);
+          document.documentElement.style.setProperty("--primary-glow", s.primary_color);
+        }
+      }).catch(() => {});
+    });
+    return () => { cancelled = true; };
+  }, []);
+  return null;
 }
