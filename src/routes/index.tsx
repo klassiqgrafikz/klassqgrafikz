@@ -273,13 +273,19 @@ function Capabilities() {
 
 function ProjectShowcase() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const loadProjects = useServerFn(getSiteProjects);
+  const { data: dbProjects } = useQuery({ queryKey: ["cms", "projects"], queryFn: () => loadProjects() });
+  const projectSlides = (dbProjects && dbProjects.length > 0)
+    ? dbProjects.map((p) => ({ src: p.image_url, alt: p.alt || "", tag: p.tag || "" }))
+    : fallbackProjects;
 
   useEffect(() => {
+    if (projectSlides.length === 0) return;
     const timer = window.setInterval(() => {
       setActiveIndex((current) => (current + 1) % projectSlides.length);
     }, 4000);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [projectSlides.length]);
 
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
