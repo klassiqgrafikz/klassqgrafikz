@@ -1,0 +1,101 @@
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { Plus, Save } from "lucide-react";
+import { getSiteSocials, adminUpsertSocial, adminDeleteSocial, type Social } from "@/lib/cms.functions";
+
+export const Route = createFileRoute("/admin/socials")({
+  component: SocialsAdmin,
+});
+
+const ICON_OPTIONS = ["MessageCircle", "Instagram", "Mail", "Send", "Facebook", "Twitter", "Youtube", "Phone", "Globe"];
+
+function SocialsAdmin() {
+  const qc = useQueryClient();
+  const load = useServerFn(getSiteSocials);
+  const upsert = useServerFn(adminUpsertSocial);
+  const del = useServerFn(adminDeleteSocial);
+  const { data = [] } = useQuery({ queryKey: ["cms", "socials"], queryFn: () => load() });
+  const [editing, setEditing] = useState<Partial<Social> | null>(null);
+
+  async function save() {
+    if (!editing) return;
+    await upsert({
+      data: {
+        id: editing.id,
+        platform: editing.platform || "custom",
+        label: editing.label || "",
+        url: editing.url || "",
+        icon: editing.icon ?? "Globe",
+        sort_order: Number(editing.sort_order ?? data.length + 1),
+      },
+    });
+    setEditing(null);
+    qc.invalidateQueries({ queryKey: ["cms", "socials"] });
+  }
+  async function remove(id: string) {
+    if (!confirm("Delete this social handle?")) return;
+    await del({ data: { id } });
+    qc.invalidateQueries({ queryKey: ["cms", "socials"] });
+  }
+
+  return (
+    <div>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="font-display text-3xl font-semibold tracking-tight">Social Media</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Manage WhatsApp, Instagram, Email, Telegram and any other handles embedded on the site.</p>
+        </div>
+        <button onClick={() => setEditing({ platform: "", label: "", url: "", icon: "Globe", sort_order: data.length + 1 })} className="inline-flex items-center gap-1.5 rounded-lg bg-foreground px-3.5 py-2 text-sm font-medium text-background">
+          <Plus className="h-4 w-4" /> Add handle
+        </button>
+      </div>
+
+      <div className="mt-6 overflow-hidden rounded-2xl border border-border bg-card">
+        <table className="w-full text-sm">
+          <thead className="bg-secondary/40 text-left text-xs uppercase tracking-wider text-muted-foreground">
+            <tr><th className="p-3">Platform</th><th className="p-3">Label</th><th className="p-3">URL</th><th className="p-3">Icon</th><th className="p-3"></th></tr>
+          </thead>
+          <tbody>
+            {data.map((s) => (
+              <tr key={s.id} className="border-t border-border">
+                <td className="p-3 font-medium">{s.platform}</td>
+                <td className="p-3">{s.label}</td>
+                <td className="p-3 text-xs text-muted-foreground"><a href={s.url} target="_blank" rel="noreferrer" className="hover:text-foreground">{s.url}</a></td>
+                <td className="p-3 text-xs">{s.icon}</td>
+                <td className="p-3 text-right text-xs">
+                  <button onClick={() => setEditing(s)} className="mr-2 text-primary hover:underline">Edit</button>
+                  <button onClick={() => remove(s.id)} className="text-red-500 hover:underline">Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {editing && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4" onClick={() => setEditing(null)}>
+          <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-6" onClick={(e) => e.stopPropagation()}>
+            <h2 className="font-display text-xl font-semibold">{editing.id ? "Edit handle" : "New handle"}</h2>
+            <div className="mt-4 space-y-3">
+              <label className="block"><div className="mb-1 text-xs font-medium text-muted-foreground">Platform (whatsapp, instagram, email, telegram…)</div><input className="input" value={editing.platform || ""} onChange={(e) => setEditing({ ...editing, platform: e.target.value.toLowerCase() })} /></label>
+              <label className="block"><div className="mb-1 text-xs font-medium text-muted-foreground">Label</div><input className="input" value={editing.label || ""} onChange={(e) => setEditing({ ...editing, label: e.target.value })} /></label>
+              <label className="block"><div className="mb-1 text-xs font-medium text-muted-foreground">URL (https://…, mailto:…, tel:…)</div><input className="input" value={editing.url || ""} onChange={(e) => setEditing({ ...editing, url: e.target.value })} /></label>
+              <label className="block"><div className="mb-1 text-xs font-medium text-muted-foreground">Icon</div>
+                <select className="input" value={editing.icon || "Globe"} onChange={(e) => setEditing({ ...editing, icon: e.target.value })}>
+                  {ICON_OPTIONS.map((i) => <option key={i} value={i}>{i}</option>)}
+                </select>
+              </label>
+              <label className="block"><div className="mb-1 text-xs font-medium text-muted-foreground">Sort order</div><input type="number" className="input" value={editing.sort_order ?? 0} onChange={(e) => setEditing({ ...editing, sort_order: Number(e.target.value) })} /></label>
+            </div>
+            <div className="mt-6 flex justify-end gap-2">
+              <button onClick={() => setEditing(null)} className="rounded-lg border border-border px-4 py-2 text-sm">Cancel</button>
+              <button onClick={save} className="inline-flex items-center gap-1.5 rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background"><Save className="h-4 w-4"/> Save</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

@@ -23,16 +23,10 @@ import {
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { BootLoader } from "@/components/site/BootLoader";
 import { Button } from "@/components/ui/button";
-import { reviews } from "@/lib/site-data";
-const project1 = { url: "/images/project-1.jpg" };
-const project2 = { url: "/images/project-2.png" };
-const project3 = { url: "/images/project-3.png" };
-const project4 = { url: "/images/project-4.png" };
-const project5 = { url: "/images/project-5.jpg" };
-const project6 = { url: "/images/project-6.png" };
-const project7 = { url: "/images/project-7.png" };
-const project8 = { url: "/images/project-8.png" };
-const project9 = { url: "/images/project-9.png" };
+import { reviews as fallbackReviews } from "@/lib/site-data";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { getPinnedReviews, getSiteProjects } from "@/lib/cms.functions";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -65,16 +59,16 @@ const capabilities = [
   { Icon: Layers, title: "Corporate Creative", desc: "Decks, reports, kits." },
 ];
 
-const projectSlides = [
-  { src: project1.url, alt: "Business registration project display", tag: "Corporate" },
-  { src: project2.url, alt: "Nebiz Cakes n Events design project", tag: "Branding" },
-  { src: project3.url, alt: "Edited client photo for Klassiq Grafikz", tag: "Portrait" },
-  { src: project4.url, alt: "Document printing and delivery design project", tag: "Print" },
-  { src: project5.url, alt: "Gift cards for cash promotional design", tag: "Campaign" },
-  { src: project6.url, alt: "Client gift surprise promotional design", tag: "Social" },
-  { src: project7.url, alt: "Creative satisfaction campaign design", tag: "Editorial" },
-  { src: project8.url, alt: "International shipment sites design project", tag: "Logistics" },
-  { src: project9.url, alt: "Outreach awakening event flyer design", tag: "Event" },
+const fallbackProjects = [
+  { src: "/images/project-1.jpg", alt: "Business registration project display", tag: "Corporate" },
+  { src: "/images/project-2.png", alt: "Nebiz Cakes n Events design project", tag: "Branding" },
+  { src: "/images/project-3.png", alt: "Edited client photo for Klassiq Grafikz", tag: "Portrait" },
+  { src: "/images/project-4.png", alt: "Document printing and delivery design project", tag: "Print" },
+  { src: "/images/project-5.jpg", alt: "Gift cards for cash promotional design", tag: "Campaign" },
+  { src: "/images/project-6.png", alt: "Client gift surprise promotional design", tag: "Social" },
+  { src: "/images/project-7.png", alt: "Creative satisfaction campaign design", tag: "Editorial" },
+  { src: "/images/project-8.png", alt: "International shipment sites design project", tag: "Logistics" },
+  { src: "/images/project-9.png", alt: "Outreach awakening event flyer design", tag: "Event" },
 ];
 
 const processSteps = [
@@ -279,13 +273,19 @@ function Capabilities() {
 
 function ProjectShowcase() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const loadProjects = useServerFn(getSiteProjects);
+  const { data: dbProjects } = useQuery({ queryKey: ["cms", "projects"], queryFn: () => loadProjects() });
+  const projectSlides = (dbProjects && dbProjects.length > 0)
+    ? dbProjects.map((p) => ({ src: p.image_url, alt: p.alt || "", tag: p.tag || "" }))
+    : fallbackProjects;
 
   useEffect(() => {
+    if (projectSlides.length === 0) return;
     const timer = window.setInterval(() => {
       setActiveIndex((current) => (current + 1) % projectSlides.length);
     }, 4000);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [projectSlides.length]);
 
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
@@ -478,13 +478,19 @@ function Stats() {
 
 function Testimonials() {
   const [active, setActive] = useState(0);
+  const loadReviews = useServerFn(getPinnedReviews);
+  const { data: dbReviews } = useQuery({ queryKey: ["cms", "reviews"], queryFn: () => loadReviews() });
+  const reviews = (dbReviews && dbReviews.length > 0)
+    ? dbReviews.map((r) => ({ initials: r.initials, name: r.name, location: r.location || "", body: r.body }))
+    : fallbackReviews;
 
   useEffect(() => {
+    if (reviews.length === 0) return;
     const timer = window.setInterval(() => {
       setActive((c) => (c + 1) % reviews.length);
     }, 5500);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [reviews.length]);
 
   return (
     <section className="mx-auto mt-28 max-w-5xl px-6">

@@ -191,6 +191,168 @@ export type Database = {
         }
         Relationships: []
       }
+      site_projects: {
+        Row: {
+          alt: string | null
+          created_at: string
+          id: string
+          image_url: string
+          sort_order: number
+          tag: string | null
+          updated_at: string
+        }
+        Insert: {
+          alt?: string | null
+          created_at?: string
+          id?: string
+          image_url: string
+          sort_order?: number
+          tag?: string | null
+          updated_at?: string
+        }
+        Update: {
+          alt?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string
+          sort_order?: number
+          tag?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_reviews_pinned: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          initials: string
+          location: string | null
+          name: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          initials: string
+          location?: string | null
+          name: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          initials?: string
+          location?: string | null
+          name?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_services: {
+        Row: {
+          created_at: string
+          id: string
+          popularity: number
+          sort_order: number
+          subtitle: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          popularity?: number
+          sort_order?: number
+          subtitle?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          popularity?: number
+          sort_order?: number
+          subtitle?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          community_instagram_url: string | null
+          community_telegram_url: string | null
+          community_whatsapp_url: string | null
+          footer_copyright: string | null
+          footer_tagline: string | null
+          id: number
+          logo_url: string | null
+          primary_color: string | null
+          updated_at: string
+        }
+        Insert: {
+          community_instagram_url?: string | null
+          community_telegram_url?: string | null
+          community_whatsapp_url?: string | null
+          footer_copyright?: string | null
+          footer_tagline?: string | null
+          id?: number
+          logo_url?: string | null
+          primary_color?: string | null
+          updated_at?: string
+        }
+        Update: {
+          community_instagram_url?: string | null
+          community_telegram_url?: string | null
+          community_whatsapp_url?: string | null
+          footer_copyright?: string | null
+          footer_tagline?: string | null
+          id?: number
+          logo_url?: string | null
+          primary_color?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_socials: {
+        Row: {
+          created_at: string
+          icon: string | null
+          id: string
+          label: string
+          platform: string
+          sort_order: number
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          icon?: string | null
+          id?: string
+          label: string
+          platform: string
+          sort_order?: number
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          icon?: string | null
+          id?: string
+          label?: string
+          platform?: string
+          sort_order?: number
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
