@@ -2,7 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
-import { services } from "@/lib/site-data";
+import { services as fallbackServices } from "@/lib/site-data";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { getSiteServices } from "@/lib/cms.functions";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
