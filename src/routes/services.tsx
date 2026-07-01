@@ -20,6 +20,11 @@ export const Route = createFileRoute("/services")({
 });
 
 function ServicesPage() {
+  const load = useServerFn(getSiteServices);
+  const { data } = useQuery({ queryKey: ["cms", "services"], queryFn: () => load() });
+  const services = (data && data.length > 0)
+    ? data.map((s) => ({ title: s.title, subtitle: s.subtitle || "", popularity: s.popularity }))
+    : fallbackServices;
   return (
     <SiteLayout>
       <section className="mx-auto mt-16 max-w-6xl px-6">
