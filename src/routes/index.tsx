@@ -59,16 +59,16 @@ const capabilities = [
   { Icon: Layers, title: "Corporate Creative", desc: "Decks, reports, kits." },
 ];
 
-const projectSlides = [
-  { src: project1.url, alt: "Business registration project display", tag: "Corporate" },
-  { src: project2.url, alt: "Nebiz Cakes n Events design project", tag: "Branding" },
-  { src: project3.url, alt: "Edited client photo for Klassiq Grafikz", tag: "Portrait" },
-  { src: project4.url, alt: "Document printing and delivery design project", tag: "Print" },
-  { src: project5.url, alt: "Gift cards for cash promotional design", tag: "Campaign" },
-  { src: project6.url, alt: "Client gift surprise promotional design", tag: "Social" },
-  { src: project7.url, alt: "Creative satisfaction campaign design", tag: "Editorial" },
-  { src: project8.url, alt: "International shipment sites design project", tag: "Logistics" },
-  { src: project9.url, alt: "Outreach awakening event flyer design", tag: "Event" },
+const fallbackProjects = [
+  { src: "/images/project-1.jpg", alt: "Business registration project display", tag: "Corporate" },
+  { src: "/images/project-2.png", alt: "Nebiz Cakes n Events design project", tag: "Branding" },
+  { src: "/images/project-3.png", alt: "Edited client photo for Klassiq Grafikz", tag: "Portrait" },
+  { src: "/images/project-4.png", alt: "Document printing and delivery design project", tag: "Print" },
+  { src: "/images/project-5.jpg", alt: "Gift cards for cash promotional design", tag: "Campaign" },
+  { src: "/images/project-6.png", alt: "Client gift surprise promotional design", tag: "Social" },
+  { src: "/images/project-7.png", alt: "Creative satisfaction campaign design", tag: "Editorial" },
+  { src: "/images/project-8.png", alt: "International shipment sites design project", tag: "Logistics" },
+  { src: "/images/project-9.png", alt: "Outreach awakening event flyer design", tag: "Event" },
 ];
 
 const processSteps = [
