@@ -478,13 +478,19 @@ function Stats() {
 
 function Testimonials() {
   const [active, setActive] = useState(0);
+  const loadReviews = useServerFn(getPinnedReviews);
+  const { data: dbReviews } = useQuery({ queryKey: ["cms", "reviews"], queryFn: () => loadReviews() });
+  const reviews = (dbReviews && dbReviews.length > 0)
+    ? dbReviews.map((r) => ({ initials: r.initials, name: r.name, location: r.location || "", body: r.body }))
+    : fallbackReviews;
 
   useEffect(() => {
+    if (reviews.length === 0) return;
     const timer = window.setInterval(() => {
       setActive((c) => (c + 1) % reviews.length);
     }, 5500);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [reviews.length]);
 
   return (
     <section className="mx-auto mt-28 max-w-5xl px-6">
