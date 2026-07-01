@@ -23,16 +23,10 @@ import {
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { BootLoader } from "@/components/site/BootLoader";
 import { Button } from "@/components/ui/button";
-import { reviews } from "@/lib/site-data";
-const project1 = { url: "/images/project-1.jpg" };
-const project2 = { url: "/images/project-2.png" };
-const project3 = { url: "/images/project-3.png" };
-const project4 = { url: "/images/project-4.png" };
-const project5 = { url: "/images/project-5.jpg" };
-const project6 = { url: "/images/project-6.png" };
-const project7 = { url: "/images/project-7.png" };
-const project8 = { url: "/images/project-8.png" };
-const project9 = { url: "/images/project-9.png" };
+import { reviews as fallbackReviews } from "@/lib/site-data";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { getPinnedReviews, getSiteProjects } from "@/lib/cms.functions";
 
 export const Route = createFileRoute("/")({
   head: () => ({
