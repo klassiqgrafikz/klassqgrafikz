@@ -14,8 +14,11 @@ import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AddupRouteImport } from './routes/addup'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminUnlockRouteImport } from './routes/admin.unlock'
 
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
@@ -42,6 +45,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AddupRoute = AddupRouteImport.update({
   id: '/addup',
   path: '/addup',
@@ -52,15 +60,28 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUnlockRoute = AdminUnlockRouteImport.update({
+  id: '/unlock',
+  path: '/unlock',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/addup': typeof AddupRoute
+  '/admin': typeof AdminRouteWithChildren
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/reviews': typeof ReviewsRoute
   '/services': typeof ServicesRoute
   '/shop': typeof ShopRoute
+  '/admin/unlock': typeof AdminUnlockRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,27 +91,35 @@ export interface FileRoutesByTo {
   '/reviews': typeof ReviewsRoute
   '/services': typeof ServicesRoute
   '/shop': typeof ShopRoute
+  '/admin/unlock': typeof AdminUnlockRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/addup': typeof AddupRoute
+  '/admin': typeof AdminRouteWithChildren
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/reviews': typeof ReviewsRoute
   '/services': typeof ServicesRoute
   '/shop': typeof ShopRoute
+  '/admin/unlock': typeof AdminUnlockRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/addup'
+    | '/admin'
     | '/contact'
     | '/dashboard'
     | '/reviews'
     | '/services'
     | '/shop'
+    | '/admin/unlock'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,20 +129,26 @@ export interface FileRouteTypes {
     | '/reviews'
     | '/services'
     | '/shop'
+    | '/admin/unlock'
+    | '/admin'
   id:
     | '__root__'
     | '/'
     | '/addup'
+    | '/admin'
     | '/contact'
     | '/dashboard'
     | '/reviews'
     | '/services'
     | '/shop'
+    | '/admin/unlock'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AddupRoute: typeof AddupRoute
+  AdminRoute: typeof AdminRouteWithChildren
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
   ReviewsRoute: typeof ReviewsRoute
@@ -158,6 +193,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/addup': {
       id: '/addup'
       path: '/addup'
@@ -172,12 +214,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/unlock': {
+      id: '/admin/unlock'
+      path: '/unlock'
+      fullPath: '/admin/unlock'
+      preLoaderRoute: typeof AdminUnlockRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminUnlockRoute: typeof AdminUnlockRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminUnlockRoute: AdminUnlockRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AddupRoute: AddupRoute,
+  AdminRoute: AdminRouteWithChildren,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
   ReviewsRoute: ReviewsRoute,
