@@ -1,8 +1,10 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Plus, Save, Trash2, Upload } from "lucide-react";
+import { Plus, Save, Upload } from "lucide-react";
+import { toast } from "sonner";
+
 import {
   getSiteProjects,
   adminUpsertProject,
