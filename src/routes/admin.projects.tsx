@@ -129,7 +129,7 @@ function ProjectsAdmin() {
             </div>
             <div className="mt-6 flex justify-end gap-2">
               <button onClick={() => setEditing(null)} className="rounded-lg border border-border px-4 py-2 text-sm">Cancel</button>
-              <button onClick={save} className="inline-flex items-center gap-1.5 rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background"><Save className="h-4 w-4"/> Save</button>
+              <button onClick={() => editing && saveMut.mutate(editing)} disabled={saveMut.isPending} className="inline-flex items-center gap-1.5 rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background disabled:opacity-60"><Save className="h-4 w-4"/> {saveMut.isPending ? "Saving…" : "Save"}</button>
             </div>
           </div>
         </div>
