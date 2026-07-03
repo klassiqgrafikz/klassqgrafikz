@@ -1,8 +1,9 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Trash2, Plus, Save } from "lucide-react";
+import { toast } from "sonner";
 import {
   getSiteServices,
   adminUpsertService,
@@ -23,24 +24,37 @@ function ServicesAdmin() {
 
   const [editing, setEditing] = useState<Partial<Service> | null>(null);
 
-  async function save() {
-    if (!editing) return;
-    await upsert({
-      data: {
-        id: editing.id,
-        title: editing.title || "",
-        subtitle: editing.subtitle ?? null,
-        popularity: Number(editing.popularity ?? 50),
-        sort_order: Number(editing.sort_order ?? data.length + 1),
-      },
-    });
-    setEditing(null);
-    qc.invalidateQueries({ queryKey: ["cms", "services"] });
-  }
-  async function remove(id: string) {
+  const saveMut = useMutation({
+    mutationFn: async (v: Partial<Service>) => {
+      const payload: Record<string, unknown> = {
+        title: v.title || "",
+        subtitle: v.subtitle ?? null,
+        popularity: Number(v.popularity ?? 50),
+        sort_order: Number(v.sort_order ?? data.length + 1),
+      };
+      if (v.id) payload.id = v.id;
+      return upsert({ data: payload as never });
+    },
+    onSuccess: async () => {
+      toast.success("Service saved");
+      await qc.invalidateQueries({ queryKey: ["cms", "services"] });
+      setEditing(null);
+    },
+    onError: (e: Error) => toast.error(e.message || "Save failed"),
+  });
+
+  const deleteMut = useMutation({
+    mutationFn: (id: string) => del({ data: { id } }),
+    onSuccess: async () => {
+      toast.success("Deleted");
+      await qc.invalidateQueries({ queryKey: ["cms", "services"] });
+    },
+    onError: (e: Error) => toast.error(e.message || "Delete failed"),
+  });
+
+  function remove(id: string) {
     if (!confirm("Delete this service?")) return;
-    await del({ data: { id } });
-    qc.invalidateQueries({ queryKey: ["cms", "services"] });
+    deleteMut.mutate(id);
   }
 
   return (
@@ -97,7 +111,13 @@ function ServicesAdmin() {
             </div>
             <div className="mt-6 flex justify-end gap-2">
               <button onClick={() => setEditing(null)} className="rounded-lg border border-border px-4 py-2 text-sm">Cancel</button>
-              <button onClick={save} className="inline-flex items-center gap-1.5 rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background"><Save className="h-4 w-4"/> Save</button>
+              <button
+                onClick={() => saveMut.mutate(editing)}
+                disabled={saveMut.isPending}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background disabled:opacity-60"
+              >
+                <Save className="h-4 w-4"/> {saveMut.isPending ? "Saving…" : "Save"}
+              </button>
             </div>
           </div>
         </div>
