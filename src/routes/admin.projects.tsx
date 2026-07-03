@@ -40,25 +40,40 @@ function ProjectsAdmin() {
     setEditing((e) => ({ ...(e || {}), image_url: url }));
   }
 
-  async function save() {
-    if (!editing?.image_url) return alert("Upload an image first");
-    await upsert({
-      data: {
-        id: editing.id,
-        image_url: editing.image_url,
-        alt: editing.alt ?? null,
-        tag: editing.tag ?? null,
-        sort_order: Number(editing.sort_order ?? data.length + 1),
-      },
-    });
-    setEditing(null);
-    qc.invalidateQueries({ queryKey: ["cms", "projects"] });
-  }
-  async function remove(id: string) {
+  const saveMut = useMutation({
+    mutationFn: async (v: Partial<Project>) => {
+      if (!v.image_url) throw new Error("Upload an image first");
+      const payload: Record<string, unknown> = {
+        image_url: v.image_url,
+        alt: v.alt ?? null,
+        tag: v.tag ?? null,
+        sort_order: Number(v.sort_order ?? data.length + 1),
+      };
+      if (v.id) payload.id = v.id;
+      return upsert({ data: payload as never });
+    },
+    onSuccess: async () => {
+      toast.success("Project saved");
+      await qc.invalidateQueries({ queryKey: ["cms", "projects"] });
+      setEditing(null);
+    },
+    onError: (e: Error) => toast.error(e.message || "Save failed"),
+  });
+
+  const deleteMut = useMutation({
+    mutationFn: (id: string) => del({ data: { id } }),
+    onSuccess: async () => {
+      toast.success("Deleted");
+      await qc.invalidateQueries({ queryKey: ["cms", "projects"] });
+    },
+    onError: (e: Error) => toast.error(e.message || "Delete failed"),
+  });
+
+  function remove(id: string) {
     if (!confirm("Delete this project?")) return;
-    await del({ data: { id } });
-    qc.invalidateQueries({ queryKey: ["cms", "projects"] });
+    deleteMut.mutate(id);
   }
+
 
   return (
     <div>
