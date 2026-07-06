@@ -147,10 +147,29 @@ function FloatingChannels() {
 }
 
 
+const HERO_TEXT = "Designing brands, experiences & digital solutions that move businesses forward.";
+
+function useTyping(text: string, speed = 28) {
+  const [out, setOut] = useState("");
+  useEffect(() => {
+    setOut("");
+    let i = 0;
+    const id = window.setInterval(() => {
+      i += 1;
+      setOut(text.slice(0, i));
+      if (i >= text.length) window.clearInterval(id);
+    }, speed);
+    return () => window.clearInterval(id);
+  }, [text, speed]);
+  return out;
+}
+
 function Hero() {
+  const typed = useTyping(HERO_TEXT, 28);
+  const done = typed.length >= HERO_TEXT.length;
+
   return (
     <section className="relative mx-auto mt-10 max-w-6xl px-6 pt-10 md:pt-20">
-      {/* Floating ambient orbs */}
       <div
         aria-hidden
         className="pointer-events-none absolute -top-10 right-10 h-72 w-72 rounded-full bg-primary/20 blur-3xl animate-float"
@@ -161,45 +180,49 @@ function Hero() {
         style={{ animationDelay: "-3s" }}
       />
 
-      <div className="relative">
-        <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground backdrop-blur">
-          <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse-dot" />
-          Multidisciplinary creative studio
-        </div>
+      <div className="relative grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-center">
+        <div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground backdrop-blur">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse-dot" />
+            Multidisciplinary creative studio
+          </div>
 
-        <h1 className="mt-7 max-w-5xl font-display text-[2.6rem] font-semibold leading-[1.02] tracking-[-0.03em] md:text-7xl lg:text-[5.5rem]">
-          Designing brands, experiences{" "}
-          <span className="text-gradient">&amp; digital solutions</span>{" "}
-          that move businesses forward.
-        </h1>
+          <h1 className="mt-7 max-w-4xl font-display text-[2.1rem] font-semibold leading-[1.05] tracking-[-0.03em] md:text-6xl lg:text-[4.5rem] min-h-[3em]">
+            {typed}
+            <span
+              className={`ml-1 inline-block h-[0.9em] w-[3px] translate-y-[0.1em] bg-primary ${done ? "animate-caret" : ""}`}
+              aria-hidden
+            />
+          </h1>
 
-        <p className="mt-7 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-          Klassiq Grafikz is a creative studio crafting identity systems, motion,
-          digital products, and logistics platforms for ambitious brands across
-          the world.
-        </p>
+          <p className="mt-7 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
+            Klassiq Grafikz is a creative studio crafting identity systems, motion,
+            digital products, and logistics platforms for ambitious brands across
+            the world.
+          </p>
 
-        <div className="mt-9 flex flex-wrap items-center gap-3">
-          <Link to="/contact">
-            <Button
-              size="lg"
-              className="group h-12 rounded-full bg-foreground px-6 text-sm font-medium text-background hover:bg-foreground/90"
-            >
-              Start a project
-              <ArrowUpRight className="ml-1.5 h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </Button>
-          </Link>
-          <Link to="/services">
-            <Button
-              size="lg"
-              variant="outline"
-              className="h-12 rounded-full border-border bg-card/40 px-6 text-sm font-medium backdrop-blur hover:bg-card"
-            >
-              Explore services
-            </Button>
-          </Link>
+          <div className="mt-9 flex flex-wrap items-center gap-3">
+            <Link to="/contact">
+              <Button
+                size="lg"
+                className="group h-12 rounded-full bg-foreground px-6 text-sm font-medium text-background hover:bg-foreground/90"
+              >
+                Start a project
+                <ArrowUpRight className="ml-1.5 h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </Button>
+            </Link>
+            <Link to="/services">
+              <Button
+                size="lg"
+                variant="outline"
+                className="h-12 rounded-full border-border bg-card/40 px-6 text-sm font-medium backdrop-blur hover:bg-card"
+              >
+                Explore services
+              </Button>
+            </Link>
+          </div>
 
-          <div className="ml-2 flex items-center gap-3">
+          <div className="mt-8 flex items-center gap-3">
             <div className="flex -space-x-2">
               {["IS", "OJ", "CO", "AB"].map((i, idx) => (
                 <div
@@ -222,29 +245,123 @@ function Hero() {
           </div>
         </div>
 
-        {/* Featured strip */}
-        <div className="mt-16 grid gap-3 rounded-3xl border border-border bg-card/40 p-3 backdrop-blur md:grid-cols-3">
-          {[
-            { k: "Avg. delivery", v: "48h", s: "rapid creative cycles" },
-            { k: "Client retention", v: "92%", s: "repeat partnerships" },
-            { k: "Disciplines", v: "08+", s: "brand · motion · product" },
-          ].map((m) => (
-            <div
-              key={m.k}
-              className="rounded-2xl bg-surface/60 p-5"
-            >
-              <div className="text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
-                {m.k}
+        {/* Big blinking logo container */}
+        <div className="relative mx-auto w-full max-w-sm">
+          <div className="absolute -inset-6 rounded-[2.5rem] bg-primary/20 blur-3xl" aria-hidden />
+          <div className="relative overflow-hidden rounded-[2rem] border border-border bg-card/60 p-5 shadow-card-soft backdrop-blur">
+            <img
+              src={kgLogo.url}
+              alt="Klassiq Grafikz logo"
+              className="mx-auto aspect-square w-full rounded-[1.5rem] object-cover animate-blink"
+            />
+            <div className="mt-4 text-center">
+              <div className="font-display text-lg font-semibold tracking-tight">Klassiq Grafikz</div>
+              <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+                Design · Editing · Innovation
               </div>
-              <div className="mt-2 font-display text-3xl font-semibold tracking-tight">{m.v}</div>
-              <div className="mt-1 text-xs text-muted-foreground">{m.s}</div>
             </div>
-          ))}
+          </div>
         </div>
+      </div>
+
+      {/* Featured strip */}
+      <div className="mt-16 grid gap-3 rounded-3xl border border-border bg-card/40 p-3 backdrop-blur md:grid-cols-3">
+        {[
+          { k: "Avg. delivery", v: "48h", s: "rapid creative cycles" },
+          { k: "Client retention", v: "92%", s: "repeat partnerships" },
+          { k: "Disciplines", v: "08+", s: "brand · motion · product" },
+        ].map((m) => (
+          <div key={m.k} className="rounded-2xl bg-surface/60 p-5">
+            <div className="text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
+              {m.k}
+            </div>
+            <div className="mt-2 font-display text-3xl font-semibold tracking-tight">{m.v}</div>
+            <div className="mt-1 text-xs text-muted-foreground">{m.s}</div>
+          </div>
+        ))}
       </div>
     </section>
   );
 }
+
+function LiveMonitor() {
+  const [viewers, setViewers] = useState(28);
+  const [visits, setVisits] = useState(237);
+  const [monthly, setMonthly] = useState(2418);
+
+  useEffect(() => {
+    const t1 = window.setInterval(() => {
+      setViewers(() => 12 + Math.floor(Math.random() * 34));
+    }, 2200);
+    const t2 = window.setInterval(() => {
+      setVisits((v) => v + Math.floor(Math.random() * 3));
+    }, 4500);
+    const t3 = window.setInterval(() => {
+      setMonthly((m) => m + Math.floor(Math.random() * 5) - 1);
+    }, 3000);
+    return () => {
+      window.clearInterval(t1);
+      window.clearInterval(t2);
+      window.clearInterval(t3);
+    };
+  }, []);
+
+  const cards = [
+    { Icon: Eye, label: "Active Viewers", value: viewers, tint: "text-emerald-400" },
+    { Icon: TrendingUp, label: "Today's Visits", value: visits, tint: "text-primary" },
+    { Icon: Users, label: "Monthly Interested Viewers", value: monthly, tint: "text-primary-glow" },
+  ];
+
+  return (
+    <section className="mx-auto mt-28 max-w-6xl px-6">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <div className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/70" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+            </span>
+            Realtime monitor
+          </div>
+          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
+            Live traffic on the studio
+          </h2>
+        </div>
+        <p className="max-w-sm text-sm text-muted-foreground">
+          A live pulse of who's browsing our work right now.
+        </p>
+      </div>
+
+      <div className="mt-10 grid gap-4 md:grid-cols-3">
+        {cards.map(({ Icon, label, value, tint }) => (
+          <div
+            key={label}
+            className="relative overflow-hidden rounded-3xl border border-border bg-card/60 p-7 backdrop-blur"
+          >
+            <div className="flex items-center justify-between">
+              <div className={`grid h-10 w-10 place-items-center rounded-xl bg-primary/10 ${tint}`}>
+                <Icon className="h-5 w-5" />
+              </div>
+              <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
+                Live
+              </span>
+            </div>
+            <div
+              key={value}
+              className="mt-6 font-display text-5xl font-semibold tracking-tight transition-all duration-500 animate-rise"
+            >
+              {value.toLocaleString()}
+            </div>
+            <div className="mt-2 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+              {label}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 
 function Marquee() {
   const words = [
