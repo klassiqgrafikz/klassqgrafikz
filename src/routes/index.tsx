@@ -55,15 +55,16 @@ export const Route = createFileRoute("/")({
 });
 
 const capabilities = [
-  { Icon: Brush, title: "Brand Identity", desc: "Logos, systems, guidelines." },
-  { Icon: Palette, title: "Graphic Design", desc: "Flyers, social, print." },
-  { Icon: Film, title: "Video & Motion", desc: "Reels, ads, lipsyncs." },
-  { Icon: PenTool, title: "Digital Portraits", desc: "Editorial illustrations." },
-  { Icon: MonitorSmartphone, title: "UI / UX Design", desc: "Web & product design." },
-  { Icon: Truck, title: "Logistics Platforms", desc: "Trackable shipping sites." },
-  { Icon: Plane, title: "Shipping Documents", desc: "Flight tickets, manifests." },
-  { Icon: Layers, title: "Corporate Creative", desc: "Decks, reports, kits." },
+  { Icon: Brush, title: "Brand Identity", desc: "Logos, systems, guidelines.", available: true },
+  { Icon: Palette, title: "Graphic Design", desc: "Flyers, social, print.", available: true },
+  { Icon: Film, title: "Video & Motion", desc: "Reels, ads, lipsyncs.", available: true },
+  { Icon: PenTool, title: "Digital Portraits", desc: "Editorial illustrations.", available: true },
+  { Icon: MonitorSmartphone, title: "UI / UX Design", desc: "Web & product design.", available: true },
+  { Icon: Truck, title: "Logistics Platforms", desc: "Trackable shipping sites.", available: true },
+  { Icon: Plane, title: "Shipping Documents", desc: "Flight tickets, manifests.", available: false },
+  { Icon: Layers, title: "Corporate Creative", desc: "Decks, reports, kits.", available: true },
 ];
+
 
 const fallbackProjects = [
   { src: "/images/project-1.jpg", alt: "Business registration project display", tag: "Corporate" },
