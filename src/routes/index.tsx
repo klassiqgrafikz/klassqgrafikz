@@ -410,21 +410,38 @@ function Capabilities() {
         </p>
       </div>
 
-      <div className="mt-12 grid gap-px overflow-hidden rounded-3xl border border-border bg-border/40 md:grid-cols-2 lg:grid-cols-4">
-        {capabilities.map(({ Icon, title, desc }) => (
+      <div className="mt-12 grid gap-4 grid-cols-1 md:grid-cols-2">
+        {capabilities.map(({ Icon, title, desc, available }) => (
           <div
             key={title}
-            className="group relative bg-card p-7 transition hover:bg-card/60"
+            className="group relative overflow-hidden rounded-2xl border border-border bg-card p-7 transition hover:-translate-y-0.5 hover:border-primary/50"
           >
-            <div className="grid h-11 w-11 place-items-center rounded-xl bg-primary/10 text-primary transition group-hover:bg-primary group-hover:text-primary-foreground">
-              <Icon className="h-5 w-5" />
+            <div className="flex items-start justify-between gap-4">
+              <div className="grid h-12 w-12 place-items-center rounded-xl bg-primary/10 text-primary transition group-hover:bg-primary group-hover:text-primary-foreground">
+                <Icon className="h-5 w-5" />
+              </div>
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] ${
+                  available
+                    ? "border-emerald-400/40 bg-emerald-400/10 text-emerald-400"
+                    : "border-amber-400/40 bg-amber-400/10 text-amber-400"
+                }`}
+              >
+                <span
+                  className={`h-1.5 w-1.5 rounded-full ${
+                    available ? "bg-emerald-400 animate-pulse-dot" : "bg-amber-400"
+                  }`}
+                />
+                {available ? "Available now" : "Waitlist"}
+              </span>
             </div>
-            <div className="mt-5 font-display text-lg font-semibold">{title}</div>
+            <div className="mt-5 font-display text-xl font-semibold">{title}</div>
             <p className="mt-1.5 text-sm text-muted-foreground">{desc}</p>
-            <ArrowUpRight className="absolute right-6 top-6 h-4 w-4 text-muted-foreground/40 transition group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <ArrowUpRight className="absolute right-6 bottom-6 h-4 w-4 text-muted-foreground/40 transition group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </div>
         ))}
       </div>
+
     </section>
   );
 }
