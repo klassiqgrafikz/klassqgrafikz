@@ -42,24 +42,8 @@ export function Footer() {
               A multidisciplinary creative agency designing brands, digital products
               and logistics platforms that move businesses forward.
             </p>
-
-            <div className="mt-6 flex flex-wrap gap-2">
-              {socials.map((s) => {
-                const Icon = ICONS[s.icon || "Globe"] || Globe;
-                return (
-                  <a
-                    key={s.id}
-                    href={s.url}
-                    target={s.url.startsWith("mailto:") || s.url.startsWith("tel:") ? undefined : "_blank"}
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/60 px-3.5 py-2 text-xs font-medium transition hover:border-primary/60 hover:text-foreground"
-                  >
-                    <Icon className="h-3.5 w-3.5" /> {s.label}
-                  </a>
-                );
-              })}
-            </div>
           </div>
+
 
           <div className="md:col-span-2">
             <div className="mb-4 text-[10px] font-semibold uppercase tracking-[0.3em] text-muted-foreground">Studio</div>
