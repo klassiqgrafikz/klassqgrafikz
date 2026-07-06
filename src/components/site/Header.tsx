@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { useState } from "react";
+import { ThemeToggle } from "./ThemeToggle";
+
 
 const nav = [
   { to: "/services", label: "Services" },
