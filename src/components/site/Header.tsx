@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { useState } from "react";
+import { ThemeToggle } from "./ThemeToggle";
+
 
 const nav = [
   { to: "/services", label: "Services" },
@@ -42,6 +44,7 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <Link
               to="/contact"
               className="hidden items-center gap-1.5 rounded-xl bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90 md:inline-flex"
@@ -50,6 +53,7 @@ export function Header() {
               <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
             <button
+
               className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-card/60 md:hidden"
               onClick={() => setOpen((o) => !o)}
               aria-label="Toggle menu"
