@@ -103,15 +103,49 @@ function Home() {
         <Hero />
         <Marquee />
         <Capabilities />
+        <LiveMonitor />
         <ProjectShowcase />
         <Process />
         <Stats />
         <Testimonials />
         <CTASection />
       </SiteLayout>
+      <FloatingChannels />
     </>
   );
 }
+
+function FloatingChannels() {
+  const loadSettings = useServerFn(getSiteSettings);
+  const { data: settings } = useQuery({ queryKey: ["cms", "settings"], queryFn: () => loadSettings() });
+  const whatsapp = settings?.community_whatsapp_url || "https://wa.me/";
+  const telegram = settings?.community_telegram_url || "https://t.me/";
+
+  return (
+    <div className="fixed bottom-5 right-5 z-40 flex flex-col gap-3">
+      <a
+        href={whatsapp}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Chat on WhatsApp"
+        className="group grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-glow transition hover:scale-110"
+      >
+        <MessageCircle className="h-6 w-6" />
+        <span className="pointer-events-none absolute inset-0 rounded-full animate-ping bg-[#25D366]/40" />
+      </a>
+      <a
+        href={telegram}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Join our Telegram"
+        className="grid h-14 w-14 place-items-center rounded-full bg-[#229ED9] text-white shadow-glow transition hover:scale-110"
+      >
+        <Send className="h-6 w-6" />
+      </a>
+    </div>
+  );
+}
+
 
 function Hero() {
   return (
