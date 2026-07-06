@@ -82,11 +82,41 @@ export function Footer() {
       </div>
 
       <div className="border-t border-border/60">
+        <div className="mx-auto max-w-6xl px-6 py-14 text-center">
+          <h3 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
+            REACH OUT TO US
+          </h3>
+          <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
+            Slide into any of these — we usually reply within minutes.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            {socials.map((s) => {
+              const Icon = ICONS[s.icon || "Globe"] || Globe;
+              const external = !s.url.startsWith("mailto:") && !s.url.startsWith("tel:");
+              return (
+                <a
+                  key={s.id}
+                  href={s.url}
+                  target={external ? "_blank" : undefined}
+                  rel="noreferrer"
+                  aria-label={s.label}
+                  className="group grid h-12 w-12 place-items-center rounded-full border border-border bg-card/60 text-foreground transition hover:-translate-y-0.5 hover:border-primary/60 hover:bg-primary hover:text-primary-foreground"
+                >
+                  <Icon className="h-5 w-5" />
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-border/60">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-6 py-6 text-xs text-muted-foreground md:flex-row">
           <p>{copyright}</p>
           <p className="font-mono tracking-wide">{tagline}</p>
         </div>
       </div>
+
     </footer>
   );
 }
