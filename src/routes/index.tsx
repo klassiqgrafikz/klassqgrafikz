@@ -147,7 +147,7 @@ function FloatingChannels() {
 }
 
 
-const HERO_TEXT = "Designing brands, experiences & digital solutions that move businesses forward.";
+const HERO_TEXT = "DESIGNING BRANDS, EXPERIENCES & DIGITAL SOLUTIONS THAT MOVE BUSINESSES FORWARD.";
 
 function useTyping(text: string, speed = 28) {
   const [out, setOut] = useState("");
