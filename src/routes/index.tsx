@@ -167,6 +167,9 @@ function useTyping(text: string, speed = 28) {
 function Hero() {
   const typed = useTyping(HERO_TEXT, 28);
   const done = typed.length >= HERO_TEXT.length;
+  const loadSettings = useServerFn(getSiteSettings);
+  const { data: settings } = useQuery({ queryKey: ["cms", "settings"], queryFn: () => loadSettings() });
+  const heroLogo = settings?.logo_url || kgLogo.url;
 
   return (
     <section className="relative mx-auto mt-10 max-w-6xl px-6 pt-10 md:pt-20">
