@@ -195,11 +195,6 @@ function Hero() {
             />
           </h1>
 
-          <p className="mt-7 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-            Klassiq Grafikz is a creative studio crafting identity systems, motion,
-            digital products, and logistics platforms for ambitious brands across
-            the world.
-          </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <Link to="/contact">
