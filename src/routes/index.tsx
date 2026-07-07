@@ -487,13 +487,16 @@ function ProjectShowcase() {
             style={{ transform: `translateX(-${activeIndex * 100}%)` }}
           >
             {projectSlides.map((slide, index) => (
-              <div key={slide.src} className="relative h-full min-w-full">
+              <div key={slide.src} className="relative h-full min-w-full select-none">
                 <img
                   src={slide.src}
                   alt={slide.alt}
                   loading={index === 0 ? "eager" : "lazy"}
-                  className="h-full w-full object-contain"
+                  draggable={false}
+                  onContextMenu={(e) => e.preventDefault()}
+                  className="h-full w-full object-contain select-none pointer-events-none"
                 />
+
                 <div className="absolute left-5 top-5 inline-flex items-center gap-1.5 rounded-full bg-background/70 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] backdrop-blur">
                   <span className="h-1 w-1 rounded-full bg-primary" />
                   {slide.tag}
