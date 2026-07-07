@@ -248,7 +248,7 @@ function Hero() {
           <div className="absolute -inset-6 rounded-[2.5rem] bg-primary/20 blur-3xl" aria-hidden />
           <div className="relative overflow-hidden rounded-[2rem] border border-border bg-card/60 p-5 shadow-card-soft backdrop-blur">
             <img
-              src={kgLogo.url}
+              src={heroLogo}
               alt="Klassiq Grafikz logo"
               className="mx-auto aspect-square w-full rounded-[1.5rem] object-cover animate-blink"
             />
