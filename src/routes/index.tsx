@@ -147,7 +147,7 @@ function FloatingChannels() {
 }
 
 
-const HERO_TEXT = "Designing brands, experiences & digital solutions that move businesses forward.";
+const HERO_TEXT = "DESIGNING BRANDS, EXPERIENCES & DIGITAL SOLUTIONS THAT MOVE BUSINESSES FORWARD.";
 
 function useTyping(text: string, speed = 28) {
   const [out, setOut] = useState("");
@@ -167,6 +167,9 @@ function useTyping(text: string, speed = 28) {
 function Hero() {
   const typed = useTyping(HERO_TEXT, 28);
   const done = typed.length >= HERO_TEXT.length;
+  const loadSettings = useServerFn(getSiteSettings);
+  const { data: settings } = useQuery({ queryKey: ["cms", "settings"], queryFn: () => loadSettings() });
+  const heroLogo = settings?.logo_url || kgLogo.url;
 
   return (
     <section className="relative mx-auto mt-10 max-w-6xl px-6 pt-10 md:pt-20">
@@ -195,11 +198,6 @@ function Hero() {
             />
           </h1>
 
-          <p className="mt-7 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-            Klassiq Grafikz is a creative studio crafting identity systems, motion,
-            digital products, and logistics platforms for ambitious brands across
-            the world.
-          </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <Link to="/contact">
@@ -250,7 +248,7 @@ function Hero() {
           <div className="absolute -inset-6 rounded-[2.5rem] bg-primary/20 blur-3xl" aria-hidden />
           <div className="relative overflow-hidden rounded-[2rem] border border-border bg-card/60 p-5 shadow-card-soft backdrop-blur">
             <img
-              src={kgLogo.url}
+              src={heroLogo}
               alt="Klassiq Grafikz logo"
               className="mx-auto aspect-square w-full rounded-[1.5rem] object-cover animate-blink"
             />
@@ -489,13 +487,16 @@ function ProjectShowcase() {
             style={{ transform: `translateX(-${activeIndex * 100}%)` }}
           >
             {projectSlides.map((slide, index) => (
-              <div key={slide.src} className="relative h-full min-w-full">
+              <div key={slide.src} className="relative h-full min-w-full select-none">
                 <img
                   src={slide.src}
                   alt={slide.alt}
                   loading={index === 0 ? "eager" : "lazy"}
-                  className="h-full w-full object-contain"
+                  draggable={false}
+                  onContextMenu={(e) => e.preventDefault()}
+                  className="h-full w-full object-contain select-none pointer-events-none"
                 />
+
                 <div className="absolute left-5 top-5 inline-flex items-center gap-1.5 rounded-full bg-background/70 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] backdrop-blur">
                   <span className="h-1 w-1 rounded-full bg-primary" />
                   {slide.tag}

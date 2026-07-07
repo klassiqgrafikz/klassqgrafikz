@@ -2,7 +2,7 @@ import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Plus, Save } from "lucide-react";
+import { Plus, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { getSiteSocials, adminUpsertSocial, adminDeleteSocial, type Social } from "@/lib/cms.functions";
 
@@ -66,10 +66,10 @@ function SocialsAdmin() {
         </button>
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-2xl border border-border bg-card">
-        <table className="w-full text-sm">
+      <div className="mt-6 overflow-x-auto rounded-2xl border border-border bg-card">
+        <table className="w-full min-w-[640px] text-sm">
           <thead className="bg-secondary/40 text-left text-xs uppercase tracking-wider text-muted-foreground">
-            <tr><th className="p-3">Platform</th><th className="p-3">Label</th><th className="p-3">URL</th><th className="p-3">Icon</th><th className="p-3"></th></tr>
+            <tr><th className="p-3">Platform</th><th className="p-3">Label</th><th className="p-3">URL</th><th className="p-3">Icon</th><th className="p-3 text-right">Actions</th></tr>
           </thead>
           <tbody>
             {data.map((s) => (
@@ -78,15 +78,20 @@ function SocialsAdmin() {
                 <td className="p-3">{s.label}</td>
                 <td className="p-3 text-xs text-muted-foreground"><a href={s.url} target="_blank" rel="noreferrer" className="hover:text-foreground">{s.url}</a></td>
                 <td className="p-3 text-xs">{s.icon}</td>
-                <td className="p-3 text-right text-xs">
-                  <button onClick={() => setEditing(s)} className="mr-2 text-primary hover:underline">Edit</button>
-                  <button onClick={() => remove(s.id)} className="text-red-500 hover:underline">Delete</button>
+                <td className="p-3 text-right">
+                  <div className="inline-flex items-center gap-2">
+                    <button onClick={() => setEditing(s)} className="rounded-md border border-border px-2.5 py-1 text-xs hover:bg-secondary">Edit</button>
+                    <button onClick={() => remove(s.id)} className="inline-flex items-center gap-1 rounded-md border border-red-500/40 bg-red-500/10 px-2.5 py-1 text-xs font-medium text-red-500 hover:bg-red-500/20">
+                      <Trash2 className="h-3 w-3" /> Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
 
       {editing && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4" onClick={() => setEditing(null)}>
