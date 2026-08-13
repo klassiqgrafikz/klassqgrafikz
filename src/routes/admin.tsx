@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, redirect, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { adminCheckUnlocked, adminLock } from "@/lib/cms.functions";
-import { Lock } from "lucide-react";
+import { Lock, LayoutDashboard, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
@@ -37,37 +37,55 @@ function AdminLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto grid max-w-7xl gap-6 px-6 py-8 md:grid-cols-[220px_1fr]">
-        <aside className="space-y-1">
-          <div className="mb-4 flex items-center justify-between">
-            <div>
-              <div className="font-display text-lg font-semibold">Admin</div>
-              <div className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Klassiq CMS</div>
+    <div className="warm min-h-screen bg-background text-foreground">
+      <div className="mx-auto grid max-w-7xl gap-6 px-6 py-8 md:grid-cols-[240px_1fr]">
+        <aside className="md:sticky md:top-8 md:self-start">
+          <div className="rounded-3xl border border-border bg-card p-5 shadow-card-soft">
+            <div className="mb-4 flex items-center justify-between gap-2">
+              <div className="flex items-center gap-3">
+                <div className="grid h-10 w-10 place-items-center rounded-xl gradient-primary font-display text-lg font-bold text-primary-foreground shadow-glow">
+                  K
+                </div>
+                <div>
+                  <div className="font-display text-base font-semibold tracking-tight">Admin</div>
+                  <div className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+                    The studio's control room
+                  </div>
+                </div>
+              </div>
+            </div>
+            <nav className="flex flex-col gap-0.5">
+              {links.map((l) => (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  className="rounded-xl px-3 py-2 text-sm text-foreground/70 transition hover:bg-secondary/60 hover:text-foreground"
+                  activeProps={{ className: "bg-primary/10 font-medium text-primary" }}
+                  activeOptions={{ exact: !!l.exact }}
+                >
+                  {l.label}
+                </Link>
+              ))}
+            </nav>
+            <div className="mt-5 flex flex-col gap-2 border-t border-border/60 pt-4">
+              <button
+                onClick={handleLock}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border px-3 py-2 text-xs font-medium text-muted-foreground transition hover:border-primary/50 hover:text-foreground"
+              >
+                <Lock className="h-3.5 w-3.5" /> Lock the studio
+              </button>
+              <Link
+                to="/"
+                className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs text-muted-foreground transition hover:text-foreground"
+              >
+                <LayoutDashboard className="h-3.5 w-3.5" /> Back to site
+              </Link>
             </div>
           </div>
-          <nav className="flex flex-col gap-0.5">
-            {links.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                className="rounded-lg px-3 py-2 text-sm text-foreground/70 transition hover:bg-secondary/60 hover:text-foreground"
-                activeProps={{ className: "bg-secondary text-foreground" }}
-                activeOptions={{ exact: !!l.exact }}
-              >
-                {l.label}
-              </Link>
-            ))}
-          </nav>
-          <button
-            onClick={handleLock}
-            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border px-3 py-2 text-xs text-muted-foreground hover:text-foreground"
-          >
-            <Lock className="h-3.5 w-3.5" /> Lock portal
-          </button>
-          <Link to="/" className="mt-2 block text-center text-xs text-muted-foreground hover:text-foreground">
-            ← Back to site
-          </Link>
+          <p className="mt-3 hidden px-2 text-[11px] leading-relaxed text-muted-foreground md:block">
+            <Sparkles className="mr-1 inline h-3 w-3 text-primary" />
+            Every change you save here goes live on the next page load.
+          </p>
         </aside>
         <main className="min-w-0">
           <Outlet />
