@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -23,14 +23,23 @@ import {
   Eye,
   TrendingUp,
   Users,
+  Expand,
 } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { BootLoader } from "@/components/site/BootLoader";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Reveal } from "@/lib/Reveal";
 import { reviews as fallbackReviews } from "@/lib/site-data";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getPinnedReviews, getSiteProjects, getSiteSettings } from "@/lib/cms.functions";
+import useEmblaCarousel from "embla-carousel-react";
 import kgLogo from "@/assets/kg-logo.jpg.asset.json";
 
 
@@ -164,12 +173,35 @@ function useTyping(text: string, speed = 28) {
   return out;
 }
 
+function useScrollRotate(speed = 0.12) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let raf = 0;
+    const update = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        el.style.transform = `rotate(${window.scrollY * speed}deg)`;
+      });
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", update);
+      cancelAnimationFrame(raf);
+    };
+  }, [speed]);
+  return ref;
+}
+
 function Hero() {
   const typed = useTyping(HERO_TEXT, 28);
   const done = typed.length >= HERO_TEXT.length;
   const loadSettings = useServerFn(getSiteSettings);
   const { data: settings } = useQuery({ queryKey: ["cms", "settings"], queryFn: () => loadSettings() });
   const heroLogo = settings?.logo_url || kgLogo.url;
+  const rotateRef = useScrollRotate(0.12);
 
   return (
     <section className="relative mx-auto mt-10 max-w-6xl px-6 pt-10 md:pt-20">
@@ -184,7 +216,7 @@ function Hero() {
       />
 
       <div className="relative grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-center">
-        <div>
+        <Reveal delay={80}>
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse-dot" />
             Multidisciplinary creative studio
@@ -203,10 +235,16 @@ function Hero() {
             <Link to="/contact">
               <Button
                 size="lg"
-                className="group h-12 rounded-full bg-foreground px-6 text-sm font-medium text-background hover:bg-foreground/90"
+                className="group btn-winona h-12 rounded-full bg-foreground px-8 text-sm font-medium text-background hover:bg-foreground/90"
               >
-                Start a project
-                <ArrowUpRight className="ml-1.5 h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <span className="btn-label">
+                  Start a project
+                  <ArrowUpRight className="ml-1.5 h-4 w-4" />
+                </span>
+                <span className="btn-label-alt" aria-hidden>
+                  Let's go
+                  <ArrowUpRight className="h-4 w-4" />
+                </span>
               </Button>
             </Link>
             <Link to="/services">
@@ -241,10 +279,15 @@ function Hero() {
               <div className="mt-0.5 text-muted-foreground">320+ happy clients</div>
             </div>
           </div>
-        </div>
+        </Reveal>
 
         {/* Big blinking logo container */}
-        <div className="relative mx-auto w-full max-w-sm">
+        <Reveal
+          direction="zoom"
+          delay={200}
+          className="relative mx-auto w-full max-w-sm"
+        >
+          <div ref={rotateRef} aria-hidden className="pointer-events-none absolute -inset-9 rounded-full border border-dashed border-primary/25" />
           <div className="absolute -inset-6 rounded-[2.5rem] bg-primary/20 blur-3xl" aria-hidden />
           <div className="relative overflow-hidden rounded-[2rem] border border-border bg-card/60 p-5 shadow-card-soft backdrop-blur">
             <img
@@ -259,11 +302,11 @@ function Hero() {
               </div>
             </div>
           </div>
-        </div>
+        </Reveal>
       </div>
 
       {/* Featured strip */}
-      <div className="mt-16 grid gap-3 rounded-3xl border border-border bg-card/40 p-3 backdrop-blur md:grid-cols-3">
+      <Reveal delay={320} className="mt-16 grid gap-3 rounded-3xl border border-border bg-card/40 p-3 backdrop-blur md:grid-cols-3">
         {[
           { k: "Avg. delivery", v: "48h", s: "rapid creative cycles" },
           { k: "Client retention", v: "92%", s: "repeat partnerships" },
@@ -277,7 +320,7 @@ function Hero() {
             <div className="mt-1 text-xs text-muted-foreground">{m.s}</div>
           </div>
         ))}
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -312,7 +355,7 @@ function LiveMonitor() {
 
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
+      <Reveal className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <div className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
             <span className="relative flex h-2 w-2">
@@ -328,12 +371,13 @@ function LiveMonitor() {
         <p className="max-w-sm text-sm text-muted-foreground">
           A live pulse of who's browsing our work right now.
         </p>
-      </div>
+      </Reveal>
 
       <div className="mt-10 grid gap-4 md:grid-cols-3">
-        {cards.map(({ Icon, label, value, tint }) => (
-          <div
+        {cards.map(({ Icon, label, value, tint }, i) => (
+          <Reveal
             key={label}
+            delay={i * 90}
             className="relative overflow-hidden rounded-3xl border border-border bg-card/60 p-7 backdrop-blur"
           >
             <div className="flex items-center justify-between">
@@ -353,7 +397,7 @@ function LiveMonitor() {
             <div className="mt-2 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
               {label}
             </div>
-          </div>
+          </Reveal>
         ))}
       </div>
     </section>
@@ -376,7 +420,10 @@ function Marquee() {
   ];
   const row = [...words, ...words];
   return (
-    <section className="relative mt-24 overflow-hidden border-y border-border/60 bg-surface/30 py-6">
+    <Reveal
+      direction="fade"
+      className="relative mt-24 overflow-hidden border-y border-border/60 bg-surface/30 py-6"
+    >
       <div className="flex animate-marquee gap-12 whitespace-nowrap">
         {row.map((w, i) => (
           <div key={i} className="flex items-center gap-12 font-display text-2xl font-semibold tracking-tight text-foreground/40 md:text-3xl">
@@ -385,14 +432,14 @@ function Marquee() {
           </div>
         ))}
       </div>
-    </section>
+    </Reveal>
   );
 }
 
 function Capabilities() {
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
-      <div className="grid items-end gap-6 md:grid-cols-2">
+      <Reveal className="grid items-end gap-6 md:grid-cols-2">
         <div>
           <div className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
             What we do
@@ -406,12 +453,13 @@ function Capabilities() {
           From a single flyer to a full shipping platform — every engagement is
           treated with the same attention to craft, strategy and finish.
         </p>
-      </div>
+      </Reveal>
 
       <div className="mt-12 grid gap-4 grid-cols-1 md:grid-cols-2">
-        {capabilities.map(({ Icon, title, desc, available }) => (
-          <div
+        {capabilities.map(({ Icon, title, desc, available }, i) => (
+          <Reveal
             key={title}
+            delay={i * 70}
             className="group relative overflow-hidden rounded-2xl border border-border bg-card p-7 transition hover:-translate-y-0.5 hover:border-primary/50"
           >
             <div className="flex items-start justify-between gap-4">
@@ -436,7 +484,7 @@ function Capabilities() {
             <div className="mt-5 font-display text-xl font-semibold">{title}</div>
             <p className="mt-1.5 text-sm text-muted-foreground">{desc}</p>
             <ArrowUpRight className="absolute right-6 bottom-6 h-4 w-4 text-muted-foreground/40 transition group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </div>
+          </Reveal>
         ))}
       </div>
 
@@ -446,6 +494,7 @@ function Capabilities() {
 
 function ProjectShowcase() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const loadProjects = useServerFn(getSiteProjects);
   const { data: dbProjects } = useQuery({ queryKey: ["cms", "projects"], queryFn: () => loadProjects() });
   const projectSlides = (dbProjects && dbProjects.length > 0)
@@ -462,7 +511,7 @@ function ProjectShowcase() {
 
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
+      <Reveal className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <div className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
             Featured work
@@ -478,30 +527,46 @@ function ProjectShowcase() {
           View capabilities
           <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </Link>
-      </div>
+      </Reveal>
 
-      <div className="mt-10 overflow-hidden rounded-[2rem] border border-border bg-card/60 p-3 shadow-card-soft backdrop-blur md:p-4">
+      <Reveal delay={120} className="mt-10 overflow-hidden rounded-[2rem] border border-border bg-card/60 p-3 shadow-card-soft backdrop-blur md:p-4">
         <div className="relative aspect-[16/10] overflow-hidden rounded-[1.5rem] bg-surface/60">
           <div
             className="flex h-full transition-transform duration-700 ease-out will-change-transform"
             style={{ transform: `translateX(-${activeIndex * 100}%)` }}
           >
             {projectSlides.map((slide, index) => (
-              <div key={slide.src} className="relative h-full min-w-full select-none">
+              <button
+                key={slide.src}
+                type="button"
+                onClick={() => {
+                  setActiveIndex(index);
+                  setLightboxOpen(true);
+                }}
+                aria-label={`View project: ${slide.alt}`}
+                className="group relative h-full min-w-full cursor-zoom-in select-none"
+              >
                 <img
                   src={slide.src}
                   alt={slide.alt}
                   loading={index === 0 ? "eager" : "lazy"}
                   draggable={false}
                   onContextMenu={(e) => e.preventDefault()}
-                  className="h-full w-full object-contain select-none pointer-events-none"
+                  className="pointer-events-none h-full w-full object-contain select-none"
                 />
 
                 <div className="absolute left-5 top-5 inline-flex items-center gap-1.5 rounded-full bg-background/70 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] backdrop-blur">
                   <span className="h-1 w-1 rounded-full bg-primary" />
                   {slide.tag}
                 </div>
-              </div>
+
+                <div className="absolute inset-0 grid place-items-center bg-background/40 opacity-0 backdrop-blur-sm transition duration-300 group-hover:opacity-100">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background/80 px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] backdrop-blur">
+                    <Expand className="h-3.5 w-3.5 text-primary" />
+                    View project
+                  </div>
+                </div>
+              </button>
             ))}
           </div>
 
@@ -546,7 +611,59 @@ function ProjectShowcase() {
             ))}
           </div>
         </div>
-      </div>
+      </Reveal>
+
+      <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
+        <DialogContent
+          className="max-w-4xl border-border bg-background/95 p-0 backdrop-blur sm:rounded-[1.5rem]"
+          onKeyDown={(e) => {
+            if (e.key === "ArrowLeft") {
+              setActiveIndex((c) => (c - 1 + projectSlides.length) % projectSlides.length);
+            }
+            if (e.key === "ArrowRight") {
+              setActiveIndex((c) => (c + 1) % projectSlides.length);
+            }
+          }}
+        >
+          <div className="relative aspect-[16/10] overflow-hidden rounded-t-[1.5rem] bg-surface/60">
+            <img
+              src={projectSlides[activeIndex]?.src}
+              alt={projectSlides[activeIndex]?.alt || "Project"}
+              className="h-full w-full object-contain"
+            />
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-4 p-5">
+            <div className="min-w-0">
+              <DialogTitle className="text-[10px] font-semibold uppercase tracking-[0.25em] text-primary">
+                {projectSlides[activeIndex]?.tag || "Project"}
+              </DialogTitle>
+              <DialogDescription className="mt-1 text-sm font-medium text-foreground">
+                {projectSlides[activeIndex]?.alt}
+              </DialogDescription>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                aria-label="Previous project"
+                onClick={() =>
+                  setActiveIndex((c) => (c - 1 + projectSlides.length) % projectSlides.length)
+                }
+                className="grid h-10 w-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-primary hover:text-primary-foreground"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                aria-label="Next project"
+                onClick={() => setActiveIndex((c) => (c + 1) % projectSlides.length)}
+                className="grid h-10 w-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-primary hover:text-primary-foreground"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
@@ -554,7 +671,7 @@ function ProjectShowcase() {
 function Process() {
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
-      <div className="grid items-end gap-6 md:grid-cols-2">
+      <Reveal className="grid items-end gap-6 md:grid-cols-2">
         <div>
           <div className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
             How we work
@@ -568,12 +685,14 @@ function Process() {
           Every engagement runs on the same five-stage rhythm — so you always
           know what's happening, when, and why.
         </p>
-      </div>
+      </Reveal>
 
       <ol className="mt-12 grid gap-4 md:grid-cols-5">
         {processSteps.map(({ n, title, desc, Icon }, i) => (
-          <li
+          <Reveal
+            as="li"
             key={n}
+            delay={i * 80}
             className="relative rounded-2xl border border-border bg-card p-6 transition hover:-translate-y-1 hover:border-primary/50 hover:shadow-soft"
           >
             <div className="flex items-center justify-between">
@@ -585,7 +704,7 @@ function Process() {
             {i < processSteps.length - 1 && (
               <div className="pointer-events-none absolute -right-2 top-1/2 hidden h-px w-4 bg-gradient-to-r from-primary/40 to-transparent md:block" />
             )}
-          </li>
+          </Reveal>
         ))}
       </ol>
     </section>
@@ -643,16 +762,19 @@ function Stat({ value, suffix, label }: { value: number; suffix: string; label: 
 function Stats() {
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((s) => (
-          <Stat key={s.label} {...s} />
+      <Reveal className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {stats.map((s, i) => (
+          <Reveal key={s.label} delay={i * 80}>
+            <Stat {...s} />
+          </Reveal>
         ))}
-      </div>
+      </Reveal>
     </section>
   );
 }
 
 function Testimonials() {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" });
   const [active, setActive] = useState(0);
   const loadReviews = useServerFn(getPinnedReviews);
   const { data: dbReviews } = useQuery({ queryKey: ["cms", "reviews"], queryFn: () => loadReviews() });
@@ -660,85 +782,111 @@ function Testimonials() {
     ? dbReviews.map((r) => ({ initials: r.initials, name: r.name, location: r.location || "", body: r.body }))
     : fallbackReviews;
 
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+
   useEffect(() => {
-    if (reviews.length === 0) return;
-    const timer = window.setInterval(() => {
-      setActive((c) => (c + 1) % reviews.length);
-    }, 5500);
-    return () => window.clearInterval(timer);
-  }, [reviews.length]);
+    if (!emblaApi) return;
+    const onSelect = () => setActive(emblaApi.selectedScrollSnap());
+    emblaApi.on("select", onSelect);
+    onSelect();
+    return () => {
+      emblaApi.off("select", onSelect);
+    };
+  }, [emblaApi]);
 
   return (
-    <section className="mx-auto mt-28 max-w-5xl px-6">
-      <div className="text-center">
+    <section className="mx-auto mt-28 max-w-6xl px-6">
+      <Reveal className="text-center">
         <div className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
           Trusted globally
         </div>
         <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
           What clients say
         </h2>
-      </div>
+      </Reveal>
 
-      <div className="mt-12 overflow-hidden rounded-[2rem] border border-border bg-card/60 shadow-card-soft backdrop-blur">
-        <div
-          className="flex transition-transform duration-700 ease-out will-change-transform"
-          style={{ transform: `translateX(-${active * 100}%)` }}
-        >
-          {reviews.map((r) => (
-            <figure key={r.name} className="min-w-full px-8 py-14 md:px-16 md:py-20">
-              <div className="flex flex-col items-center text-center">
-                <div className="flex gap-1 text-primary">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-current" />
-                  ))}
-                </div>
-                <blockquote className="mt-7 max-w-2xl font-display text-xl font-medium leading-snug text-foreground md:text-2xl">
-                  "{r.body}"
-                </blockquote>
-                <figcaption className="mt-8 flex items-center gap-3">
-                  <div className="grid h-11 w-11 place-items-center rounded-full gradient-primary text-sm font-semibold text-primary-foreground shadow-glow">
-                    {r.initials}
+      <Reveal delay={120}>
+        <div className="relative mt-12">
+          <div ref={emblaRef} className="overflow-hidden">
+            <div className="flex gap-7">
+              {reviews.map((r) => (
+                <figure
+                  key={r.name}
+                  className="min-w-0 flex-[0_0_100%] md:flex-[0_0_calc(50%-14px)] rounded-[2rem] border border-border bg-card/60 p-8 shadow-card-soft backdrop-blur md:p-10"
+                >
+                  <div className="flex gap-1 text-primary">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-current" />
+                    ))}
                   </div>
-                  <div className="text-left">
-                    <div className="text-sm font-semibold">{r.name}</div>
-                    <div className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
-                      {r.location}
+                  <blockquote className="mt-6 font-display text-lg font-medium leading-snug text-foreground md:text-xl">
+                    "{r.body}"
+                  </blockquote>
+                  <figcaption className="mt-8 flex items-center gap-3">
+                    <div className="grid h-11 w-11 place-items-center rounded-full gradient-primary text-sm font-semibold text-primary-foreground shadow-glow">
+                      {r.initials}
                     </div>
-                  </div>
-                </figcaption>
-              </div>
-            </figure>
+                    <div>
+                      <div className="text-sm font-semibold">{r.name}</div>
+                      <div className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                        {r.location}
+                      </div>
+                    </div>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            aria-label="Previous reviews"
+            onClick={scrollPrev}
+            className="absolute -left-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-border bg-background/80 text-foreground backdrop-blur transition hover:bg-primary hover:text-primary-foreground md:-left-5"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            type="button"
+            aria-label="Next reviews"
+            onClick={scrollNext}
+            className="absolute -right-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-border bg-background/80 text-foreground backdrop-blur transition hover:bg-primary hover:text-primary-foreground md:-right-5"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+        </div>
+
+        <div className="mt-6 flex items-center justify-center gap-1.5">
+          {reviews.map((r, index) => (
+            <button
+              key={r.name}
+              type="button"
+              aria-label={`Show review ${index + 1}`}
+              onClick={() => emblaApi?.scrollTo(index)}
+              className={`h-1 rounded-full transition-all duration-300 ${
+                active === index ? "w-8 bg-primary" : "w-4 bg-border"
+              }`}
+            />
           ))}
         </div>
-      </div>
 
-      <div className="mt-6 flex items-center justify-center gap-1.5">
-        {reviews.map((r, index) => (
-          <button
-            key={r.name}
-            type="button"
-            aria-label={`Show review ${index + 1}`}
-            onClick={() => setActive(index)}
-            className={`h-1 rounded-full transition-all duration-300 ${
-              active === index ? "w-8 bg-primary" : "w-4 bg-border"
-            }`}
-          />
-        ))}
-      </div>
-
-      <div className="mt-10 text-center">
-        <Link to="/reviews" className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-primary">
-          Read all reviews <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
+        <div className="mt-10 text-center">
+          <Link to="/reviews" className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-primary">
+            Read all reviews <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </Reveal>
     </section>
   );
 }
 
 function CTASection() {
+  const ctaRingRef = useScrollRotate(-0.08);
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
-      <div className="relative overflow-hidden rounded-[2.5rem] border border-border bg-mesh p-10 text-center md:p-20">
+      <Reveal direction="zoom" className="relative overflow-hidden rounded-[2.5rem] border border-border bg-mesh p-10 text-center md:p-20">
+        <div ref={ctaRingRef} aria-hidden className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full border border-dashed border-primary/20" />
         <div className="pointer-events-none absolute inset-0 bg-hero-glow opacity-80" />
         <div className="pointer-events-none absolute inset-0 bg-grid opacity-40" />
 
@@ -759,10 +907,16 @@ function CTASection() {
             <Link to="/contact">
               <Button
                 size="lg"
-                className="group h-12 rounded-full bg-foreground px-6 text-sm font-medium text-background hover:bg-foreground/90"
+                className="group btn-winona h-12 rounded-full bg-foreground px-8 text-sm font-medium text-background hover:bg-foreground/90"
               >
-                Start a project
-                <ArrowUpRight className="ml-1.5 h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <span className="btn-label">
+                  Start a project
+                  <ArrowUpRight className="ml-1.5 h-4 w-4" />
+                </span>
+                <span className="btn-label-alt" aria-hidden>
+                  Let's go
+                  <ArrowUpRight className="h-4 w-4" />
+                </span>
               </Button>
             </Link>
             <Link to="/services">
@@ -785,7 +939,7 @@ function CTASection() {
             ))}
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

@@ -358,6 +358,67 @@
   .animate-caret {
     animation: caret 0.8s steps(1) infinite;
   }
+
+  /* Scroll-reveal entrance animations (ultigraph-style) */
+  .reveal {
+    opacity: 0;
+    will-change: opacity, transform;
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal-up {
+    transform: translateY(28px);
+  }
+  .reveal-left {
+    transform: translateX(-32px);
+  }
+  .reveal-right {
+    transform: translateX(32px);
+  }
+  .reveal-zoom {
+    transform: scale(0.94);
+  }
+  .reveal-visible {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none;
+    }
+  }
+
+  /* Winona hover-reveal buttons (ultigraph EAEL creative-button style) */
+  .btn-winona {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .btn-winona > .btn-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-winona > .btn-label-alt {
+    position: absolute;
+    inset: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    transform: translateY(101%);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-winona:hover > .btn-label {
+    transform: translateY(-101%);
+  }
+  .btn-winona:hover > .btn-label-alt {
+    transform: translateY(0);
+  }
 }
 
 @layer components {
