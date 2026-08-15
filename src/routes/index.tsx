@@ -1,27 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Star,
-  Sparkles,
-  Palette,
-  Film,
-  Brush,
-  Layers,
-  MonitorSmartphone,
-  Truck,
-  Plane,
-  Compass,
-  ChevronLeft,
-  ChevronRight,
-  PenTool,
-  Rocket,
-  Send,
-  CheckCircle2,
-  MessageCircle,
-  Expand,
-} from "lucide-react";
+import { Star, ChevronLeft, ChevronRight, Expand, MessageCircle, Send } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { BootLoader } from "@/components/site/BootLoader";
 import { Button } from "@/components/ui/button";
@@ -60,17 +39,15 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const capabilities = [
-  { Icon: Brush, title: "Brand Identity", desc: "Logos, systems, guidelines.", available: true },
-  { Icon: Palette, title: "Graphic Design", desc: "Flyers, social, print.", available: true },
-  { Icon: Film, title: "Video & Motion", desc: "Reels, ads, lipsyncs.", available: true },
-  { Icon: PenTool, title: "Digital Portraits", desc: "Editorial illustrations.", available: true },
-  { Icon: MonitorSmartphone, title: "UI / UX Design", desc: "Web & product design.", available: true },
-  { Icon: Truck, title: "Logistics Platforms", desc: "Trackable shipping sites.", available: true },
-  { Icon: Plane, title: "Shipping Documents", desc: "Flight tickets, manifests.", available: false },
-  { Icon: Layers, title: "Corporate Creative", desc: "Decks, reports, kits.", available: true },
+const services = [
+  { title: "Brand Identity", desc: "Logos, identity systems and brand guidelines.", img: "/images/project-2.png" },
+  { title: "Graphic Design", desc: "Flyers, social creatives and print design.", img: "/images/project-4.png" },
+  { title: "Video & Motion", desc: "Reels, adverts and animated brand content.", img: "/images/project-5.jpg" },
+  { title: "Digital Portraits", desc: "Editorial illustrations and digital art.", img: "/images/project-3.png" },
+  { title: "UI / UX Design", desc: "Web and product interface design.", img: "/images/project-7.png" },
+  { title: "Web & Logistics Platforms", desc: "Trackable shipping and e-commerce sites.", img: "/images/project-8.png" },
+  { title: "Corporate Creative", desc: "Company profiles, decks and documents.", img: "/images/project-1.jpg" },
 ];
-
 
 const fallbackProjects = [
   { src: "/images/project-1.jpg", alt: "Business registration project display", tag: "Corporate" },
@@ -84,39 +61,21 @@ const fallbackProjects = [
   { src: "/images/project-9.png", alt: "Outreach awakening event flyer design", tag: "Event" },
 ];
 
-const processSteps = [
-  { n: "01", title: "Discovery", desc: "We listen, audit, and align on the real problem.", Icon: Compass },
-  { n: "02", title: "Strategy", desc: "Positioning, scope, references and creative direction.", Icon: PenTool },
-  { n: "03", title: "Design", desc: "Concepts iterated against brand and business goals.", Icon: Brush },
-  { n: "04", title: "Build", desc: "Production-grade assets, motion, or shipping platforms.", Icon: Rocket },
-  { n: "05", title: "Delivery", desc: "Files, training, launch support, and ongoing care.", Icon: Send },
-];
-
-const stats = [
-  { value: 850, suffix: "+", label: "Projects shipped" },
-  { value: 320, suffix: "+", label: "Clients served" },
-  { value: 18, suffix: "", label: "Countries reached" },
-  { value: 5, suffix: "+", label: "Years in studio" },
-];
-
-const showcases = [
+const bands = [
   {
-    title: "Effective Brand Identity & Graphic Design",
-    desc: "Logos, complete identity systems and print-ready graphics that give your business a face customers remember.",
-    img: "/images/project-2.png",
-    tag: "Branding",
+    title: "Effective Brand Identity & Visual Identity",
+    desc: "Let's walk you through an amazing journey of effective Brand Identity & Visual Identity for your business / organization. We are good at what we do.",
+    flipped: false,
   },
   {
     title: "Quality Motion, Video & Digital Portraits",
-    desc: "Reels, adverts and editorial illustrations that stop the scroll and carry your story with motion.",
-    img: "/images/project-5.jpg",
-    tag: "Motion",
+    desc: "Let's help you drive engagement and sales with quality motion, video and digital portraits, looking through the lens of your customers. We are good at what we do.",
+    flipped: true,
   },
   {
     title: "Beautiful & Functional Web & Logistics Platforms",
-    desc: "Trackable shipping platforms, product sites and interfaces built to convert and easy to run.",
-    img: "/images/project-8.png",
-    tag: "Digital",
+    desc: "Your website and shipping platform can help you make more sales. Let's create lively, beautiful and functional platforms that help your business drive more sales. We are good at what we do.",
+    flipped: false,
   },
 ];
 
@@ -129,14 +88,13 @@ function Home() {
       <SiteLayout>
         <Hero />
         <Welcome />
-        <ShowcaseRows />
-        <ServicesList />
+        <ShowcaseBands />
+        <ServicesSection />
         <PortfolioGrid />
         <AboutBand />
-        <About />
-        <Marquee />
+        <AboutUs />
         <Testimonials />
-        <CTASection />
+        <LetsConnect />
       </SiteLayout>
       <FloatingChannels />
     </>
@@ -174,24 +132,6 @@ function FloatingChannels() {
   );
 }
 
-
-const HERO_TEXT = "DESIGNING BRANDS, EXPERIENCES & DIGITAL SOLUTIONS THAT MOVE BUSINESSES FORWARD.";
-
-function useTyping(text: string, speed = 28) {
-  const [out, setOut] = useState("");
-  useEffect(() => {
-    setOut("");
-    let i = 0;
-    const id = window.setInterval(() => {
-      i += 1;
-      setOut(text.slice(0, i));
-      if (i >= text.length) window.clearInterval(id);
-    }, speed);
-    return () => window.clearInterval(id);
-  }, [text, speed]);
-  return out;
-}
-
 function useScrollRotate(speed = 0.12) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -214,13 +154,17 @@ function useScrollRotate(speed = 0.12) {
   return ref;
 }
 
+function SectionBar() {
+  return (
+    <div className="h-[6px] w-[181px] rounded-full bg-gradient-to-r from-primary to-primary/30" />
+  );
+}
+
 function Hero() {
-  const typed = useTyping(HERO_TEXT, 28);
-  const done = typed.length >= HERO_TEXT.length;
   const rotateRef = useScrollRotate(0.12);
 
   return (
-    <section className="relative mx-auto flex min-h-[80vh] max-w-6xl flex-col justify-end px-6 pt-10 pb-16 md:min-h-[88vh] md:pb-24">
+    <section className="relative mx-auto flex min-h-[70vh] max-w-6xl flex-col justify-center px-6 pt-10 pb-16 md:min-h-[80vh]">
       <div className="pointer-events-none absolute inset-0 bg-hero-glow" aria-hidden />
       <div
         aria-hidden
@@ -239,70 +183,22 @@ function Hero() {
 
       <div className="relative">
         <Reveal delay={80}>
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground backdrop-blur">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse-dot" />
+          <SectionBar />
+          <h1 className="mt-7 max-w-3xl font-display text-4xl font-semibold leading-[1.05] tracking-[-0.03em] md:text-6xl lg:text-7xl">
             Welcome to Klassiq Grafikz
-          </div>
-
-          <h1 className="mt-7 max-w-4xl font-display text-[2.1rem] font-semibold leading-[1.05] tracking-[-0.03em] md:text-6xl lg:text-[4.5rem] min-h-[3em]">
-            {typed}
-            <span
-              className={`ml-1 inline-block h-[0.9em] w-[3px] translate-y-[0.1em] bg-primary ${done ? "animate-caret" : ""}`}
-              aria-hidden
-            />
           </h1>
-
           <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-            We make branding, design and digital easy, fulfilling and rewarding for you.
+            We make branding easy, fulfilling and rewarding for you.
           </p>
-
-          <div className="mt-9 flex flex-wrap items-center gap-3">
+          <div className="mt-9">
             <Link to="/contact">
               <Button
                 size="lg"
-                className="group btn-winona h-12 rounded-full bg-foreground px-8 text-sm font-medium text-background hover:bg-foreground/90"
+                className="h-12 rounded-full bg-foreground px-8 text-sm font-medium text-background transition hover:-translate-y-0.5 hover:bg-foreground/90"
               >
-                <span className="btn-label">
-                  Start a project
-                  <ArrowUpRight className="ml-1.5 h-4 w-4" />
-                </span>
-                <span className="btn-label-alt" aria-hidden>
-                  Let's go
-                  <ArrowUpRight className="h-4 w-4" />
-                </span>
+                Start A Project
               </Button>
             </Link>
-            <Link to="/services">
-              <Button
-                size="lg"
-                variant="outline"
-                className="h-12 rounded-full border-border bg-card/40 px-6 text-sm font-medium backdrop-blur hover:bg-card"
-              >
-                Explore services
-              </Button>
-            </Link>
-          </div>
-
-          <div className="mt-8 flex items-center gap-3">
-            <div className="flex -space-x-2">
-              {["IS", "OJ", "CO", "AB"].map((i, idx) => (
-                <div
-                  key={i}
-                  className="grid h-8 w-8 place-items-center rounded-full border-2 border-background gradient-primary text-[10px] font-semibold text-primary-foreground"
-                  style={{ zIndex: 10 - idx }}
-                >
-                  {i}
-                </div>
-              ))}
-            </div>
-            <div className="text-xs leading-tight">
-              <div className="flex gap-0.5 text-primary">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="h-3 w-3 fill-current" />
-                ))}
-              </div>
-              <div className="mt-0.5 text-muted-foreground">320+ happy clients</div>
-            </div>
           </div>
         </Reveal>
       </div>
@@ -314,46 +210,25 @@ function Welcome() {
   const loadSettings = useServerFn(getSiteSettings);
   const { data: settings } = useQuery({ queryKey: ["cms", "settings"], queryFn: () => loadSettings() });
   const heroLogo = settings?.logo_url || kgLogo.url;
-  const rotateRef = useScrollRotate(0.1);
+  const rotateRef = useScrollRotate(-0.1);
 
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
       <div className="grid items-center gap-12 md:grid-cols-2">
         <Reveal>
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground backdrop-blur">
-            <span className="h-1 w-1 rounded-full bg-primary" />
-            A multidisciplinary creative studio
-          </div>
+          <SectionBar />
           <h2 className="mt-5 font-display text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
-            We make branding easy,{" "}
-            <span className="text-gradient">fulfilling and rewarding</span> for you.
+            Welcome
           </h2>
           <p className="mt-6 max-w-lg text-sm leading-relaxed text-muted-foreground md:text-base">
-            We are a team of designers, strategists and creative technologists. We harness our
-            skills to deliver innovative and unconventional branding, design and digital
-            solutions for businesses, organizations and individuals.
+            Klassiq Grafikz is coined from two words: <strong className="font-semibold text-foreground underline decoration-primary/60 decoration-2 underline-offset-4">Klassic</strong> &{" "}
+            <strong className="font-semibold text-foreground underline decoration-primary/60 decoration-2 underline-offset-4">Graphics</strong>.
+            We started with the mindset of rendering klassic (best) graphic design services. With
+            this "Klassic" mindset we have evolved into an agency that provides{" "}
+            <strong className="font-semibold text-foreground underline decoration-primary/60 decoration-2 underline-offset-4">Innovative Branding</strong>,
+            motion and digital solutions for businesses, organisations and individuals.
           </p>
-          <p className="mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground md:text-base">
-            Our passion for creative work and modern technologies helps us create strategic,
-            beautiful and practical designs that grow your brand's reputation and bottom line.
-          </p>
-          <div className="mt-8">
-            <Link to="/contact">
-              <Button
-                size="lg"
-                className="group btn-winona h-12 rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground shadow-glow hover:bg-primary/90"
-              >
-                <span className="btn-label">
-                  Start a project
-                  <ArrowUpRight className="ml-1.5 h-4 w-4" />
-                </span>
-                <span className="btn-label-alt" aria-hidden>
-                  Let's go
-                  <ArrowUpRight className="h-4 w-4" />
-                </span>
-              </Button>
-            </Link>
-          </div>
+          <p className="mt-4 text-sm text-muted-foreground md:text-base">Feel at home, Welcome.</p>
         </Reveal>
 
         <Reveal direction="zoom" delay={150} className="relative mx-auto w-full max-w-sm">
@@ -382,47 +257,62 @@ function Welcome() {
   );
 }
 
-function ShowcaseRows() {
+function ShowcaseBands() {
+  return (
+    <section className="mt-28 flex flex-col gap-24">
+      {bands.map((b) => (
+        <div key={b.title} className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center px-6 md:grid-cols-2">
+          <div className={b.flipped ? "md:order-1 md:col-start-2" : ""} />
+          <Reveal
+            direction={b.flipped ? "left" : "right"}
+            className={b.flipped ? "md:order-2 md:col-start-1 md:row-start-1" : "md:col-start-2"}
+          >
+            <SectionBar />
+            <h2 className="mt-5 font-display text-3xl font-semibold leading-tight tracking-tight md:text-4xl">
+              {b.title}
+            </h2>
+            <p className="mt-5 max-w-md text-sm leading-relaxed text-muted-foreground md:text-base">
+              {b.desc}
+            </p>
+            <div className="mt-7">
+              <Link to="/services">
+                <Button
+                  size="lg"
+                  className="h-11 rounded-full bg-primary px-7 text-sm font-medium text-primary-foreground transition hover:-translate-y-0.5 hover:bg-primary/90"
+                >
+                  Get Started
+                </Button>
+              </Link>
+            </div>
+          </Reveal>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function ServicesSection() {
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
-      {showcases.map((s, i) => {
-        const flipped = i % 2 === 1;
-        return (
-          <div key={s.title} className="mb-20 grid items-center gap-10 md:grid-cols-2 md:gap-16 last:mb-0">
-            <Reveal
-              direction={flipped ? "right" : "left"}
-              className={flipped ? "md:order-2" : ""}
-            >
-              <div className="h-0.5 w-14 bg-gradient-to-r from-primary to-transparent" />
-              <div className="mt-5 text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
-                {s.tag}
-              </div>
-              <h3 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight md:text-4xl">
-                {s.title}
-              </h3>
-              <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground md:text-base">
-                {s.desc}
-              </p>
-              <div className="mt-7">
-                <Link to="/services">
-                  <Button
-                    variant="outline"
-                    className="group h-11 rounded-full border-primary/40 px-6 text-sm font-medium hover:bg-primary hover:text-primary-foreground"
-                  >
-                    Get started
-                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-                  </Button>
-                </Link>
-              </div>
-            </Reveal>
+      <Reveal>
+        <SectionBar />
+        <h2 className="mt-5 font-display text-4xl font-semibold tracking-tight md:text-5xl">
+          Our Services
+        </h2>
+        <h3 className="mt-4 font-display text-xl font-semibold tracking-[0.3em] text-primary">
+          | Branding |
+        </h3>
+        <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
+          Our core service is Branding which is subdivided into these services:
+        </p>
+      </Reveal>
 
-            <Reveal
-              direction={flipped ? "left" : "right"}
-              delay={120}
-              className={flipped ? "md:order-1" : ""}
-            >
-              <div className="group relative overflow-hidden rounded-[2rem] border border-border bg-card/60 p-3 shadow-card-soft backdrop-blur">
-                <div className="overflow-hidden rounded-[1.5rem]">
+      <div className="mt-12 grid gap-x-8 gap-y-10 md:grid-cols-2">
+        {services.map((s, i) => (
+          <Reveal key={s.title} delay={(i % 2) * 100}>
+            <div className="group">
+              <div className="overflow-hidden rounded-[1.5rem] border border-border bg-card/60 p-2.5 shadow-card-soft backdrop-blur transition duration-300 group-hover:-translate-y-1">
+                <div className="overflow-hidden rounded-[1.25rem]">
                   <img
                     src={s.img}
                     alt={s.title}
@@ -431,74 +321,40 @@ function ShowcaseRows() {
                     className="aspect-[4/3] w-full object-cover transition duration-700 ease-out group-hover:scale-105"
                   />
                 </div>
-                <div className="absolute left-6 top-6 inline-flex items-center gap-1.5 rounded-full bg-background/70 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] backdrop-blur">
-                  <span className="h-1 w-1 rounded-full bg-primary" />
-                  {s.tag}
+              </div>
+              <div className="mt-5 flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <div className="font-display text-lg font-semibold">{s.title}</div>
+                  <div className="mt-0.5 text-sm text-muted-foreground">{s.desc}</div>
                 </div>
+                <Link to="/services">
+                  <Button className="btn-winona h-11 rounded-full bg-primary px-6 text-xs font-semibold uppercase tracking-[0.15em] text-primary-foreground hover:bg-primary/90">
+                    <span className="btn-label">{s.title}</span>
+                    <span className="btn-label-alt" aria-hidden>
+                      Let's Go!
+                    </span>
+                  </Button>
+                </Link>
               </div>
-            </Reveal>
-          </div>
-        );
-      })}
-    </section>
-  );
-}
-
-function ServicesList() {
-  return (
-    <section className="mx-auto mt-28 max-w-6xl px-6">
-      <Reveal className="text-center">
-        <div className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
-          | Branding · Design · Digital |
-        </div>
-        <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-          Our services
-        </h2>
-      </Reveal>
-
-      <div className="mt-12 flex flex-col gap-4">
-        {capabilities.map(({ Icon, title, desc, available }, i) => (
-          <Reveal
-            key={title}
-            delay={i * 60}
-            className="group flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card/60 p-5 backdrop-blur transition hover:border-primary/50 hover:bg-card md:p-6"
-          >
-            <div className="flex min-w-0 items-center gap-4">
-              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary transition group-hover:bg-primary group-hover:text-primary-foreground">
-                <Icon className="h-5 w-5" />
-              </div>
-              <div>
-                <div className="font-display text-lg font-semibold">{title}</div>
-                <div className="mt-0.5 text-sm text-muted-foreground">{desc}</div>
-              </div>
-            </div>
-            <div className="flex shrink-0 items-center gap-3">
-              <span
-                className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] ${
-                  available
-                    ? "border-emerald-400/40 bg-emerald-400/10 text-emerald-400"
-                    : "border-amber-400/40 bg-amber-400/10 text-amber-400"
-                }`}
-              >
-                <span
-                  className={`h-1.5 w-1.5 rounded-full ${
-                    available ? "bg-emerald-400 animate-pulse-dot" : "bg-amber-400"
-                  }`}
-                />
-                {available ? "Available now" : "Waitlist"}
-              </span>
-              <Link to="/services">
-                <Button className="btn-winona h-10 rounded-full bg-primary px-6 text-xs font-semibold uppercase tracking-[0.15em] text-primary-foreground hover:bg-primary/90">
-                  <span className="btn-label">Let's go</span>
-                  <span className="btn-label-alt" aria-hidden>
-                    <ArrowUpRight className="h-4 w-4" />
-                  </span>
-                </Button>
-              </Link>
             </div>
           </Reveal>
         ))}
       </div>
+
+      <Reveal className="mt-14 text-center">
+        <p className="text-sm text-muted-foreground md:text-base">Learn more about our services</p>
+        <div className="mt-4">
+          <Link to="/services">
+            <Button
+              size="lg"
+              variant="outline"
+              className="h-12 rounded-full border-border px-8 text-sm font-medium transition hover:-translate-y-0.5 hover:bg-card"
+            >
+              Our Services
+            </Button>
+          </Link>
+        </div>
+      </Reveal>
     </section>
   );
 }
@@ -517,22 +373,11 @@ function PortfolioGrid() {
 
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
-      <Reveal className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <div className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
-            Some of our best works
-          </div>
-          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            Selected projects
-          </h2>
-        </div>
-        <Link
-          to="/services"
-          className="group inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition hover:text-foreground"
-        >
-          View capabilities
-          <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-        </Link>
+      <Reveal>
+        <SectionBar />
+        <h2 className="mt-5 font-display text-4xl font-semibold tracking-tight md:text-5xl">
+          Some of Our Best Works
+        </h2>
       </Reveal>
 
       <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -571,6 +416,18 @@ function PortfolioGrid() {
           </Reveal>
         ))}
       </div>
+
+      <Reveal className="mt-12 text-center">
+        <Link to="/services">
+          <Button
+            size="lg"
+            variant="outline"
+            className="h-12 rounded-full border-border px-8 text-sm font-medium transition hover:-translate-y-0.5 hover:bg-card"
+          >
+            View Portfolio
+          </Button>
+        </Link>
+      </Reveal>
 
       <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
         <DialogContent
@@ -628,146 +485,29 @@ function PortfolioGrid() {
 }
 
 function AboutBand() {
-  const ringRef = useScrollRotate(-0.1);
+  const ringRef = useScrollRotate(0.1);
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
-      <Reveal direction="zoom" className="relative overflow-hidden rounded-[2.5rem] border border-border">
-        <img
-          src="/images/project-1.jpg"
-          alt="Behind the scenes at Klassiq Grafikz"
-          loading="lazy"
-          className="h-72 w-full object-cover md:h-96"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/10 to-transparent" />
+      <Reveal direction="zoom" className="relative mx-auto w-full max-w-2xl">
         <div
           ref={ringRef}
           aria-hidden
-          className="pointer-events-none absolute -right-12 -top-12 h-52 w-52 rounded-full border border-dashed border-primary/30"
+          className="pointer-events-none absolute -right-14 -top-14 h-44 w-44 rounded-full border border-dashed border-primary/30"
         />
+        <div className="relative overflow-hidden rounded-[2.5rem] border border-border">
+          <img
+            src="/images/project-1.jpg"
+            alt="Behind the scenes at Klassiq Grafikz"
+            loading="lazy"
+            className="aspect-[4/3] w-full object-cover"
+          />
+        </div>
       </Reveal>
     </section>
   );
 }
 
-function About() {
-  return (
-    <section className="mx-auto mt-28 max-w-6xl px-6">
-      <div className="grid items-start gap-12 md:grid-cols-2">
-        <Reveal>
-          <div className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
-            About us
-          </div>
-          <h2 className="mt-3 font-display text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
-            A studio that treats every brief{" "}
-            <span className="text-gradient">like its own brand.</span>
-          </h2>
-          <p className="mt-6 max-w-lg text-sm leading-relaxed text-muted-foreground md:text-base">
-            Since 2019, Klassiq Grafikz has helped businesses, organizations and individuals
-            build brands that influence growth, reputation and sustainability. From a single
-            flyer to a full shipping platform, every engagement runs on the same five-stage
-            rhythm — so you always know what's happening, when, and why.
-          </p>
-          <div className="mt-8">
-            <Link to="/contact">
-              <Button
-                size="lg"
-                className="group btn-winona h-12 rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground shadow-glow hover:bg-primary/90"
-              >
-                <span className="btn-label">
-                  Start a project
-                  <ArrowUpRight className="ml-1.5 h-4 w-4" />
-                </span>
-                <span className="btn-label-alt" aria-hidden>
-                  Let's go
-                  <ArrowUpRight className="h-4 w-4" />
-                </span>
-              </Button>
-            </Link>
-          </div>
-        </Reveal>
-
-        <Reveal delay={120}>
-          <ol className="flex flex-col gap-3">
-            {processSteps.map(({ n, title, desc, Icon }) => (
-              <li
-                key={n}
-                className="flex items-start gap-4 rounded-2xl border border-border bg-card/60 p-5 backdrop-blur transition hover:border-primary/50 hover:bg-card"
-              >
-                <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary/10 font-mono text-xs text-primary">
-                  {n}
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 font-display font-semibold">
-                    {title}
-                    <Icon className="h-3.5 w-3.5 text-primary" />
-                  </div>
-                  <div className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{desc}</div>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </Reveal>
-      </div>
-
-      <Reveal className="mt-14 grid gap-3 rounded-3xl border border-border bg-card/40 p-3 backdrop-blur md:grid-cols-3">
-        {[
-          { k: "Avg. delivery", v: "48h", s: "rapid creative cycles" },
-          { k: "Client retention", v: "92%", s: "repeat partnerships" },
-          { k: "Disciplines", v: "08+", s: "brand · motion · product" },
-        ].map((m) => (
-          <div key={m.k} className="rounded-2xl bg-surface/60 p-5">
-            <div className="text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
-              {m.k}
-            </div>
-            <div className="mt-2 font-display text-3xl font-semibold tracking-tight">{m.v}</div>
-            <div className="mt-1 text-xs text-muted-foreground">{m.s}</div>
-          </div>
-        ))}
-      </Reveal>
-
-      <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((s, i) => (
-          <Reveal key={s.label} delay={i * 80}>
-            <Stat {...s} />
-          </Reveal>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function Marquee() {
-  const words = [
-    "Brand Identity",
-    "Motion Design",
-    "Digital Portraits",
-    "UI/UX",
-    "Shipping Platforms",
-    "Video Ads",
-    "Editorial",
-    "Print",
-    "Social Campaigns",
-    "Corporate Decks",
-  ];
-  const row = [...words, ...words];
-  return (
-    <Reveal
-      direction="fade"
-      className="relative mt-28 overflow-hidden border-y border-border/60 bg-surface/30 py-6"
-    >
-      <div className="flex animate-marquee gap-12 whitespace-nowrap">
-        {row.map((w, i) => (
-          <div key={i} className="flex items-center gap-12 font-display text-2xl font-semibold tracking-tight text-foreground/40 md:text-3xl">
-            {w}
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-          </div>
-        ))}
-      </div>
-    </Reveal>
-  );
-}
-
-function useCountUp(target: number, durationMs = 1600) {
+function useCountUp(target: number, durationMs = 2000) {
   const [val, setVal] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const started = useRef(false);
@@ -800,18 +540,60 @@ function useCountUp(target: number, durationMs = 1600) {
   return { ref, val };
 }
 
-function Stat({ value, suffix, label }: { value: number; suffix: string; label: string }) {
-  const { ref, val } = useCountUp(value);
+function AboutUs() {
+  const { ref, val } = useCountUp(850);
+
   return (
-    <div ref={ref} className="rounded-3xl border border-border bg-card/60 p-8 backdrop-blur">
-      <div className="font-display text-5xl font-semibold tracking-tight text-foreground md:text-6xl">
-        {val}
-        <span className="text-primary">{suffix}</span>
+    <section className="mx-auto mt-28 max-w-6xl px-6">
+      <div className="grid grid-cols-1 items-start md:grid-cols-2">
+        <div />
+        <Reveal direction="left">
+          <SectionBar />
+          <h2 className="mt-5 font-display text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
+            About Us
+          </h2>
+          <p className="mt-6 max-w-lg text-sm leading-relaxed text-muted-foreground md:text-base">
+            We are a team of strategists, designers and creative technologists. We harness our
+            skills to provide innovative and unconventional branding, design and digital solutions
+            for businesses, organizations and individuals.
+          </p>
+          <p className="mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground md:text-base">
+            Our passion for creative works and experience in modern technologies aid us to create
+            strategic, beautiful and practical designs, motion and digital platforms for our
+            clients. These influence the growth, reputation and sustainability of their enterprise.
+          </p>
+          <p className="mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground md:text-base">
+            Our{" "}
+            <Link to="/services" className="font-medium text-primary no-underline">
+              Portfolio
+            </Link>{" "}
+            reflects what we can do for you.
+          </p>
+
+          <div ref={ref} className="mt-10 rounded-3xl border border-border bg-card/60 p-8 backdrop-blur">
+            <div className="text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">
+              Projects Completed
+            </div>
+            <div className="mt-2 font-display text-6xl font-semibold tracking-tight text-foreground">
+              {val}
+              <span className="text-primary">+</span>
+            </div>
+          </div>
+
+          <div className="mt-8">
+            <Link to="/services">
+              <Button
+                size="lg"
+                variant="outline"
+                className="h-12 rounded-full border-border px-8 text-sm font-medium transition hover:-translate-y-0.5 hover:bg-card"
+              >
+                Learn More
+              </Button>
+            </Link>
+          </div>
+        </Reveal>
       </div>
-      <div className="mt-3 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-        {label}
-      </div>
-    </div>
+    </section>
   );
 }
 
@@ -839,12 +621,10 @@ function Testimonials() {
 
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
-      <Reveal className="text-center">
-        <div className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
-          Trusted globally
-        </div>
-        <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-          What clients say
+      <Reveal>
+        <SectionBar />
+        <h2 className="mt-5 font-display text-4xl font-semibold tracking-tight md:text-5xl">
+          What Our Clients Say
         </h2>
       </Reveal>
 
@@ -913,75 +693,71 @@ function Testimonials() {
           ))}
         </div>
 
-        <div className="mt-10 text-center">
-          <Link to="/reviews" className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-primary">
-            Read all reviews <ArrowRight className="h-4 w-4" />
-          </Link>
+        <div className="mt-12 grid gap-4 md:grid-cols-2">
+          <div className="rounded-3xl border border-border bg-card/40 p-8 text-center backdrop-blur">
+            <p className="text-sm text-muted-foreground md:text-base">
+              Want to say something nice about us?
+            </p>
+            <div className="mt-5">
+              <Link to="/reviews">
+                <Button
+                  size="lg"
+                  className="h-11 rounded-full bg-primary px-7 text-sm font-medium text-primary-foreground transition hover:-translate-y-0.5 hover:bg-primary/90"
+                >
+                  Add a Review
+                </Button>
+              </Link>
+            </div>
+          </div>
+          <div className="rounded-3xl border border-border bg-card/40 p-8 text-center backdrop-blur">
+            <p className="text-sm text-muted-foreground md:text-base">
+              Others still said 1 or 2 things about us
+            </p>
+            <div className="mt-5">
+              <Link to="/reviews">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="h-11 rounded-full border-border px-7 text-sm font-medium transition hover:-translate-y-0.5 hover:bg-card"
+                >
+                  More Testimonials
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       </Reveal>
     </section>
   );
 }
 
-function CTASection() {
-  const ctaRingRef = useScrollRotate(-0.08);
+function LetsConnect() {
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
-      <Reveal direction="zoom" className="relative overflow-hidden rounded-[2.5rem] border border-border bg-mesh p-10 text-center md:p-20">
-        <div ref={ctaRingRef} aria-hidden className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full border border-dashed border-primary/20" />
-        <div className="pointer-events-none absolute inset-0 bg-hero-glow opacity-80" />
-        <div className="pointer-events-none absolute inset-0 bg-grid opacity-40" />
-
-        <div className="relative">
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background/60 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] backdrop-blur">
-            <Sparkles className="h-3 w-3 text-primary" />
-            Now booking Q1 projects
-          </div>
-          <h2 className="relative mt-6 font-display text-4xl font-semibold leading-[1.05] tracking-[-0.02em] md:text-6xl lg:text-7xl">
-            Ready to build something{" "}
-            <span className="text-gradient">exceptional?</span>
+      <div className="grid grid-cols-1 items-start md:grid-cols-2">
+        <Reveal>
+          <SectionBar />
+          <h2 className="mt-5 font-display text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
+            Let's Connect
           </h2>
-          <p className="relative mx-auto mt-5 max-w-xl text-base text-muted-foreground">
-            Tell us about your brand, product, or campaign. We reply within
-            minutes on WhatsApp and ship pilots in days, not months.
+          <p className="mt-6 max-w-lg text-sm leading-relaxed text-muted-foreground md:text-base">
+            Creating compelling branding solutions is what we love doing. Influencing the growth of
+            your business with the compelling branding is our delight. Let's connect and make a
+            positive impact.
           </p>
-          <div className="relative mt-9 flex flex-wrap justify-center gap-3">
+          <div className="mt-8">
             <Link to="/contact">
               <Button
                 size="lg"
-                className="group btn-winona h-12 rounded-full bg-foreground px-8 text-sm font-medium text-background hover:bg-foreground/90"
+                className="h-12 rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground shadow-glow transition hover:-translate-y-0.5 hover:bg-primary/90"
               >
-                <span className="btn-label">
-                  Start a project
-                  <ArrowUpRight className="ml-1.5 h-4 w-4" />
-                </span>
-                <span className="btn-label-alt" aria-hidden>
-                  Let's go
-                  <ArrowUpRight className="h-4 w-4" />
-                </span>
-              </Button>
-            </Link>
-            <Link to="/services">
-              <Button
-                size="lg"
-                variant="outline"
-                className="h-12 rounded-full border-border bg-background/40 px-6 text-sm font-medium backdrop-blur"
-              >
-                View services
+                Contact Us
               </Button>
             </Link>
           </div>
-
-          <div className="relative mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
-            {["Free discovery call", "NDA on request", "Worldwide delivery"].map((t) => (
-              <div key={t} className="inline-flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
-                {t}
-              </div>
-            ))}
-          </div>
-        </div>
-      </Reveal>
+        </Reveal>
+        <div />
+      </div>
     </section>
   );
 }
