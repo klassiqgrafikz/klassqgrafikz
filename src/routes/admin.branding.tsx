@@ -16,14 +16,14 @@ function BrandingAdmin() {
   const upload = useServerFn(adminUploadImage);
   const { data } = useQuery({ queryKey: ["cms", "settings"], queryFn: () => load() });
   const [logo, setLogo] = useState<string | null>(null);
-  const [color, setColor] = useState<string>("#7C5CFF");
+  const [color, setColor] = useState<string>("#FF7C00");
   const [uploading, setUploading] = useState(false);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     if (data) {
       setLogo(data.logo_url);
-      setColor(data.primary_color || "#7C5CFF");
+      setColor(data.primary_color || "#FF7C00");
     }
   }, [data]);
 

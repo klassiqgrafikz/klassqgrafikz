@@ -20,9 +20,6 @@ import {
   Send,
   CheckCircle2,
   MessageCircle,
-  Eye,
-  TrendingUp,
-  Users,
   Expand,
 } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -102,6 +99,27 @@ const stats = [
   { value: 5, suffix: "+", label: "Years in studio" },
 ];
 
+const showcases = [
+  {
+    title: "Effective Brand Identity & Graphic Design",
+    desc: "Logos, complete identity systems and print-ready graphics that give your business a face customers remember.",
+    img: "/images/project-2.png",
+    tag: "Branding",
+  },
+  {
+    title: "Quality Motion, Video & Digital Portraits",
+    desc: "Reels, adverts and editorial illustrations that stop the scroll and carry your story with motion.",
+    img: "/images/project-5.jpg",
+    tag: "Motion",
+  },
+  {
+    title: "Beautiful & Functional Web & Logistics Platforms",
+    desc: "Trackable shipping platforms, product sites and interfaces built to convert and easy to run.",
+    img: "/images/project-8.png",
+    tag: "Digital",
+  },
+];
+
 function Home() {
   const [booted, setBooted] = useState(false);
 
@@ -110,12 +128,13 @@ function Home() {
       {!booted && <BootLoader onDone={() => setBooted(true)} />}
       <SiteLayout>
         <Hero />
+        <Welcome />
+        <ShowcaseRows />
+        <ServicesList />
+        <PortfolioGrid />
+        <AboutBand />
+        <About />
         <Marquee />
-        <Capabilities />
-        <LiveMonitor />
-        <ProjectShowcase />
-        <Process />
-        <Stats />
         <Testimonials />
         <CTASection />
       </SiteLayout>
@@ -198,13 +217,11 @@ function useScrollRotate(speed = 0.12) {
 function Hero() {
   const typed = useTyping(HERO_TEXT, 28);
   const done = typed.length >= HERO_TEXT.length;
-  const loadSettings = useServerFn(getSiteSettings);
-  const { data: settings } = useQuery({ queryKey: ["cms", "settings"], queryFn: () => loadSettings() });
-  const heroLogo = settings?.logo_url || kgLogo.url;
   const rotateRef = useScrollRotate(0.12);
 
   return (
-    <section className="relative mx-auto mt-10 max-w-6xl px-6 pt-10 md:pt-20">
+    <section className="relative mx-auto flex min-h-[80vh] max-w-6xl flex-col justify-end px-6 pt-10 pb-16 md:min-h-[88vh] md:pb-24">
+      <div className="pointer-events-none absolute inset-0 bg-hero-glow" aria-hidden />
       <div
         aria-hidden
         className="pointer-events-none absolute -top-10 right-10 h-72 w-72 rounded-full bg-primary/20 blur-3xl animate-float"
@@ -214,12 +231,17 @@ function Hero() {
         className="pointer-events-none absolute top-40 -left-10 h-72 w-72 rounded-full bg-primary-glow/15 blur-3xl animate-float"
         style={{ animationDelay: "-3s" }}
       />
+      <div
+        ref={rotateRef}
+        aria-hidden
+        className="pointer-events-none absolute right-[8%] top-[16%] hidden h-40 w-40 rounded-full border border-dashed border-primary/25 md:block"
+      />
 
-      <div className="relative grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-center">
+      <div className="relative">
         <Reveal delay={80}>
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse-dot" />
-            Multidisciplinary creative studio
+            Welcome to Klassiq Grafikz
           </div>
 
           <h1 className="mt-7 max-w-4xl font-display text-[2.1rem] font-semibold leading-[1.05] tracking-[-0.03em] md:text-6xl lg:text-[4.5rem] min-h-[3em]">
@@ -230,6 +252,9 @@ function Hero() {
             />
           </h1>
 
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
+            We make branding, design and digital easy, fulfilling and rewarding for you.
+          </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <Link to="/contact">
@@ -280,14 +305,63 @@ function Hero() {
             </div>
           </div>
         </Reveal>
+      </div>
+    </section>
+  );
+}
 
-        {/* Big blinking logo container */}
-        <Reveal
-          direction="zoom"
-          delay={200}
-          className="relative mx-auto w-full max-w-sm"
-        >
-          <div ref={rotateRef} aria-hidden className="pointer-events-none absolute -inset-9 rounded-full border border-dashed border-primary/25" />
+function Welcome() {
+  const loadSettings = useServerFn(getSiteSettings);
+  const { data: settings } = useQuery({ queryKey: ["cms", "settings"], queryFn: () => loadSettings() });
+  const heroLogo = settings?.logo_url || kgLogo.url;
+  const rotateRef = useScrollRotate(0.1);
+
+  return (
+    <section className="mx-auto mt-28 max-w-6xl px-6">
+      <div className="grid items-center gap-12 md:grid-cols-2">
+        <Reveal>
+          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground backdrop-blur">
+            <span className="h-1 w-1 rounded-full bg-primary" />
+            A multidisciplinary creative studio
+          </div>
+          <h2 className="mt-5 font-display text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
+            We make branding easy,{" "}
+            <span className="text-gradient">fulfilling and rewarding</span> for you.
+          </h2>
+          <p className="mt-6 max-w-lg text-sm leading-relaxed text-muted-foreground md:text-base">
+            We are a team of designers, strategists and creative technologists. We harness our
+            skills to deliver innovative and unconventional branding, design and digital
+            solutions for businesses, organizations and individuals.
+          </p>
+          <p className="mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground md:text-base">
+            Our passion for creative work and modern technologies helps us create strategic,
+            beautiful and practical designs that grow your brand's reputation and bottom line.
+          </p>
+          <div className="mt-8">
+            <Link to="/contact">
+              <Button
+                size="lg"
+                className="group btn-winona h-12 rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground shadow-glow hover:bg-primary/90"
+              >
+                <span className="btn-label">
+                  Start a project
+                  <ArrowUpRight className="ml-1.5 h-4 w-4" />
+                </span>
+                <span className="btn-label-alt" aria-hidden>
+                  Let's go
+                  <ArrowUpRight className="h-4 w-4" />
+                </span>
+              </Button>
+            </Link>
+          </div>
+        </Reveal>
+
+        <Reveal direction="zoom" delay={150} className="relative mx-auto w-full max-w-sm">
+          <div
+            ref={rotateRef}
+            aria-hidden
+            className="pointer-events-none absolute -inset-9 rounded-full border border-dashed border-primary/25"
+          />
           <div className="absolute -inset-6 rounded-[2.5rem] bg-primary/20 blur-3xl" aria-hidden />
           <div className="relative overflow-hidden rounded-[2rem] border border-border bg-card/60 p-5 shadow-card-soft backdrop-blur">
             <img
@@ -304,168 +378,101 @@ function Hero() {
           </div>
         </Reveal>
       </div>
-
-      {/* Featured strip */}
-      <Reveal delay={320} className="mt-16 grid gap-3 rounded-3xl border border-border bg-card/40 p-3 backdrop-blur md:grid-cols-3">
-        {[
-          { k: "Avg. delivery", v: "48h", s: "rapid creative cycles" },
-          { k: "Client retention", v: "92%", s: "repeat partnerships" },
-          { k: "Disciplines", v: "08+", s: "brand · motion · product" },
-        ].map((m) => (
-          <div key={m.k} className="rounded-2xl bg-surface/60 p-5">
-            <div className="text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
-              {m.k}
-            </div>
-            <div className="mt-2 font-display text-3xl font-semibold tracking-tight">{m.v}</div>
-            <div className="mt-1 text-xs text-muted-foreground">{m.s}</div>
-          </div>
-        ))}
-      </Reveal>
     </section>
   );
 }
 
-function LiveMonitor() {
-  const [viewers, setViewers] = useState(28);
-  const [visits, setVisits] = useState(237);
-  const [monthly, setMonthly] = useState(2418);
-
-  useEffect(() => {
-    const t1 = window.setInterval(() => {
-      setViewers(() => 12 + Math.floor(Math.random() * 34));
-    }, 2200);
-    const t2 = window.setInterval(() => {
-      setVisits((v) => v + Math.floor(Math.random() * 3));
-    }, 4500);
-    const t3 = window.setInterval(() => {
-      setMonthly((m) => m + Math.floor(Math.random() * 5) - 1);
-    }, 3000);
-    return () => {
-      window.clearInterval(t1);
-      window.clearInterval(t2);
-      window.clearInterval(t3);
-    };
-  }, []);
-
-  const cards = [
-    { Icon: Eye, label: "Active Viewers", value: viewers, tint: "text-emerald-400" },
-    { Icon: TrendingUp, label: "Today's Visits", value: visits, tint: "text-primary" },
-    { Icon: Users, label: "Monthly Interested Viewers", value: monthly, tint: "text-primary-glow" },
-  ];
-
+function ShowcaseRows() {
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
-      <Reveal className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <div className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/70" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-            </span>
-            Realtime monitor
-          </div>
-          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            Live traffic on the studio
-          </h2>
-        </div>
-        <p className="max-w-sm text-sm text-muted-foreground">
-          A live pulse of who's browsing our work right now.
-        </p>
-      </Reveal>
-
-      <div className="mt-10 grid gap-4 md:grid-cols-3">
-        {cards.map(({ Icon, label, value, tint }, i) => (
-          <Reveal
-            key={label}
-            delay={i * 90}
-            className="relative overflow-hidden rounded-3xl border border-border bg-card/60 p-7 backdrop-blur"
-          >
-            <div className="flex items-center justify-between">
-              <div className={`grid h-10 w-10 place-items-center rounded-xl bg-primary/10 ${tint}`}>
-                <Icon className="h-5 w-5" />
-              </div>
-              <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
-                Live
-              </span>
-            </div>
-            <div
-              key={value}
-              className="mt-6 font-display text-5xl font-semibold tracking-tight transition-all duration-500 animate-rise"
+      {showcases.map((s, i) => {
+        const flipped = i % 2 === 1;
+        return (
+          <div key={s.title} className="mb-20 grid items-center gap-10 md:grid-cols-2 md:gap-16 last:mb-0">
+            <Reveal
+              direction={flipped ? "right" : "left"}
+              className={flipped ? "md:order-2" : ""}
             >
-              {value.toLocaleString()}
-            </div>
-            <div className="mt-2 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-              {label}
-            </div>
-          </Reveal>
-        ))}
-      </div>
+              <div className="h-0.5 w-14 bg-gradient-to-r from-primary to-transparent" />
+              <div className="mt-5 text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
+                {s.tag}
+              </div>
+              <h3 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight md:text-4xl">
+                {s.title}
+              </h3>
+              <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground md:text-base">
+                {s.desc}
+              </p>
+              <div className="mt-7">
+                <Link to="/services">
+                  <Button
+                    variant="outline"
+                    className="group h-11 rounded-full border-primary/40 px-6 text-sm font-medium hover:bg-primary hover:text-primary-foreground"
+                  >
+                    Get started
+                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                  </Button>
+                </Link>
+              </div>
+            </Reveal>
+
+            <Reveal
+              direction={flipped ? "left" : "right"}
+              delay={120}
+              className={flipped ? "md:order-1" : ""}
+            >
+              <div className="group relative overflow-hidden rounded-[2rem] border border-border bg-card/60 p-3 shadow-card-soft backdrop-blur">
+                <div className="overflow-hidden rounded-[1.5rem]">
+                  <img
+                    src={s.img}
+                    alt={s.title}
+                    loading="lazy"
+                    draggable={false}
+                    className="aspect-[4/3] w-full object-cover transition duration-700 ease-out group-hover:scale-105"
+                  />
+                </div>
+                <div className="absolute left-6 top-6 inline-flex items-center gap-1.5 rounded-full bg-background/70 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] backdrop-blur">
+                  <span className="h-1 w-1 rounded-full bg-primary" />
+                  {s.tag}
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        );
+      })}
     </section>
   );
 }
 
-
-function Marquee() {
-  const words = [
-    "Brand Identity",
-    "Motion Design",
-    "Digital Portraits",
-    "UI/UX",
-    "Shipping Platforms",
-    "Video Ads",
-    "Editorial",
-    "Print",
-    "Social Campaigns",
-    "Corporate Decks",
-  ];
-  const row = [...words, ...words];
-  return (
-    <Reveal
-      direction="fade"
-      className="relative mt-24 overflow-hidden border-y border-border/60 bg-surface/30 py-6"
-    >
-      <div className="flex animate-marquee gap-12 whitespace-nowrap">
-        {row.map((w, i) => (
-          <div key={i} className="flex items-center gap-12 font-display text-2xl font-semibold tracking-tight text-foreground/40 md:text-3xl">
-            {w}
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-          </div>
-        ))}
-      </div>
-    </Reveal>
-  );
-}
-
-function Capabilities() {
+function ServicesList() {
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
-      <Reveal className="grid items-end gap-6 md:grid-cols-2">
-        <div>
-          <div className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
-            What we do
-          </div>
-          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            Eight disciplines.{" "}
-            <span className="text-muted-foreground">One studio.</span>
-          </h2>
+      <Reveal className="text-center">
+        <div className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
+          | Branding · Design · Digital |
         </div>
-        <p className="text-sm leading-relaxed text-muted-foreground md:text-base">
-          From a single flyer to a full shipping platform — every engagement is
-          treated with the same attention to craft, strategy and finish.
-        </p>
+        <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
+          Our services
+        </h2>
       </Reveal>
 
-      <div className="mt-12 grid gap-4 grid-cols-1 md:grid-cols-2">
+      <div className="mt-12 flex flex-col gap-4">
         {capabilities.map(({ Icon, title, desc, available }, i) => (
           <Reveal
             key={title}
-            delay={i * 70}
-            className="group relative overflow-hidden rounded-2xl border border-border bg-card p-7 transition hover:-translate-y-0.5 hover:border-primary/50"
+            delay={i * 60}
+            className="group flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card/60 p-5 backdrop-blur transition hover:border-primary/50 hover:bg-card md:p-6"
           >
-            <div className="flex items-start justify-between gap-4">
-              <div className="grid h-12 w-12 place-items-center rounded-xl bg-primary/10 text-primary transition group-hover:bg-primary group-hover:text-primary-foreground">
+            <div className="flex min-w-0 items-center gap-4">
+              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary transition group-hover:bg-primary group-hover:text-primary-foreground">
                 <Icon className="h-5 w-5" />
               </div>
+              <div>
+                <div className="font-display text-lg font-semibold">{title}</div>
+                <div className="mt-0.5 text-sm text-muted-foreground">{desc}</div>
+              </div>
+            </div>
+            <div className="flex shrink-0 items-center gap-3">
               <span
                 className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] ${
                   available
@@ -480,19 +487,23 @@ function Capabilities() {
                 />
                 {available ? "Available now" : "Waitlist"}
               </span>
+              <Link to="/services">
+                <Button className="btn-winona h-10 rounded-full bg-primary px-6 text-xs font-semibold uppercase tracking-[0.15em] text-primary-foreground hover:bg-primary/90">
+                  <span className="btn-label">Let's go</span>
+                  <span className="btn-label-alt" aria-hidden>
+                    <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                </Button>
+              </Link>
             </div>
-            <div className="mt-5 font-display text-xl font-semibold">{title}</div>
-            <p className="mt-1.5 text-sm text-muted-foreground">{desc}</p>
-            <ArrowUpRight className="absolute right-6 bottom-6 h-4 w-4 text-muted-foreground/40 transition group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Reveal>
         ))}
       </div>
-
     </section>
   );
 }
 
-function ProjectShowcase() {
+function PortfolioGrid() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const loadProjects = useServerFn(getSiteProjects);
@@ -501,20 +512,15 @@ function ProjectShowcase() {
     ? dbProjects.map((p) => ({ src: p.image_url, alt: p.alt || "", tag: p.tag || "" }))
     : fallbackProjects;
 
-  useEffect(() => {
-    if (projectSlides.length === 0) return;
-    const timer = window.setInterval(() => {
-      setActiveIndex((current) => (current + 1) % projectSlides.length);
-    }, 4000);
-    return () => window.clearInterval(timer);
-  }, [projectSlides.length]);
+  const go = (delta: number) =>
+    setActiveIndex((c) => (c + delta + projectSlides.length) % projectSlides.length);
 
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
       <Reveal className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <div className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
-            Featured work
+            Some of our best works
           </div>
           <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
             Selected projects
@@ -529,100 +535,49 @@ function ProjectShowcase() {
         </Link>
       </Reveal>
 
-      <Reveal delay={120} className="mt-10 overflow-hidden rounded-[2rem] border border-border bg-card/60 p-3 shadow-card-soft backdrop-blur md:p-4">
-        <div className="relative aspect-[16/10] overflow-hidden rounded-[1.5rem] bg-surface/60">
-          <div
-            className="flex h-full transition-transform duration-700 ease-out will-change-transform"
-            style={{ transform: `translateX(-${activeIndex * 100}%)` }}
-          >
-            {projectSlides.map((slide, index) => (
-              <button
-                key={slide.src}
-                type="button"
-                onClick={() => {
-                  setActiveIndex(index);
-                  setLightboxOpen(true);
-                }}
-                aria-label={`View project: ${slide.alt}`}
-                className="group relative h-full min-w-full cursor-zoom-in select-none"
-              >
+      <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {projectSlides.map((slide, index) => (
+          <Reveal key={slide.src} delay={(index % 3) * 80}>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveIndex(index);
+                setLightboxOpen(true);
+              }}
+              aria-label={`View project: ${slide.alt}`}
+              className="group block w-full cursor-zoom-in overflow-hidden rounded-3xl border border-border bg-card/60 p-2.5 text-left backdrop-blur transition hover:border-primary/50"
+            >
+              <div className="relative aspect-square overflow-hidden rounded-2xl bg-surface/60">
                 <img
                   src={slide.src}
                   alt={slide.alt}
-                  loading={index === 0 ? "eager" : "lazy"}
+                  loading="lazy"
                   draggable={false}
                   onContextMenu={(e) => e.preventDefault()}
-                  className="pointer-events-none h-full w-full object-contain select-none"
+                  className="h-full w-full object-cover select-none transition duration-700 ease-out group-hover:scale-105"
                 />
-
-                <div className="absolute left-5 top-5 inline-flex items-center gap-1.5 rounded-full bg-background/70 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] backdrop-blur">
+                <div className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-background/70 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] backdrop-blur">
                   <span className="h-1 w-1 rounded-full bg-primary" />
                   {slide.tag}
                 </div>
-
                 <div className="absolute inset-0 grid place-items-center bg-background/40 opacity-0 backdrop-blur-sm transition duration-300 group-hover:opacity-100">
                   <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background/80 px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] backdrop-blur">
                     <Expand className="h-3.5 w-3.5 text-primary" />
-                    View project
+                    View
                   </div>
                 </div>
-              </button>
-            ))}
-          </div>
-
-          <button
-            type="button"
-            aria-label="Previous slide"
-            onClick={() =>
-              setActiveIndex((c) => (c - 1 + projectSlides.length) % projectSlides.length)
-            }
-            className="absolute left-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-border bg-background/70 text-foreground backdrop-blur transition hover:bg-background hover:text-primary md:left-5 md:h-12 md:w-12"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <button
-            type="button"
-            aria-label="Next slide"
-            onClick={() => setActiveIndex((c) => (c + 1) % projectSlides.length)}
-            className="absolute right-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-border bg-background/70 text-foreground backdrop-blur transition hover:bg-background hover:text-primary md:right-5 md:h-12 md:w-12"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-        </div>
-
-        <div className="mt-5 flex items-center justify-between gap-4 px-2">
-          <div className="text-xs text-muted-foreground">
-            <span className="font-mono text-foreground">
-              {String(activeIndex + 1).padStart(2, "0")}
-            </span>{" "}
-            / {String(projectSlides.length).padStart(2, "0")}
-          </div>
-          <div className="flex items-center gap-1.5">
-            {projectSlides.map((slide, index) => (
-              <button
-                key={slide.src}
-                type="button"
-                aria-label={`Show slide ${index + 1}`}
-                onClick={() => setActiveIndex(index)}
-                className={`h-1 rounded-full transition-all duration-300 ${
-                  activeIndex === index ? "w-8 bg-primary" : "w-4 bg-border"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </Reveal>
+              </div>
+            </button>
+          </Reveal>
+        ))}
+      </div>
 
       <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
         <DialogContent
           className="max-w-4xl border-border bg-background/95 p-0 backdrop-blur sm:rounded-[1.5rem]"
           onKeyDown={(e) => {
-            if (e.key === "ArrowLeft") {
-              setActiveIndex((c) => (c - 1 + projectSlides.length) % projectSlides.length);
-            }
-            if (e.key === "ArrowRight") {
-              setActiveIndex((c) => (c + 1) % projectSlides.length);
-            }
+            if (e.key === "ArrowLeft") go(-1);
+            if (e.key === "ArrowRight") go(1);
           }}
         >
           <div className="relative aspect-[16/10] overflow-hidden rounded-t-[1.5rem] bg-surface/60">
@@ -642,12 +597,16 @@ function ProjectShowcase() {
               </DialogDescription>
             </div>
             <div className="flex items-center gap-2">
+              <div className="mr-2 text-xs text-muted-foreground">
+                <span className="font-mono text-foreground">
+                  {String(activeIndex + 1).padStart(2, "0")}
+                </span>{" "}
+                / {String(projectSlides.length).padStart(2, "0")}
+              </div>
               <button
                 type="button"
                 aria-label="Previous project"
-                onClick={() =>
-                  setActiveIndex((c) => (c - 1 + projectSlides.length) % projectSlides.length)
-                }
+                onClick={() => go(-1)}
                 className="grid h-10 w-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-primary hover:text-primary-foreground"
               >
                 <ChevronLeft className="h-5 w-5" />
@@ -655,7 +614,7 @@ function ProjectShowcase() {
               <button
                 type="button"
                 aria-label="Next project"
-                onClick={() => setActiveIndex((c) => (c + 1) % projectSlides.length)}
+                onClick={() => go(1)}
                 className="grid h-10 w-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-primary hover:text-primary-foreground"
               >
                 <ChevronRight className="h-5 w-5" />
@@ -668,46 +627,143 @@ function ProjectShowcase() {
   );
 }
 
-function Process() {
+function AboutBand() {
+  const ringRef = useScrollRotate(-0.1);
   return (
     <section className="mx-auto mt-28 max-w-6xl px-6">
-      <Reveal className="grid items-end gap-6 md:grid-cols-2">
-        <div>
+      <Reveal direction="zoom" className="relative overflow-hidden rounded-[2.5rem] border border-border">
+        <img
+          src="/images/project-1.jpg"
+          alt="Behind the scenes at Klassiq Grafikz"
+          loading="lazy"
+          className="h-72 w-full object-cover md:h-96"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/10 to-transparent" />
+        <div
+          ref={ringRef}
+          aria-hidden
+          className="pointer-events-none absolute -right-12 -top-12 h-52 w-52 rounded-full border border-dashed border-primary/30"
+        />
+      </Reveal>
+    </section>
+  );
+}
+
+function About() {
+  return (
+    <section className="mx-auto mt-28 max-w-6xl px-6">
+      <div className="grid items-start gap-12 md:grid-cols-2">
+        <Reveal>
           <div className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
-            How we work
+            About us
           </div>
-          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            A clear process.{" "}
-            <span className="text-muted-foreground">Predictable outcomes.</span>
+          <h2 className="mt-3 font-display text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
+            A studio that treats every brief{" "}
+            <span className="text-gradient">like its own brand.</span>
           </h2>
-        </div>
-        <p className="text-sm leading-relaxed text-muted-foreground md:text-base">
-          Every engagement runs on the same five-stage rhythm — so you always
-          know what's happening, when, and why.
-        </p>
+          <p className="mt-6 max-w-lg text-sm leading-relaxed text-muted-foreground md:text-base">
+            Since 2019, Klassiq Grafikz has helped businesses, organizations and individuals
+            build brands that influence growth, reputation and sustainability. From a single
+            flyer to a full shipping platform, every engagement runs on the same five-stage
+            rhythm — so you always know what's happening, when, and why.
+          </p>
+          <div className="mt-8">
+            <Link to="/contact">
+              <Button
+                size="lg"
+                className="group btn-winona h-12 rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground shadow-glow hover:bg-primary/90"
+              >
+                <span className="btn-label">
+                  Start a project
+                  <ArrowUpRight className="ml-1.5 h-4 w-4" />
+                </span>
+                <span className="btn-label-alt" aria-hidden>
+                  Let's go
+                  <ArrowUpRight className="h-4 w-4" />
+                </span>
+              </Button>
+            </Link>
+          </div>
+        </Reveal>
+
+        <Reveal delay={120}>
+          <ol className="flex flex-col gap-3">
+            {processSteps.map(({ n, title, desc, Icon }) => (
+              <li
+                key={n}
+                className="flex items-start gap-4 rounded-2xl border border-border bg-card/60 p-5 backdrop-blur transition hover:border-primary/50 hover:bg-card"
+              >
+                <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary/10 font-mono text-xs text-primary">
+                  {n}
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 font-display font-semibold">
+                    {title}
+                    <Icon className="h-3.5 w-3.5 text-primary" />
+                  </div>
+                  <div className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{desc}</div>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </Reveal>
+      </div>
+
+      <Reveal className="mt-14 grid gap-3 rounded-3xl border border-border bg-card/40 p-3 backdrop-blur md:grid-cols-3">
+        {[
+          { k: "Avg. delivery", v: "48h", s: "rapid creative cycles" },
+          { k: "Client retention", v: "92%", s: "repeat partnerships" },
+          { k: "Disciplines", v: "08+", s: "brand · motion · product" },
+        ].map((m) => (
+          <div key={m.k} className="rounded-2xl bg-surface/60 p-5">
+            <div className="text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
+              {m.k}
+            </div>
+            <div className="mt-2 font-display text-3xl font-semibold tracking-tight">{m.v}</div>
+            <div className="mt-1 text-xs text-muted-foreground">{m.s}</div>
+          </div>
+        ))}
       </Reveal>
 
-      <ol className="mt-12 grid gap-4 md:grid-cols-5">
-        {processSteps.map(({ n, title, desc, Icon }, i) => (
-          <Reveal
-            as="li"
-            key={n}
-            delay={i * 80}
-            className="relative rounded-2xl border border-border bg-card p-6 transition hover:-translate-y-1 hover:border-primary/50 hover:shadow-soft"
-          >
-            <div className="flex items-center justify-between">
-              <div className="font-mono text-xs text-muted-foreground">{n}</div>
-              <Icon className="h-4 w-4 text-primary" />
-            </div>
-            <div className="mt-6 font-display text-lg font-semibold">{title}</div>
-            <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{desc}</p>
-            {i < processSteps.length - 1 && (
-              <div className="pointer-events-none absolute -right-2 top-1/2 hidden h-px w-4 bg-gradient-to-r from-primary/40 to-transparent md:block" />
-            )}
+      <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {stats.map((s, i) => (
+          <Reveal key={s.label} delay={i * 80}>
+            <Stat {...s} />
           </Reveal>
         ))}
-      </ol>
+      </div>
     </section>
+  );
+}
+
+function Marquee() {
+  const words = [
+    "Brand Identity",
+    "Motion Design",
+    "Digital Portraits",
+    "UI/UX",
+    "Shipping Platforms",
+    "Video Ads",
+    "Editorial",
+    "Print",
+    "Social Campaigns",
+    "Corporate Decks",
+  ];
+  const row = [...words, ...words];
+  return (
+    <Reveal
+      direction="fade"
+      className="relative mt-28 overflow-hidden border-y border-border/60 bg-surface/30 py-6"
+    >
+      <div className="flex animate-marquee gap-12 whitespace-nowrap">
+        {row.map((w, i) => (
+          <div key={i} className="flex items-center gap-12 font-display text-2xl font-semibold tracking-tight text-foreground/40 md:text-3xl">
+            {w}
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+          </div>
+        ))}
+      </div>
+    </Reveal>
   );
 }
 
@@ -756,20 +812,6 @@ function Stat({ value, suffix, label }: { value: number; suffix: string; label: 
         {label}
       </div>
     </div>
-  );
-}
-
-function Stats() {
-  return (
-    <section className="mx-auto mt-28 max-w-6xl px-6">
-      <Reveal className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((s, i) => (
-          <Reveal key={s.label} delay={i * 80}>
-            <Stat {...s} />
-          </Reveal>
-        ))}
-      </Reveal>
-    </section>
   );
 }
 

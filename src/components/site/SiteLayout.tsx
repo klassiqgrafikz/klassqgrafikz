@@ -23,7 +23,7 @@ function ReadingProgress() {
   return (
     <div className="fixed inset-x-0 top-0 z-[70] h-[3px]" aria-hidden>
       <div
-        className="h-full bg-gradient-to-r from-primary via-primary-glow to-primary shadow-[0_0_12px_oklch(0.64_0.22_287/0.6)] transition-[width] duration-150 ease-out"
+        className="h-full bg-gradient-to-r from-primary via-primary-glow to-primary shadow-[0_0_12px_oklch(0.72_0.17_55/0.6)] transition-[width] duration-150 ease-out"
         style={{ width: `${progress}%` }}
       />
     </div>

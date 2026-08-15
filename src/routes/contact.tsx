@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Mail, MessageCircle, Phone, ArrowUpRight, MapPin, Clock } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
+import { LiveMonitor } from "@/components/site/LiveMonitor";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -102,6 +103,8 @@ function ContactPage() {
           </div>
         </div>
       </section>
+
+      <LiveMonitor />
     </SiteLayout>
   );
 }
