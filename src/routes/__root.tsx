@@ -10,7 +10,6 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -38,9 +37,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -87,8 +83,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Klassiq Grafikz Studios" },
       { name: "twitter:description", content: "Creative agency — we design, edit, brand, animate and advertise." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/01557603-d363-4cb5-a23d-e5af1b406857/id-preview-02dfd975--7e99ea2a-a6cf-4136-9da1-329c6d4aac11.lovable.app-1780663152761.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/01557603-d363-4cb5-a23d-e5af1b406857/id-preview-02dfd975--7e99ea2a-a6cf-4136-9da1-329c6d4aac11.lovable.app-1780663152761.png" },
+      { property: "og:image", content: "/images/project-1.jpg" },
+      { name: "twitter:image", content: "/images/project-1.jpg" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
