@@ -21,9 +21,9 @@ function ReadingProgress() {
   }, []);
 
   return (
-    <div className="fixed inset-x-0 top-0 z-[70] h-[3px]" aria-hidden>
+    <div className="fixed inset-x-0 top-0 z-[70] h-[2px]" aria-hidden>
       <div
-        className="h-full bg-gradient-to-r from-primary via-primary-glow to-primary shadow-[0_0_12px_oklch(0.72_0.17_55/0.6)] transition-[width] duration-150 ease-out"
+        className="h-full bg-foreground transition-[width] duration-150 ease-out"
         style={{ width: `${progress}%` }}
       />
     </div>
@@ -32,11 +32,9 @@ function ReadingProgress() {
 
 export function SiteLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
+    <div className="relative min-h-screen overflow-x-hidden bg-white text-foreground">
       <ReadingProgress />
-      <div className="pointer-events-none fixed inset-0 bg-grid opacity-40" aria-hidden />
-      <div className="pointer-events-none fixed inset-0 bg-hero-glow" aria-hidden />
-      <div className="relative pt-6">
+      <div className="relative">
         <Header />
         <main>{children}</main>
         <Footer />

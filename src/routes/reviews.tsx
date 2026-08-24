@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Star } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
-import { Button } from "@/components/ui/button";
 import { reviews } from "@/lib/site-data";
 
 export const Route = createFileRoute("/reviews")({
@@ -19,47 +18,25 @@ export const Route = createFileRoute("/reviews")({
 function ReviewsPage() {
   return (
     <SiteLayout>
-      <section className="mx-auto mt-16 max-w-6xl px-6">
-        <div className="text-center">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
-            Word on the street
-          </div>
-          <h1 className="mt-3 font-display text-5xl font-semibold tracking-tight md:text-7xl">
-            Trusted by 320+ brands.
-          </h1>
-          <p className="mx-auto mt-5 max-w-xl text-muted-foreground">
-            Real people, real projects — from Lagos and Accra to London and Toronto.
-          </p>
-          <Link to="/contact" className="mt-7 inline-block">
-            <Button className="h-11 rounded-full bg-foreground px-5 text-sm font-medium text-background hover:bg-foreground/90">
-              Leave a review
-            </Button>
-          </Link>
+      <section className="mx-auto max-w-6xl px-6 pt-10 pb-16">
+        <div className="mx-auto max-w-2xl text-center">
+          <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Word on the street</div>
+          <h1 className="mt-2 font-display text-4xl font-extrabold tracking-tight md:text-5xl">Trusted by 500+ brands.</h1>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-zinc-600">Real people, real projects — from Lagos and Accra to London and Toronto.</p>
+          <Link to="/contact" className="mt-6 inline-flex rounded-full bg-black px-6 py-2.5 text-sm font-medium text-white hover:bg-zinc-800">Leave a review</Link>
+          <div className="mt-3 text-xs text-zinc-500">5.0 · 168 Google Reviews</div>
         </div>
 
-        <div className="mt-14 columns-1 gap-5 md:columns-2 lg:columns-3 [&>*]:mb-5 [&>*]:break-inside-avoid">
+        <div className="mt-10 columns-1 gap-5 md:columns-2 lg:columns-3 [&>*]:mb-5 [&>*]:break-inside-avoid">
           {reviews.map((r) => (
-            <figure
-              key={r.name}
-              className="rounded-3xl border border-border bg-card/60 p-7 backdrop-blur transition hover:border-primary/50"
-            >
-              <div className="flex gap-0.5 text-primary">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="h-3.5 w-3.5 fill-current" />
-                ))}
-              </div>
-              <blockquote className="mt-5 text-sm leading-relaxed text-foreground/90">
-                "{r.body}"
-              </blockquote>
-              <figcaption className="mt-6 flex items-center gap-3 border-t border-border/60 pt-5">
-                <div className="grid h-10 w-10 place-items-center rounded-full gradient-primary text-xs font-semibold text-primary-foreground">
-                  {r.initials}
-                </div>
+            <figure key={r.name} className="rounded-2xl border border-zinc-200 bg-white p-6">
+              <div className="flex gap-0.5 text-black">{Array.from({ length: 5 }).map((_, i) => (<Star key={i} className="h-3.5 w-3.5 fill-black" />))}</div>
+              <blockquote className="mt-4 text-sm leading-relaxed">"{r.body}"</blockquote>
+              <figcaption className="mt-5 flex items-center gap-3 border-t border-zinc-100 pt-4">
+                <div className="grid h-10 w-10 place-items-center rounded-full bg-black text-xs font-bold text-white">{r.initials}</div>
                 <div>
-                  <div className="text-sm font-medium">{r.name}</div>
-                  <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                    {r.location}
-                  </div>
+                  <div className="text-sm font-semibold">{r.name}</div>
+                  <div className="text-[11px] uppercase tracking-widest text-zinc-500">{r.location}</div>
                 </div>
               </figcaption>
             </figure>

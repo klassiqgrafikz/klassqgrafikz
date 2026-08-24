@@ -1,9 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Bell, MessageCircle, Send, Sparkles, ArrowUpRight } from "lucide-react";
+import { Bell, MessageCircle, Send, ArrowUpRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { SiteLayout } from "@/components/site/SiteLayout";
-import { Button } from "@/components/ui/button";
 import { getSiteSettings } from "@/lib/cms.functions";
 
 export const Route = createFileRoute("/addup")({
@@ -30,40 +29,25 @@ function AddUpPage() {
 
   return (
     <SiteLayout>
-      <section className="mx-auto mt-16 max-w-4xl px-6 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground backdrop-blur">
-          <Sparkles className="h-3 w-3 text-primary" /> Community
-        </div>
-        <h1 className="mt-5 font-display text-5xl font-semibold tracking-tight md:text-7xl">Join the crew.</h1>
-        <p className="mx-auto mt-5 max-w-xl text-muted-foreground">
-          Free drops, design templates, behind-the-scenes, and first access to
-          new Klassiq services. Pick your channel.
-        </p>
+      <section className="mx-auto max-w-4xl px-6 pt-10 pb-16 text-center">
+        <div className="inline-flex items-center rounded-full border border-zinc-200 bg-white px-4 py-1.5 text-xs font-medium">Community</div>
+        <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight md:text-5xl">Join the crew.</h1>
+        <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-zinc-600">Free drops, design templates, behind-the-scenes, and first access to new services.</p>
 
-        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {channels.map(({ href, Icon, title, desc }) => (
-            <a
-              key={title}
-              href={href}
-              target="_blank"
-              rel="noreferrer"
-              className="group rounded-3xl border border-border bg-card/60 p-8 text-left backdrop-blur transition hover:-translate-y-1 hover:border-primary/50"
-            >
+            <a key={title} href={href} target="_blank" rel="noreferrer" className="rounded-2xl border border-zinc-200 bg-white p-6 text-left hover:shadow-sm transition">
               <div className="flex items-start justify-between">
-                <div className="grid h-11 w-11 place-items-center rounded-xl bg-primary/10 text-primary">
-                  <Icon className="h-5 w-5" />
-                </div>
-                <ArrowUpRight className="h-4 w-4 text-muted-foreground transition group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <div className="grid h-10 w-10 place-items-center rounded-xl bg-black text-white"><Icon className="h-5 w-5" /></div>
+                <ArrowUpRight className="h-4 w-4 text-zinc-400" />
               </div>
-              <div className="mt-6 font-display text-xl font-semibold">{title}</div>
-              <p className="mt-1.5 text-sm text-muted-foreground">{desc}</p>
+              <div className="mt-4 font-display text-base font-bold">{title}</div>
+              <p className="mt-1 text-sm text-zinc-600">{desc}</p>
             </a>
           ))}
         </div>
 
-        <Link to="/contact" className="mt-10 inline-block">
-          <Button variant="outline" className="h-11 rounded-full">Or contact us directly</Button>
-        </Link>
+        <Link to="/contact" className="mt-8 inline-flex rounded-full border border-zinc-200 bg-white px-6 py-3 text-sm font-medium hover:bg-zinc-50">Or contact us directly</Link>
       </section>
     </SiteLayout>
   );

@@ -16,107 +16,92 @@ export function Footer() {
 
   const copyright = settings?.footer_copyright || `© ${new Date().getFullYear()} Klassiq Grafikz Studios. All rights reserved.`;
   const tagline = settings?.footer_tagline || "...we decorate the world.";
-  const logo = settings?.logo_url;
 
   return (
-    <footer className="relative mt-32 border-t border-border/60 bg-surface/30">
-      <div className="pointer-events-none absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+    <footer className="border-t border-zinc-200 bg-white">
+      {/* newsletter strip like slatech */}
+      <div className="border-b border-zinc-100 bg-zinc-50">
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-8 md:flex-row md:items-center md:justify-between">
+          <div>
+            <div className="font-display text-lg font-bold">Subscribe to our newsletter</div>
+            <div className="mt-1 text-sm text-zinc-500">Get latest insights and updates — no spam.</div>
+          </div>
+          <form onSubmit={(e) => e.preventDefault()} className="flex w-full max-w-sm gap-2">
+            <input placeholder="Enter your email" className="input h-10 flex-1 rounded-full bg-white" />
+            <button className="rounded-full bg-black px-6 text-sm font-medium text-white hover:bg-zinc-800">Subscribe</button>
+          </form>
+        </div>
+      </div>
 
-      <div className="mx-auto max-w-6xl px-6 py-20">
-        <div className="grid gap-12 md:grid-cols-12">
+      <div className="mx-auto max-w-6xl px-6 py-12">
+        <div className="grid gap-10 md:grid-cols-12">
           <div className="md:col-span-5">
             <div className="flex items-center gap-3">
-              {logo ? (
-                <img src={logo} alt="Klassiq Grafikz" className="h-11 w-11 rounded-2xl object-cover shadow-glow" />
-              ) : (
-                <div className="grid h-11 w-11 place-items-center rounded-2xl gradient-primary text-primary-foreground font-display text-lg font-bold shadow-glow">K</div>
-              )}
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-black text-white font-display text-sm font-bold">K</div>
               <div>
-                <div className="font-display text-lg font-semibold tracking-tight">Klassiq Grafikz</div>
-                <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-                  Creative Studio · est. 2019
-                </div>
+                <div className="font-display text-base font-bold tracking-tight">Klassiq Grafikz</div>
+                <div className="text-[10px] uppercase tracking-[0.2em] text-zinc-500">Creative Studio · est. 2019</div>
               </div>
             </div>
-            <p className="mt-6 max-w-md text-sm leading-relaxed text-muted-foreground">
-              A multidisciplinary creative agency designing brands, digital products
-              and logistics platforms that move businesses forward.
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-zinc-600">
+              Turning ideas into powerful digital brands. We build fast, beautiful and secure websites that convert visitors into customers.
             </p>
+            {socials.length > 0 && (
+              <div className="mt-6 flex gap-2">
+                {socials.slice(0, 5).map((s) => {
+                  const Icon = ICONS[s.icon || "Globe"] || Globe;
+                  return (
+                    <a key={s.id} href={s.url} target="_blank" rel="noreferrer" aria-label={s.label} className="grid h-9 w-9 place-items-center rounded-full border border-zinc-200 text-zinc-700 hover:bg-black hover:text-white hover:border-black transition">
+                      <Icon className="h-4 w-4" />
+                    </a>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
-
           <div className="md:col-span-2">
-            <div className="mb-4 text-[10px] font-semibold uppercase tracking-[0.3em] text-muted-foreground">Studio</div>
-            <ul className="space-y-3 text-sm">
-              <li><Link to="/services" className="text-foreground/80 transition hover:text-foreground">Services</Link></li>
-              <li><Link to="/shop" className="text-foreground/80 transition hover:text-foreground">Shop</Link></li>
-              <li><Link to="/reviews" className="text-foreground/80 transition hover:text-foreground">Reviews</Link></li>
-              <li><Link to="/addup" className="text-foreground/80 transition hover:text-foreground">Community</Link></li>
+            <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-zinc-900">Our Services</div>
+            <ul className="space-y-2.5 text-sm text-zinc-600">
+              <li><Link to="/services" className="hover:text-black">Website Design</Link></li>
+              <li><Link to="/services" className="hover:text-black">E-Commerce</Link></li>
+              <li><Link to="/services" className="hover:text-black">SEO</Link></li>
+              <li><Link to="/services" className="hover:text-black">Hosting</Link></li>
+              <li><Link to="/services" className="hover:text-black">Branding</Link></li>
             </ul>
           </div>
 
           <div className="md:col-span-2">
-            <div className="mb-4 text-[10px] font-semibold uppercase tracking-[0.3em] text-muted-foreground">Capabilities</div>
-            <ul className="space-y-3 text-sm">
-              <li className="text-foreground/80">Brand Identity</li>
-              <li className="text-foreground/80">Motion & Video</li>
-              <li className="text-foreground/80">UI / UX Design</li>
-              <li className="text-foreground/80">Logistics Platforms</li>
+            <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-zinc-900">Quick Links</div>
+            <ul className="space-y-2.5 text-sm text-zinc-600">
+              <li><Link to="/" className="hover:text-black">Home</Link></li>
+              <li><Link to="/services" className="hover:text-black">Services</Link></li>
+              <li><Link to="/reviews" className="hover:text-black">Reviews</Link></li>
+              <li><Link to="/shop" className="hover:text-black">Shop</Link></li>
+              <li><Link to="/contact" className="hover:text-black">Contact</Link></li>
             </ul>
           </div>
 
           <div className="md:col-span-3">
-            <div className="mb-4 text-[10px] font-semibold uppercase tracking-[0.3em] text-muted-foreground">Have a project?</div>
-            <Link
-              to="/contact"
-              className="group inline-flex items-center justify-between gap-3 rounded-2xl border border-border bg-card/60 p-4 text-sm transition hover:border-primary/60 hover:bg-card"
-            >
-              <span>
-                <span className="block font-medium">Let's build something.</span>
-                <span className="mt-0.5 block text-xs text-muted-foreground">Reply in minutes on WhatsApp.</span>
-              </span>
-              <ArrowUpRight className="h-4 w-4 shrink-0 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-primary" />
+            <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-zinc-900">Contact Us</div>
+            <div className="space-y-2 text-sm text-zinc-600">
+              <div>Lagos, Nigeria</div>
+              <a href="tel:+2347050495704" className="block hover:text-black">+234 705 049 5704</a>
+              <a href="mailto:klassiqgrafikz@gmail.com" className="block hover:text-black">klassiqgrafikz@gmail.com</a>
+            </div>
+            <Link to="/contact" className="mt-6 inline-flex items-center gap-2 rounded-full border border-zinc-200 px-5 py-2.5 text-sm font-medium hover:bg-zinc-50">
+              Get a Quote <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
       </div>
 
-      <div className="border-t border-border/60">
-        <div className="mx-auto max-w-6xl px-6 py-14 text-center">
-          <h3 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
-            REACH OUT TO US
-          </h3>
-          <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
-            Slide into any of these — we usually reply within minutes.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            {socials.map((s) => {
-              const Icon = ICONS[s.icon || "Globe"] || Globe;
-              const external = !s.url.startsWith("mailto:") && !s.url.startsWith("tel:");
-              return (
-                <a
-                  key={s.id}
-                  href={s.url}
-                  target={external ? "_blank" : undefined}
-                  rel="noreferrer"
-                  aria-label={s.label}
-                  className="group grid h-12 w-12 place-items-center rounded-full border border-border bg-card/60 text-foreground transition hover:-translate-y-0.5 hover:border-primary/60 hover:bg-primary hover:text-primary-foreground"
-                >
-                  <Icon className="h-5 w-5" />
-                </a>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      <div className="border-t border-border/60">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-6 py-6 text-xs text-muted-foreground md:flex-row">
+      <div className="border-t border-zinc-200">
+        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-5 text-xs text-zinc-500 md:flex-row md:items-center md:justify-between">
           <p>{copyright}</p>
-          <p className="font-mono tracking-wide">{tagline}</p>
+          <p>{tagline}</p>
         </div>
       </div>
-
     </footer>
   );
 }

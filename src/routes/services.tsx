@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowUpRight } from "lucide-react";
+import { Check, ArrowUpRight } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
-import { Button } from "@/components/ui/button";
 import { services as fallbackServices } from "@/lib/site-data";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -19,6 +18,12 @@ export const Route = createFileRoute("/services")({
   component: ServicesPage,
 });
 
+const bullets: Record<string, string[]> = {
+  "Flyer Designs": ["Event & promo flyers", "Social creatives", "Print-ready exports"],
+  "Logos & Branding": ["Identity systems", "Brand guidelines", "Logo variations"],
+  "Shipping Websites": ["Trackable shipping", "E-commerce ready", "Admin dashboard"],
+};
+
 function ServicesPage() {
   const load = useServerFn(getSiteServices);
   const { data } = useQuery({ queryKey: ["cms", "services"], queryFn: () => load() });
@@ -27,62 +32,34 @@ function ServicesPage() {
     : fallbackServices;
   return (
     <SiteLayout>
-      <section className="mx-auto mt-16 max-w-6xl px-6">
-        <div className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
-          Capabilities
+      <section className="mx-auto max-w-6xl px-6 pt-10 pb-16">
+        <div className="mx-auto max-w-2xl text-center">
+          <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Our Services</div>
+          <h1 className="mt-2 font-display text-4xl font-extrabold tracking-tight md:text-5xl">What We Offer</h1>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-zinc-600">From stunning designs to powerful e-commerce solutions — everything you need to succeed online.</p>
         </div>
-        <h1 className="mt-3 max-w-3xl font-display text-5xl font-semibold tracking-tight md:text-7xl">
-          Services built for ambitious brands.
-        </h1>
-        <p className="mt-5 max-w-2xl text-muted-foreground">
-          From a single flyer to a complete shipping platform — every service
-          ships fast, looks premium, and is built to convert.
-        </p>
 
-        <div className="mt-14 grid gap-px overflow-hidden rounded-3xl border border-border bg-border/40 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {services.map((s) => (
-            <Link
-              key={s.title}
-              to="/contact"
-              className="group relative bg-card p-7 transition hover:bg-card/60"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <div className="font-display text-lg font-semibold">{s.title}</div>
-                  <p className="mt-1.5 text-sm text-muted-foreground">{s.subtitle}</p>
-                </div>
-                <ArrowUpRight className="h-4 w-4 text-muted-foreground/40 transition group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </div>
-              <div className="mt-7 flex items-center gap-3">
-                <div className="h-1 flex-1 overflow-hidden rounded-full bg-secondary">
-                  <div
-                    className="h-full gradient-primary transition-all duration-500"
-                    style={{ width: `${s.popularity}%` }}
-                  />
-                </div>
-                <div className="font-mono text-[11px] text-muted-foreground">
-                  {s.popularity}%
-                </div>
-              </div>
-            </Link>
+            <div key={s.title} className="flex flex-col rounded-2xl border border-zinc-200 bg-white p-6">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-black text-white"><Check className="h-5 w-5" /></div>
+              <div className="mt-4 font-display text-base font-bold">{s.title}</div>
+              <p className="mt-1 text-sm leading-relaxed text-zinc-600">{s.subtitle}</p>
+              {(bullets[s.title] || ["Custom tailored", "Fast delivery", "Premium quality"]).slice(0,3).map((b) => (
+                <div key={b} className="mt-2 flex items-center gap-2 text-xs text-zinc-600"><span className="h-1 w-1 rounded-full bg-black" />{b}</div>
+              ))}
+              <Link to="/contact" className="mt-5 inline-flex items-center gap-1 text-sm font-medium hover:gap-2 transition-all">Learn more <ArrowUpRight className="h-4 w-4" /></Link>
+            </div>
           ))}
         </div>
 
-        <div className="mt-16 grid items-center gap-6 rounded-3xl border border-border bg-card/60 p-8 backdrop-blur md:flex-row md:p-10">
-          <div className="flex-1">
-            <h3 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">
-              Don't see what you need?
-            </h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              We build custom creative and digital systems for brands and
-              enterprise teams. Tell us what you have in mind.
-            </p>
+        <div className="mt-10 flex flex-col items-center justify-between gap-4 rounded-2xl border border-zinc-200 bg-zinc-50 p-6 md:flex-row md:p-8">
+          <div>
+            <h3 className="font-display text-xl font-bold">Don't see what you need?</h3>
+            <p className="mt-1 text-sm text-zinc-600">We build custom creative and digital systems. Tell us what you have in mind.</p>
           </div>
           <Link to="/contact">
-            <Button className="h-12 rounded-full bg-foreground px-6 text-sm font-medium text-background hover:bg-foreground/90">
-              Request a custom quote
-              <ArrowUpRight className="ml-1.5 h-4 w-4" />
-            </Button>
+            <span className="inline-flex items-center gap-2 rounded-full bg-black px-6 py-3 text-sm font-medium text-white hover:bg-zinc-800">Request a custom quote <ArrowUpRight className="h-4 w-4" /></span>
           </Link>
         </div>
       </section>

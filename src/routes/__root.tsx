@@ -91,7 +91,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap",
       },
       { rel: "stylesheet", href: appCss },
     ],
@@ -130,18 +130,6 @@ function RootComponent() {
 }
 
 function BrandInjector() {
-  useEffect(() => {
-    let cancelled = false;
-    import("@/lib/cms.functions").then(({ getSiteSettings }) => {
-      getSiteSettings().then((s) => {
-        if (cancelled) return;
-        if (s?.primary_color) {
-          document.documentElement.style.setProperty("--primary", s.primary_color);
-          document.documentElement.style.setProperty("--primary-glow", s.primary_color);
-        }
-      }).catch(() => {});
-    });
-    return () => { cancelled = true; };
-  }, []);
+  // Monochrome forced — ignore CMS primary_color
   return null;
 }
