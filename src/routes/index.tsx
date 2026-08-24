@@ -290,6 +290,8 @@ function ServicesSection() {
 function PortfolioGrid() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" });
+  const paused = useRef(false);
   const loadProjects = useServerFn(getSiteProjects);
   const { data: dbProjects } = useQuery({ queryKey: ["cms", "projects"], queryFn: () => loadProjects() });
   const projectSlides = (dbProjects && dbProjects.length > 0)
@@ -298,6 +300,14 @@ function PortfolioGrid() {
 
   const go = (delta: number) =>
     setActiveIndex((c) => (c + delta + projectSlides.length) % projectSlides.length);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const id = setInterval(() => {
+      if (!paused.current && !lightboxOpen) emblaApi.scrollNext();
+    }, 2600);
+    return () => clearInterval(id);
+  }, [emblaApi, lightboxOpen]);
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-16 md:py-20">
@@ -309,31 +319,40 @@ function PortfolioGrid() {
         <Link to="/services" className="hidden rounded-full border border-zinc-200 px-5 py-2.5 text-sm font-medium hover:bg-zinc-50 md:inline-flex">See All Our Works</Link>
       </div>
 
-      <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {projectSlides.map((slide, index) => (
-          <Reveal key={slide.src} delay={(index % 3) * 60}>
-            <button
-              type="button"
-              onClick={() => {
-                setActiveIndex(index);
-                setLightboxOpen(true);
-              }}
-              className="group block w-full overflow-hidden rounded-2xl border border-zinc-200 bg-white text-left hover:shadow-sm transition"
-            >
-              <div className="relative aspect-[4/3] overflow-hidden bg-zinc-50">
-                <img src={slide.src} alt={slide.alt} loading="lazy" className="h-full w-full object-cover group-hover:scale-[1.02] transition duration-500" />
-                <div className="absolute left-3 top-3 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-widest">{slide.tag}</div>
-                <div className="absolute inset-0 hidden place-items-center bg-white/60 backdrop-blur-sm group-hover:grid">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-xs font-medium text-white"><Expand className="h-3.5 w-3.5" /> View</span>
+      <div
+        className="relative mt-8"
+        onMouseEnter={() => { paused.current = true; }}
+        onMouseLeave={() => { paused.current = false; }}
+      >
+        <div ref={emblaRef} className="overflow-hidden">
+          <div className="flex gap-5">
+            {projectSlides.map((slide, index) => (
+              <button
+                key={slide.src + index}
+                type="button"
+                onClick={() => {
+                  setActiveIndex(index);
+                  setLightboxOpen(true);
+                }}
+                className="group min-w-0 flex-[0_0_85%] overflow-hidden rounded-2xl border border-zinc-200 bg-white text-left hover:shadow-sm transition sm:flex-[0_0_46%] lg:flex-[0_0_32%]"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden bg-zinc-50">
+                  <img src={slide.src} alt={slide.alt} loading="lazy" className="h-full w-full object-cover group-hover:scale-[1.02] transition duration-500" />
+                  <div className="absolute left-3 top-3 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-widest">{slide.tag}</div>
+                  <div className="absolute inset-0 hidden place-items-center bg-white/60 backdrop-blur-sm group-hover:grid">
+                    <span className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-xs font-medium text-white"><Expand className="h-3.5 w-3.5" /> View</span>
+                  </div>
                 </div>
-              </div>
-              <div className="p-4">
-                <div className="text-sm font-semibold leading-tight">{slide.alt}</div>
-                <div className="text-xs text-zinc-500">{slide.tag}</div>
-              </div>
-            </button>
-          </Reveal>
-        ))}
+                <div className="p-4">
+                  <div className="text-sm font-semibold leading-tight line-clamp-1">{slide.alt}</div>
+                  <div className="text-xs text-zinc-500">{slide.tag}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+        <button type="button" aria-label="Previous" onClick={() => emblaApi?.scrollPrev()} className="absolute -left-3 top-1/2 hidden h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-zinc-200 bg-white shadow-sm md:grid"><ChevronLeft className="h-5 w-5" /></button>
+        <button type="button" aria-label="Next" onClick={() => emblaApi?.scrollNext()} className="absolute -right-3 top-1/2 hidden h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-zinc-200 bg-white shadow-sm md:grid"><ChevronRight className="h-5 w-5" /></button>
       </div>
 
       <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
