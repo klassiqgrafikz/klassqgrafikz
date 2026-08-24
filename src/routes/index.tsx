@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Star, ChevronLeft, ChevronRight, Expand, Check, ArrowUpRight, Shield, Zap, Smartphone, Palette } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
@@ -38,12 +38,12 @@ export const Route = createFileRoute("/")({
 });
 
 const services = [
-  { title: "Brand Identity", desc: "Logos, identity systems and brand guidelines that make you memorable.", img: "/images/project-2.png" },
-  { title: "Graphic Design", desc: "Flyers, social creatives and print that stops the scroll.", img: "/images/project-4.png" },
-  { title: "Video & Motion", desc: "Reels, adverts and animated brand content that converts.", img: "/images/project-5.jpg" },
-  { title: "Digital Portraits", desc: "Editorial illustrations and digital art crafted with precision.", img: "/images/project-3.png" },
-  { title: "UI / UX Design", desc: "Web and product interfaces built for clarity and conversion.", img: "/images/project-7.png" },
-  { title: "Web & Logistics Platforms", desc: "Trackable shipping and e-commerce sites that scale your sales.", img: "/images/project-8.png" },
+  { title: "Brand Identity", desc: "Logos, identity systems and brand guidelines that make you memorable." },
+  { title: "Graphic Design", desc: "Flyers, social creatives and print that stops the scroll." },
+  { title: "Video & Motion", desc: "Reels, adverts and animated brand content that converts." },
+  { title: "Digital Portraits", desc: "Editorial illustrations and digital art crafted with precision." },
+  { title: "UI / UX Design", desc: "Web and product interfaces built for clarity and conversion." },
+  { title: "Web & Logistics Platforms", desc: "Trackable shipping and e-commerce sites that scale your sales." },
 ];
 
 const fallbackProjects = [
@@ -56,13 +56,80 @@ const fallbackProjects = [
 ];
 
 const whyChoose = [
-  { title: "Proven Track Record", desc: "Over 850 projects delivered with a high satisfaction rate." },
+  { title: "Proven Track Record", desc: "Over 150+ projects delivered with a high satisfaction rate." },
   { title: "On-Time Delivery", desc: "We respect deadlines and ship without compromising quality." },
   { title: "24/7 Support", desc: "WhatsApp, email and phone — we stay close after delivery." },
   { title: "Affordable Pricing", desc: "No hidden costs. Flexible packages for every business size." },
   { title: "Client-Centric", desc: "Your success is the brief. We co-build at every stage." },
   { title: "Built to Convert", desc: "Every design is made to turn visitors into customers." },
 ];
+
+function useTypewriter(text: string, speed = 80, deleteSpeed = 40, pause = 1800) {
+  const [display, setDisplay] = useState("");
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    let t: ReturnType<typeof setTimeout>;
+    if (!deleting && display === text) {
+      t = setTimeout(() => setDeleting(true), pause);
+    } else if (deleting && display === "") {
+      t = setTimeout(() => setDeleting(false), 600);
+    } else {
+      t = setTimeout(() => {
+        setDisplay((prev) => (deleting ? prev.slice(0, -1) : text.slice(0, prev.length + 1)));
+      }, deleting ? deleteSpeed : speed);
+    }
+    return () => clearTimeout(t);
+  }, [display, deleting, text, speed, deleteSpeed, pause]);
+
+  return display;
+}
+
+function useCountUp(target: number, duration = 1600) {
+  const [value, setValue] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const started = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting && !started.current) {
+            started.current = true;
+            const start = performance.now();
+            const tick = (now: number) => {
+              const p = Math.min(1, (now - start) / duration);
+              const eased = 1 - Math.pow(1 - p, 3);
+              setValue(Math.round(eased * target));
+              if (p < 1) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [target, duration]);
+
+  return { ref, value };
+}
+
+function AnimatedStat({ target, suffix, label }: { target: number; suffix: string; label: string }) {
+  const { ref, value } = useCountUp(target);
+  return (
+    <div ref={ref} className="text-center">
+      <div className="font-display text-3xl font-extrabold tracking-tight">
+        {value}
+        {suffix}
+      </div>
+      <div className="mt-1 text-xs font-medium uppercase tracking-widest text-zinc-500">{label}</div>
+    </div>
+  );
+}
 
 function Home() {
   return (
@@ -71,7 +138,6 @@ function Home() {
       <StatsBar />
       <AboutSection />
       <ServicesSection />
-      <TrustedBy />
       <PortfolioGrid />
       <Testimonials />
       <WhyChooseUs />
@@ -85,6 +151,7 @@ function Hero() {
   const loadSettings = useServerFn(getSiteSettings);
   const { data: settings } = useQuery({ queryKey: ["cms", "settings"], queryFn: () => loadSettings() });
   const heroLogo = settings?.logo_url || kgLogo.url;
+  const typed = useTypewriter("Welcome to Klassiq Grafikz Concepts");
 
   return (
     <section className="mx-auto max-w-6xl px-6 pt-10 pb-12 md:pt-14">
@@ -94,9 +161,9 @@ function Hero() {
             <span className="h-2 w-2 rounded-full bg-black" />
             #1 Creative Studio in Lagos
           </div>
-          <h1 className="mt-5 font-display text-4xl font-extrabold leading-[0.95] tracking-tight md:text-5xl lg:text-[56px]">
-            Premium <span className="font-black">Creative</span> <br />
-            Services in Lagos
+          <h1 className="mt-5 min-h-[3.25rem] font-display text-4xl font-extrabold leading-[0.95] tracking-tight md:min-h-[4.5rem] md:text-5xl lg:text-[48px]">
+            {typed}
+            <span className="ml-0.5 inline-block h-[1em] w-[3px] translate-y-1 bg-black animate-caret" aria-hidden />
           </h1>
           <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-zinc-600">
             Klassiq Grafikz — we build fast, beautiful brands that rank, convert and stay memorable. From SMEs to large organisations, we help you grow with design that works.
@@ -111,7 +178,7 @@ function Hero() {
           </div>
           <div className="mt-6 flex items-center gap-2 text-xs text-zinc-500">
             <span className="inline-flex items-center gap-1.5 font-medium text-black"><Star className="h-3.5 w-3.5 fill-black" /> 5.0 Google Rating</span>
-            <span className="h-3 w-px bg-zinc-200" /> 850+ Projects · 500+ Happy Clients
+            <span className="h-3 w-px bg-zinc-200" /> 150+ Projects · 500+ Happy Clients
           </div>
         </div>
 
@@ -121,7 +188,7 @@ function Hero() {
           </div>
           <div className="absolute -bottom-4 -left-4 hidden rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm md:block">
             <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Projects Done</div>
-            <div className="mt-1 font-display text-2xl font-bold">850+</div>
+            <div className="mt-1 font-display text-2xl font-bold">150+</div>
             <div className="text-xs text-zinc-500">Across branding, motion & web</div>
           </div>
         </div>
@@ -131,21 +198,13 @@ function Hero() {
 }
 
 function StatsBar() {
-  const items = [
-    { k: "10+", l: "Years in Lagos" },
-    { k: "850+", l: "Projects Done" },
-    { k: "500+", l: "Happy Clients" },
-    { k: "100%", l: "Satisfaction" },
-  ];
   return (
     <section className="border-y border-zinc-200 bg-zinc-50">
       <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-6 py-8 md:grid-cols-4">
-        {items.map((s) => (
-          <div key={s.l} className="text-center">
-            <div className="font-display text-3xl font-extrabold tracking-tight">{s.k}</div>
-            <div className="mt-1 text-xs font-medium uppercase tracking-widest text-zinc-500">{s.l}</div>
-          </div>
-        ))}
+        <AnimatedStat target={7} suffix="+" label="Years in Lagos" />
+        <AnimatedStat target={150} suffix="+" label="Projects Done" />
+        <AnimatedStat target={500} suffix="+" label="Happy Clients" />
+        <AnimatedStat target={100} suffix="%" label="Satisfaction" />
       </div>
     </section>
   );
@@ -204,12 +263,12 @@ function ServicesSection() {
           <h2 className="mt-2 font-display text-3xl font-bold tracking-tight md:text-4xl">What We Offer</h2>
           <p className="mt-3 text-sm leading-relaxed text-zinc-600">From stunning designs to powerful platforms, we provide everything you need to succeed online.</p>
         </div>
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
+        <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {services.map((s) => (
             <Reveal key={s.title}>
               <div className="flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-6 hover:shadow-sm transition">
-                <div className="overflow-hidden rounded-xl border border-zinc-100 bg-zinc-50">
-                  <img src={s.img} alt={s.title} className="aspect-[4/3] w-full object-cover" />
+                <div className="grid h-10 w-10 place-items-center rounded-xl bg-black text-white">
+                  <Check className="h-5 w-5" />
                 </div>
                 <div className="mt-4 font-display text-base font-bold">{s.title}</div>
                 <div className="mt-1 text-sm leading-relaxed text-zinc-600">{s.desc}</div>
@@ -222,22 +281,6 @@ function ServicesSection() {
         </div>
         <div className="mt-8 text-center">
           <Link to="/services" className="inline-flex items-center rounded-full border border-zinc-200 bg-white px-6 py-3 text-sm font-medium hover:bg-zinc-50">View All Services</Link>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function TrustedBy() {
-  const logos = ["Cybera", "BUA Foods", "Kuda", "Paystack", "Envato", "Slimboss"];
-  return (
-    <section className="border-y border-zinc-200 bg-white">
-      <div className="mx-auto max-w-6xl px-6 py-10">
-        <div className="text-center text-xs font-semibold uppercase tracking-widest text-zinc-500">Trusted by 500+ Businesses Across Nigeria and Beyond</div>
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-6 opacity-60">
-          {logos.map((l) => (
-            <div key={l} className="rounded-full border border-zinc-200 px-5 py-2 text-sm font-semibold text-zinc-700">{l}</div>
-          ))}
         </div>
       </div>
     </section>
@@ -346,7 +389,7 @@ function Testimonials() {
       <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
         <div className="mx-auto max-w-2xl text-center">
           <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Client Testimonials</div>
-          <h2 className="mt-2 font-display text-3xl font-bold tracking-tight md:text-4xl">Trusted by 500+ Businesses</h2>
+          <h2 className="mt-2 font-display text-3xl font-bold tracking-tight md:text-4xl">Trusted by 200+ Businesses</h2>
           <div className="mt-2 text-sm text-zinc-500">5.0 · 168 Google Reviews</div>
         </div>
 
