@@ -9,30 +9,15 @@ const nav = [
   { to: "/shop", label: "Shop" },
 ];
 
+import klassiqLogo from "@/assets/hero-logo.jpeg";
+
 export function Header() {
   const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
-      {/* top contact bar like slatech */}
-      <div className="hidden border-b border-zinc-100 bg-zinc-50 text-xs text-zinc-600 md:block">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-2">
-          <div className="flex items-center gap-4">
-            <a href="tel:+2347050495704" className="hover:text-foreground">+234 705 049 5704</a>
-            <span className="h-3 w-px bg-zinc-200" />
-            <span>Lagos, Nigeria</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <a href="https://wa.me/2347050495704" target="_blank" rel="noreferrer" className="hover:text-foreground">WhatsApp</a>
-            <a href="mailto:klassiqgrafikz@gmail.com" className="hover:text-foreground">Email</a>
-          </div>
-        </div>
-      </div>
-
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
         <Link to="/" className="flex items-center gap-2.5">
-          <div className="grid h-9 w-9 place-items-center rounded-lg bg-black text-white font-display text-sm font-bold">
-            K
-          </div>
+          <img src={klassiqLogo} alt="Klassiq Grafikz" className="h-9 w-9 rounded-lg object-cover" />
           <div className="leading-tight">
             <div className="font-display text-[15px] font-bold tracking-tight">Klassiq Grafikz</div>
             <div className=" -mt-0.5 text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-500">

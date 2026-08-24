@@ -15,7 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getPinnedReviews, getSiteProjects, getSiteSettings } from "@/lib/cms.functions";
 import useEmblaCarousel from "embla-carousel-react";
-import kgLogo from "@/assets/kg-logo.jpg.asset.json";
+import klassiqLogo from "@/assets/hero-logo.jpeg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -150,7 +150,7 @@ function Home() {
 function Hero() {
   const loadSettings = useServerFn(getSiteSettings);
   const { data: settings } = useQuery({ queryKey: ["cms", "settings"], queryFn: () => loadSettings() });
-  const heroLogo = settings?.logo_url || kgLogo.url;
+  const heroLogo = settings?.logo_url || klassiqLogo;
   const typed = useTypewriter("Welcome to Klassiq Grafikz Concepts");
 
   return (

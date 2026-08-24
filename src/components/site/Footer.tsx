@@ -3,6 +3,7 @@ import { Instagram, MessageCircle, Mail, Send, ArrowUpRight, Globe, Facebook, Tw
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getSiteSettings, getSiteSocials } from "@/lib/cms.functions";
+import klassiqLogo from "@/assets/hero-logo.jpeg";
 
 const ICONS: Record<string, LucideIcon> = {
   MessageCircle, Instagram, Mail, Send, Facebook, Twitter, Youtube, Phone, Globe,
@@ -37,7 +38,7 @@ export function Footer() {
         <div className="grid gap-10 md:grid-cols-12">
           <div className="md:col-span-5">
             <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 place-items-center rounded-xl bg-black text-white font-display text-sm font-bold">K</div>
+              <img src={klassiqLogo} alt="Klassiq Grafikz" className="h-10 w-10 rounded-xl object-cover" />
               <div>
                 <div className="font-display text-base font-bold tracking-tight">Klassiq Grafikz</div>
                 <div className="text-[10px] uppercase tracking-[0.2em] text-zinc-500">Creative Studio · est. 2019</div>
