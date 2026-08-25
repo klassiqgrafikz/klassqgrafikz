@@ -324,7 +324,14 @@ function PortfolioGrid() {
                   className="group block w-full overflow-hidden rounded-2xl border border-zinc-200 bg-white text-left hover:shadow-sm transition"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden bg-zinc-50">
-                    <img src={slide.src} alt={slide.alt} loading="lazy" draggable={false} className="block h-full w-full object-cover object-center select-none group-hover:scale-[1.02] transition duration-500" />
+                    <img
+                      src={slide.src}
+                      alt={slide.alt}
+                      loading={index < 3 ? "eager" : "lazy"}
+                      fetchPriority={index === 0 ? "high" : "auto"}
+                      draggable={false}
+                      className="block h-full w-full object-cover object-center select-none group-hover:scale-[1.02] transition duration-500"
+                    />
                     <div className="absolute left-3 top-3 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-widest">{slide.tag}</div>
                     <div className="absolute inset-0 hidden place-items-center bg-white/60 backdrop-blur-sm group-hover:grid">
                       <span className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-xs font-medium text-white"><Expand className="h-3.5 w-3.5" /> View</span>
