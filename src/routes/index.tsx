@@ -456,12 +456,12 @@ function WhyChooseUs() {
         <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Why Choose Us</div>
         <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold tracking-tight md:text-4xl">Several Things Define Us As a Company</h2>
       </div>
-      <div className="mt-8 sm:mt-10 grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+      <div className="mt-8 sm:mt-10 grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3">
         {items.map((w) => (
-          <div key={w.title} className="rounded-2xl border border-zinc-200 p-6">
-            <div className="grid h-9 w-9 place-items-center rounded-lg bg-black text-white"><Check className="h-4 w-4" /></div>
-            <div className="mt-4 font-display text-sm font-bold">{w.title}</div>
-            <div className="mt-1 text-sm leading-relaxed text-zinc-600">{w.desc}</div>
+          <div key={w.title} className="rounded-xl sm:rounded-2xl border border-zinc-200 p-4 sm:p-6">
+            <div className="grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-lg bg-black text-white"><Check className="h-3.5 w-3.5 sm:h-4 sm:w-4" /></div>
+            <div className="mt-3 sm:mt-4 font-display text-xs sm:text-sm font-bold leading-tight">{w.title}</div>
+            <div className="mt-1 text-[11px] sm:text-sm leading-relaxed text-zinc-600 line-clamp-3">{w.desc}</div>
           </div>
         ))}
       </div>
