@@ -220,16 +220,18 @@ function StatsBar() {
 
 function AboutSection() {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-16 md:py-20">
-      <div className="mx-auto max-w-3xl text-center">
-          <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500">About Us</div>
-          <h2 className="mt-2 font-display text-3xl font-bold leading-tight tracking-tight md:text-4xl">We Build Digital Experiences That Inspire</h2>
-          <p className="mt-4 text-[15px] leading-relaxed text-zinc-600">
-            Klassiq Grafikz combines creativity with technology to deliver brands that look stunning and perform. From SMEs to large firms, we help you build a stronger presence and scale with confidence.
-          </p>
-          <Link to="/services" className="mt-8 inline-flex items-center gap-2 rounded-full bg-black px-6 py-3 text-sm font-medium text-white hover:bg-zinc-800">
-            Click To View Our Services <ArrowUpRight className="h-4 w-4" />
-          </Link>
+    <section className="bg-black py-16 md:py-20">
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="mx-auto max-w-3xl text-center">
+            <div className="text-xs font-semibold uppercase tracking-widest text-zinc-400">About Us</div>
+            <h2 className="mt-2 font-display text-3xl font-bold leading-tight tracking-tight text-white md:text-4xl">We Build Digital Experiences That Inspire</h2>
+            <p className="mt-4 text-[15px] leading-relaxed text-zinc-300">
+              Klassiq Grafikz combines creativity with technology to deliver brands that look stunning and perform. From SMEs to large firms, we help you build a stronger presence and scale with confidence.
+            </p>
+            <Link to="/services" className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-black hover:bg-zinc-100">
+              Click To View Our Services <ArrowUpRight className="h-4 w-4" />
+            </Link>
+        </div>
       </div>
     </section>
   );
@@ -294,13 +296,14 @@ function PortfolioGrid() {
   }, [emblaApi, lightboxOpen]);
 
   return (
-    <section className="mx-auto max-w-6xl px-6 py-16 md:py-20">
+    <section className="bg-black py-16 md:py-20">
+      <div className="mx-auto max-w-6xl px-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Our Portfolio</div>
-          <h2 className="mt-2 font-display text-3xl font-bold tracking-tight md:text-4xl">Recent Projects</h2>
+          <div className="text-xs font-semibold uppercase tracking-widest text-zinc-400">Our Portfolio</div>
+          <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-white md:text-4xl">Recent Projects</h2>
         </div>
-        <Link to="/services" className="hidden rounded-full border border-zinc-200 px-5 py-2.5 text-sm font-medium hover:bg-zinc-50 md:inline-flex">See All Our Works</Link>
+        <Link to="/services" className="hidden rounded-full border border-white/20 bg-white px-5 py-2.5 text-sm font-medium text-black hover:bg-zinc-100 md:inline-flex">See All Our Works</Link>
       </div>
 
       <div
@@ -363,6 +366,7 @@ function PortfolioGrid() {
           </div>
         </DialogContent>
       </Dialog>
+      </div>
     </section>
   );
 }
