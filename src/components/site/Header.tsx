@@ -10,6 +10,7 @@ const nav = [
 ];
 
 import klassiqLogo from "@/assets/hero-logo.jpeg";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -42,9 +43,15 @@ export function Header() {
               Get a Quote
             </span>
           </Link>
+          <div className="ml-2 hidden md:block">
+            <ThemeToggle />
+          </div>
         </nav>
 
         <div className="flex items-center gap-2 md:hidden">
+          <div className="mr-1">
+            <ThemeToggle />
+          </div>
           <button
             className="grid h-9 w-9 place-items-center rounded-lg border border-zinc-200 bg-white"
             onClick={() => setOpen((o) => !o)}

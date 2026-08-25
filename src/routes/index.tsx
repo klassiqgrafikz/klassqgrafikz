@@ -141,7 +141,6 @@ function Home() {
       <Testimonials />
       <WhyChooseUs />
       <FinalCTA />
-      <ContactBand />
     </SiteLayout>
   );
 }
@@ -312,7 +311,7 @@ function PortfolioGrid() {
         onMouseLeave={() => { paused.current = false; }}
       >
         <div ref={emblaRef} className="overflow-hidden">
-          <div className="flex gap-5">
+          <div className="flex touch-pan-y gap-4 sm:gap-6">
             {projectSlides.map((slide, index) => (
               <button
                 key={slide.src + index}
@@ -321,10 +320,10 @@ function PortfolioGrid() {
                   setActiveIndex(index);
                   setLightboxOpen(true);
                 }}
-                className="group min-w-0 flex-[0_0_85%] overflow-hidden rounded-2xl border border-zinc-200 bg-white text-left hover:shadow-sm transition sm:flex-[0_0_46%] lg:flex-[0_0_32%]"
+                className="group min-w-0 flex-[0_0_82%] overflow-hidden rounded-2xl border border-zinc-200 bg-white text-left hover:shadow-sm transition sm:flex-[0_0_45%] lg:flex-[0_0_31.5%]"
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-zinc-50">
-                  <img src={slide.src} alt={slide.alt} loading="lazy" className="h-full w-full object-cover group-hover:scale-[1.02] transition duration-500" />
+                  <img src={slide.src} alt={slide.alt} loading="lazy" draggable={false} className="h-full w-full object-cover object-center select-none group-hover:scale-[1.02] transition duration-500" />
                   <div className="absolute left-3 top-3 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-widest">{slide.tag}</div>
                   <div className="absolute inset-0 hidden place-items-center bg-white/60 backdrop-blur-sm group-hover:grid">
                     <span className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-xs font-medium text-white"><Expand className="h-3.5 w-3.5" /> View</span>
