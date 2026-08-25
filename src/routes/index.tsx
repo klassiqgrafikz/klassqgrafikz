@@ -137,7 +137,6 @@ function Home() {
       <Hero />
       <StatsBar />
       <AboutSection />
-      <ServicesSection />
       <PortfolioGrid />
       <Testimonials />
       <WhyChooseUs />
@@ -222,42 +221,15 @@ function StatsBar() {
 function AboutSection() {
   return (
     <section className="mx-auto max-w-6xl px-6 py-16 md:py-20">
-      <div className="grid gap-10 md:grid-cols-2 md:items-center">
-        <div className="overflow-hidden rounded-3xl border border-zinc-200">
-          <img src="/images/project-1.jpg" alt="Team" className="aspect-[4/3] w-full object-cover" />
-        </div>
-        <div>
+      <div className="mx-auto max-w-3xl text-center">
           <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500">About Us</div>
           <h2 className="mt-2 font-display text-3xl font-bold leading-tight tracking-tight md:text-4xl">We Build Digital Experiences That Inspire</h2>
           <p className="mt-4 text-[15px] leading-relaxed text-zinc-600">
             Klassiq Grafikz combines creativity with technology to deliver brands that look stunning and perform. From SMEs to large firms, we help you build a stronger presence and scale with confidence.
           </p>
-          <div className="mt-8 grid grid-cols-2 gap-4">
-            <div className="rounded-2xl border border-zinc-200 p-4">
-              <Palette className="h-5 w-5" />
-              <div className="mt-2 text-sm font-semibold">Beautiful Design</div>
-              <div className="text-xs leading-relaxed text-zinc-500">Clean and modern designs that captivate.</div>
-            </div>
-            <div className="rounded-2xl border border-zinc-200 p-4">
-              <Zap className="h-5 w-5" />
-              <div className="mt-2 text-sm font-semibold">Lightning Fast</div>
-              <div className="text-xs leading-relaxed text-zinc-500">Optimized for speed and conversion.</div>
-            </div>
-            <div className="rounded-2xl border border-zinc-200 p-4">
-              <Shield className="h-5 w-5" />
-              <div className="mt-2 text-sm font-semibold">Secure</div>
-              <div className="text-xs leading-relaxed text-zinc-500">Protected with best practices.</div>
-            </div>
-            <div className="rounded-2xl border border-zinc-200 p-4">
-              <Smartphone className="h-5 w-5" />
-              <div className="mt-2 text-sm font-semibold">Mobile-Friendly</div>
-              <div className="text-xs leading-relaxed text-zinc-500">Looks great on every device.</div>
-            </div>
-          </div>
           <Link to="/services" className="mt-8 inline-flex items-center gap-2 rounded-full bg-black px-6 py-3 text-sm font-medium text-white hover:bg-zinc-800">
-            More About Us <ArrowUpRight className="h-4 w-4" />
+            Click To View Our Services <ArrowUpRight className="h-4 w-4" />
           </Link>
-        </div>
       </div>
     </section>
   );
