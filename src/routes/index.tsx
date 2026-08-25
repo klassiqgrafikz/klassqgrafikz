@@ -311,29 +311,33 @@ function PortfolioGrid() {
         onMouseLeave={() => { paused.current = false; }}
       >
         <div ref={emblaRef} className="overflow-hidden">
-          <div className="flex touch-pan-y gap-4 sm:gap-6">
+          <div className="flex touch-pan-y -ml-4 sm:-ml-6">
             {projectSlides.map((slide, index) => (
-              <button
+              <div
                 key={slide.src + index}
-                type="button"
-                onClick={() => {
-                  setActiveIndex(index);
-                  setLightboxOpen(true);
-                }}
-                className="group min-w-0 flex-[0_0_82%] overflow-hidden rounded-2xl border border-zinc-200 bg-white text-left hover:shadow-sm transition sm:flex-[0_0_45%] lg:flex-[0_0_31.5%]"
+                className="min-w-0 shrink-0 flex-[0_0_82%] pl-4 sm:flex-[0_0_45%] sm:pl-6 lg:flex-[0_0_33.333%] lg:pl-6"
               >
-                <div className="relative aspect-[4/3] overflow-hidden bg-zinc-50">
-                  <img src={slide.src} alt={slide.alt} loading="lazy" draggable={false} className="h-full w-full object-cover object-center select-none group-hover:scale-[1.02] transition duration-500" />
-                  <div className="absolute left-3 top-3 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-widest">{slide.tag}</div>
-                  <div className="absolute inset-0 hidden place-items-center bg-white/60 backdrop-blur-sm group-hover:grid">
-                    <span className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-xs font-medium text-white"><Expand className="h-3.5 w-3.5" /> View</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveIndex(index);
+                    setLightboxOpen(true);
+                  }}
+                  className="group block w-full overflow-hidden rounded-2xl border border-zinc-200 bg-white text-left hover:shadow-sm transition"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden bg-zinc-50">
+                    <img src={slide.src} alt={slide.alt} loading="lazy" draggable={false} className="block h-full w-full object-cover object-center select-none group-hover:scale-[1.02] transition duration-500" />
+                    <div className="absolute left-3 top-3 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-widest">{slide.tag}</div>
+                    <div className="absolute inset-0 hidden place-items-center bg-white/60 backdrop-blur-sm group-hover:grid">
+                      <span className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-xs font-medium text-white"><Expand className="h-3.5 w-3.5" /> View</span>
+                    </div>
                   </div>
-                </div>
-                <div className="p-4">
-                  <div className="text-sm font-semibold leading-tight line-clamp-1">{slide.alt}</div>
-                  <div className="text-xs text-zinc-500">{slide.tag}</div>
-                </div>
-              </button>
+                  <div className="p-4">
+                    <div className="text-sm font-semibold leading-tight line-clamp-1">{slide.alt}</div>
+                    <div className="text-xs text-zinc-500">{slide.tag}</div>
+                  </div>
+                </button>
+              </div>
             ))}
           </div>
         </div>
