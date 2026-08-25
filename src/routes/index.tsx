@@ -201,14 +201,12 @@ function Hero() {
 function StatsBar() {
   const loadSettings = useServerFn(getSiteSettings);
   const { data: s } = useQuery({ queryKey: ["cms", "settings"], queryFn: () => loadSettings() });
-  const years = s?.stat_years ?? 7;
   const projects = s?.stat_projects ?? 150;
   const clients = s?.stat_clients ?? 500;
   const satisfaction = s?.stat_satisfaction ?? 100;
   return (
     <section className="border-y border-zinc-200 bg-zinc-50 overflow-hidden">
-      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 sm:gap-6 px-4 sm:px-6 py-6 sm:py-8 md:grid-cols-4">
-        <AnimatedStat target={years} suffix="+" label="Years in Lagos" />
+      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 sm:gap-6 px-4 sm:px-6 py-6 sm:py-8 md:grid-cols-3">
         <AnimatedStat target={projects} suffix="+" label="Projects Done" />
         <AnimatedStat target={clients} suffix="+" label="Happy Clients" />
         <AnimatedStat target={satisfaction} suffix="%" label="Satisfaction" />

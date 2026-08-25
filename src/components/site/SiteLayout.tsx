@@ -36,7 +36,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       <ReadingProgress />
       <div className="relative">
         <Header />
-        <main>{children}</main>
+        <main className="pt-16">{children}</main>
         <Footer />
       </div>
     </div>
