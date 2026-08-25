@@ -32,23 +32,23 @@ function ServicesPage() {
     : fallbackServices;
   return (
     <SiteLayout>
-      <section className="mx-auto max-w-6xl px-6 pt-10 pb-16">
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 pt-8 sm:pt-10 pb-12 sm:pb-16 overflow-hidden">
         <div className="mx-auto max-w-2xl text-center">
           <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Our Services</div>
-          <h1 className="mt-2 font-display text-4xl font-extrabold tracking-tight md:text-5xl">What We Offer</h1>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-zinc-600">From stunning designs to powerful e-commerce solutions — everything you need to succeed online.</p>
+          <h1 className="mt-2 font-display text-3xl sm:text-4xl font-extrabold tracking-tight md:text-5xl">What We Offer</h1>
+          <p className="mx-auto mt-3 max-w-xl text-xs sm:text-sm leading-relaxed text-zinc-600">From stunning designs to powerful e-commerce solutions — everything you need to succeed online.</p>
         </div>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {services.map((s) => (
-            <div key={s.title} className="flex flex-col rounded-2xl border border-zinc-200 bg-white p-6">
-              <div className="grid h-10 w-10 place-items-center rounded-xl bg-black text-white"><Check className="h-5 w-5" /></div>
-              <div className="mt-4 font-display text-base font-bold">{s.title}</div>
-              <p className="mt-1 text-sm leading-relaxed text-zinc-600">{s.subtitle}</p>
+            <div key={s.title} className="flex flex-col rounded-xl sm:rounded-2xl border border-zinc-200 bg-white p-3 sm:p-4 hover:shadow-sm transition">
+              <div className="grid h-8 w-8 place-items-center rounded-lg bg-black text-white"><Check className="h-4 w-4" /></div>
+              <div className="mt-3 font-display text-xs sm:text-sm font-bold leading-tight line-clamp-2">{s.title}</div>
+              <p className="mt-1 text-[11px] sm:text-xs leading-relaxed text-zinc-600 line-clamp-3">{s.subtitle}</p>
               {(bullets[s.title] || ["Custom tailored", "Fast delivery", "Premium quality"]).slice(0,3).map((b) => (
-                <div key={b} className="mt-2 flex items-center gap-2 text-xs text-zinc-600"><span className="h-1 w-1 rounded-full bg-black" />{b}</div>
+                <div key={b} className="mt-1.5 flex items-center gap-1.5 text-[11px] text-zinc-600"><span className="h-1 w-1 rounded-full bg-black shrink-0" />{b}</div>
               ))}
-              <Link to="/contact" className="mt-5 inline-flex items-center gap-1 text-sm font-medium hover:gap-2 transition-all">Learn more <ArrowUpRight className="h-4 w-4" /></Link>
+              <Link to="/contact" className="mt-3 inline-flex items-center gap-1 text-[11px] sm:text-xs font-medium hover:gap-1.5 transition-all">Learn more <ArrowUpRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" /></Link>
             </div>
           ))}
         </div>

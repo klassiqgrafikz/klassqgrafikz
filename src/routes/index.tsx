@@ -137,7 +137,6 @@ function Home() {
       <Hero />
       <StatsBar />
       <AboutSection />
-      <ServicesSection />
       <PortfolioGrid />
       <Testimonials />
       <WhyChooseUs />
