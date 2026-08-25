@@ -22,14 +22,20 @@ update public.site_settings set
   stat_satisfaction = coalesce(stat_satisfaction, 100)
 where id = 1;
 
--- 2) Why Choose Us table (mirrors site_services pattern)
+-- 2) Why Choose Us table (mirrors site_services pattern) — use description (desc is reserved)
 create table if not exists public.site_whychoose (
   id uuid primary key default gen_random_uuid(),
   title text not null,
-  desc text,
+  description text,
   sort_order int not null default 0,
   created_at timestamptz not null default now()
 );
+-- Handle legacy tables that were created with unquoted desc column (fix previous failed run)
+do $$ begin
+  if exists (select 1 from information_schema.columns where table_schema='public' and table_name='site_whychoose' and column_name='desc') then
+    alter table public.site_whychoose rename column "desc" to description;
+  end if;
+end $$;
 
 -- Enable RLS and allow public read (anon) + service_role full access
 alter table public.site_whychoose enable row level security;
@@ -44,7 +50,7 @@ do $$ begin
 end $$;
 
 -- Seed defaults if empty (so homepage shows slatech 6 cards via DB)
-insert into public.site_whychoose (title, desc, sort_order)
+insert into public.site_whychoose (title, description, sort_order)
 select * from (values
   ('Proven Track Record', 'Over 150+ projects delivered with a high satisfaction rate.', 1),
   ('On-Time Delivery', 'We respect deadlines and ship without compromising quality.', 2),
@@ -52,5 +58,5 @@ select * from (values
   ('Affordable Pricing', 'No hidden costs. Flexible packages for every business size.', 4),
   ('Client-Centric', 'Your success is the brief. We co-build at every stage.', 5),
   ('Built to Convert', 'Every design is made to turn visitors into customers.', 6)
-) as v(title, desc, sort_order)
+) as v(title, description, sort_order)
 where not exists (select 1 from public.site_whychoose);

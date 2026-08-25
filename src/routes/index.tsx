@@ -470,7 +470,7 @@ function Testimonials() {
 function WhyChooseUs() {
   const load = useServerFn(getSiteWhyChoose);
   const { data } = useQuery({ queryKey: ["cms", "whychoose"], queryFn: () => load() });
-  const items = (data && data.length > 0) ? data.map((w) => ({ title: w.title, desc: w.desc || "" })) : whyChoose;
+  const items = (data && data.length > 0) ? data.map((w) => ({ title: w.title, desc: (w as any).description || (w as any).desc || "" })) : whyChoose;
   return (
     <section className="mx-auto max-w-6xl px-6 py-16 md:py-20">
       <div className="mx-auto max-w-2xl text-center">

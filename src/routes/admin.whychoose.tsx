@@ -20,7 +20,7 @@ function WhyChooseAdmin() {
 
   const saveMut = useMutation({
     mutationFn: async (v: Partial<WhyChoose>) => {
-      const payload: Record<string, unknown> = { title: v.title || "", desc: v.desc ?? null, sort_order: Number(v.sort_order ?? data.length + 1) };
+      const payload: Record<string, unknown> = { title: v.title || "", description: (v as any).description ?? (v as any).desc ?? null, sort_order: Number(v.sort_order ?? data.length + 1) };
       if (v.id) payload.id = v.id;
       return upsert({ data: payload as never });
     },
@@ -41,14 +41,14 @@ function WhyChooseAdmin() {
           <h1 className="font-display text-3xl font-semibold tracking-tight">Why Choose Us</h1>
           <p className="mt-1 text-sm text-muted-foreground">Edit the 6 cards in "Several Things Define Us As a Company".</p>
         </div>
-        <button onClick={() => setEditing({ title: "", desc: "", sort_order: data.length + 1 })} className="inline-flex items-center gap-1.5 rounded-lg bg-foreground px-3.5 py-2 text-sm font-medium text-background"><Plus className="h-4 w-4"/> Add card</button>
+        <button onClick={() => setEditing({ title: "", description: "", sort_order: data.length + 1 } as any)} className="inline-flex items-center gap-1.5 rounded-lg bg-foreground px-3.5 py-2 text-sm font-medium text-background"><Plus className="h-4 w-4"/> Add card</button>
       </div>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {data.map((w) => (
           <div key={w.id} className="rounded-2xl border border-border bg-card p-5">
             <div className="font-medium">{w.title}</div>
-            <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{w.desc}</p>
+            <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{(w as any).description ?? (w as any).desc}</p>
             <div className="mt-3 flex gap-2 text-xs">
               <button onClick={() => setEditing(w)} className="text-primary hover:underline">Edit</button>
               <button onClick={() => { if (confirm("Delete?")) deleteMut.mutate(w.id); }} className="text-red-500 hover:underline"><Trash2 className="inline h-3 w-3"/> Delete</button>
@@ -64,7 +64,7 @@ function WhyChooseAdmin() {
             <h2 className="font-display text-xl font-semibold">{editing.id ? "Edit card" : "New card"}</h2>
             <div className="mt-4 space-y-3">
               <label className="block"><div className="mb-1 text-xs font-medium text-muted-foreground">Title</div><input className="input" value={editing.title || ""} onChange={(e) => setEditing({ ...editing, title: e.target.value })} /></label>
-              <label className="block"><div className="mb-1 text-xs font-medium text-muted-foreground">Description</div><textarea rows={3} className="input" value={editing.desc || ""} onChange={(e) => setEditing({ ...editing, desc: e.target.value })} /></label>
+              <label className="block"><div className="mb-1 text-xs font-medium text-muted-foreground">Description</div><textarea rows={3} className="input" value={(editing as any).description ?? (editing as any).desc ?? ""} onChange={(e) => setEditing({ ...editing, description: e.target.value } as any)} /></label>
               <label className="block"><div className="mb-1 text-xs font-medium text-muted-foreground">Sort order</div><input type="number" className="input" value={editing.sort_order ?? 0} onChange={(e) => setEditing({ ...editing, sort_order: Number(e.target.value) })} /></label>
             </div>
             <div className="mt-6 flex justify-end gap-2">

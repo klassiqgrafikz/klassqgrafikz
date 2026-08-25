@@ -303,14 +303,14 @@ export const adminUpdateSettings = createServerFn({ method: "POST" })
   });
 
 // Why Choose Us CMS (requires Supabase table site_whychoose — see SQL below; fallback to empty)
-export type WhyChoose = { id: string; title: string; desc: string | null; sort_order: number };
+export type WhyChoose = { id: string; title: string; description: string | null; sort_order: number };
 export const getSiteWhyChoose = createServerFn({ method: "GET" }).handler(async () => {
   const sb: any = await publicClient();
-  const { data, error } = await sb.from("site_whychoose").select("id,title,desc,sort_order").order("sort_order");
+  const { data, error } = await sb.from("site_whychoose").select("id,title,description,sort_order").order("sort_order");
   if (error) return [] as WhyChoose[];
   return (data ?? []) as WhyChoose[];
 });
-const whyChooseInput = z.object({ id: z.string().uuid().optional(), title: z.string().min(1), desc: z.string().nullish(), sort_order: z.number().int().default(0) });
+const whyChooseInput = z.object({ id: z.string().uuid().optional(), title: z.string().min(1), description: z.string().nullish(), sort_order: z.number().int().default(0) });
 export const adminUpsertWhyChoose = createServerFn({ method: "POST" }).inputValidator((d: unknown) => whyChooseInput.parse(d)).handler(async ({ data }) => {
   const sb: any = await admin(); const { error } = await sb.from("site_whychoose").upsert(data); if (error) throw new Error(error.message); return { ok: true };
 });
