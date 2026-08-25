@@ -18,11 +18,14 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AddupRouteImport } from './routes/addup'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminWhychooseRouteImport } from './routes/admin.whychoose'
 import { Route as AdminUnlockRouteImport } from './routes/admin.unlock'
+import { Route as AdminStatsRouteImport } from './routes/admin.stats'
 import { Route as AdminSocialsRouteImport } from './routes/admin.socials'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminReviewsRouteImport } from './routes/admin.reviews'
 import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
+import { Route as AdminHeroRouteImport } from './routes/admin.hero'
 import { Route as AdminFooterRouteImport } from './routes/admin.footer'
 import { Route as AdminCommunityRouteImport } from './routes/admin.community'
 import { Route as AdminBrandingRouteImport } from './routes/admin.branding'
@@ -72,9 +75,19 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminWhychooseRoute = AdminWhychooseRouteImport.update({
+  id: '/whychoose',
+  path: '/whychoose',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminUnlockRoute = AdminUnlockRouteImport.update({
   id: '/unlock',
   path: '/unlock',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminStatsRoute = AdminStatsRouteImport.update({
+  id: '/stats',
+  path: '/stats',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminSocialsRoute = AdminSocialsRouteImport.update({
@@ -95,6 +108,11 @@ const AdminReviewsRoute = AdminReviewsRouteImport.update({
 const AdminProjectsRoute = AdminProjectsRouteImport.update({
   id: '/projects',
   path: '/projects',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHeroRoute = AdminHeroRouteImport.update({
+  id: '/hero',
+  path: '/hero',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminFooterRoute = AdminFooterRouteImport.update({
@@ -125,11 +143,14 @@ export interface FileRoutesByFullPath {
   '/admin/branding': typeof AdminBrandingRoute
   '/admin/community': typeof AdminCommunityRoute
   '/admin/footer': typeof AdminFooterRoute
+  '/admin/hero': typeof AdminHeroRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/socials': typeof AdminSocialsRoute
+  '/admin/stats': typeof AdminStatsRoute
   '/admin/unlock': typeof AdminUnlockRoute
+  '/admin/whychoose': typeof AdminWhychooseRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -143,11 +164,14 @@ export interface FileRoutesByTo {
   '/admin/branding': typeof AdminBrandingRoute
   '/admin/community': typeof AdminCommunityRoute
   '/admin/footer': typeof AdminFooterRoute
+  '/admin/hero': typeof AdminHeroRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/socials': typeof AdminSocialsRoute
+  '/admin/stats': typeof AdminStatsRoute
   '/admin/unlock': typeof AdminUnlockRoute
+  '/admin/whychoose': typeof AdminWhychooseRoute
   '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
@@ -163,11 +187,14 @@ export interface FileRoutesById {
   '/admin/branding': typeof AdminBrandingRoute
   '/admin/community': typeof AdminCommunityRoute
   '/admin/footer': typeof AdminFooterRoute
+  '/admin/hero': typeof AdminHeroRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/socials': typeof AdminSocialsRoute
+  '/admin/stats': typeof AdminStatsRoute
   '/admin/unlock': typeof AdminUnlockRoute
+  '/admin/whychoose': typeof AdminWhychooseRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -184,11 +211,14 @@ export interface FileRouteTypes {
     | '/admin/branding'
     | '/admin/community'
     | '/admin/footer'
+    | '/admin/hero'
     | '/admin/projects'
     | '/admin/reviews'
     | '/admin/services'
     | '/admin/socials'
+    | '/admin/stats'
     | '/admin/unlock'
+    | '/admin/whychoose'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -202,11 +232,14 @@ export interface FileRouteTypes {
     | '/admin/branding'
     | '/admin/community'
     | '/admin/footer'
+    | '/admin/hero'
     | '/admin/projects'
     | '/admin/reviews'
     | '/admin/services'
     | '/admin/socials'
+    | '/admin/stats'
     | '/admin/unlock'
+    | '/admin/whychoose'
     | '/admin'
   id:
     | '__root__'
@@ -221,11 +254,14 @@ export interface FileRouteTypes {
     | '/admin/branding'
     | '/admin/community'
     | '/admin/footer'
+    | '/admin/hero'
     | '/admin/projects'
     | '/admin/reviews'
     | '/admin/services'
     | '/admin/socials'
+    | '/admin/stats'
     | '/admin/unlock'
+    | '/admin/whychoose'
     | '/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -305,11 +341,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/whychoose': {
+      id: '/admin/whychoose'
+      path: '/whychoose'
+      fullPath: '/admin/whychoose'
+      preLoaderRoute: typeof AdminWhychooseRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/unlock': {
       id: '/admin/unlock'
       path: '/unlock'
       fullPath: '/admin/unlock'
       preLoaderRoute: typeof AdminUnlockRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/stats': {
+      id: '/admin/stats'
+      path: '/stats'
+      fullPath: '/admin/stats'
+      preLoaderRoute: typeof AdminStatsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/socials': {
@@ -340,6 +390,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProjectsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/hero': {
+      id: '/admin/hero'
+      path: '/hero'
+      fullPath: '/admin/hero'
+      preLoaderRoute: typeof AdminHeroRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/footer': {
       id: '/admin/footer'
       path: '/footer'
@@ -368,11 +425,14 @@ interface AdminRouteChildren {
   AdminBrandingRoute: typeof AdminBrandingRoute
   AdminCommunityRoute: typeof AdminCommunityRoute
   AdminFooterRoute: typeof AdminFooterRoute
+  AdminHeroRoute: typeof AdminHeroRoute
   AdminProjectsRoute: typeof AdminProjectsRoute
   AdminReviewsRoute: typeof AdminReviewsRoute
   AdminServicesRoute: typeof AdminServicesRoute
   AdminSocialsRoute: typeof AdminSocialsRoute
+  AdminStatsRoute: typeof AdminStatsRoute
   AdminUnlockRoute: typeof AdminUnlockRoute
+  AdminWhychooseRoute: typeof AdminWhychooseRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -380,11 +440,14 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminBrandingRoute: AdminBrandingRoute,
   AdminCommunityRoute: AdminCommunityRoute,
   AdminFooterRoute: AdminFooterRoute,
+  AdminHeroRoute: AdminHeroRoute,
   AdminProjectsRoute: AdminProjectsRoute,
   AdminReviewsRoute: AdminReviewsRoute,
   AdminServicesRoute: AdminServicesRoute,
   AdminSocialsRoute: AdminSocialsRoute,
+  AdminStatsRoute: AdminStatsRoute,
   AdminUnlockRoute: AdminUnlockRoute,
+  AdminWhychooseRoute: AdminWhychooseRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 

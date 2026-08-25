@@ -5,6 +5,8 @@ export const Route = createFileRoute("/admin/")({
 });
 
 const cards = [
+  { to: "/admin/hero", title: "Hero", desc: "Edit hero badge, title (typewriter) and subtitle." },
+  { to: "/admin/stats", title: "Stats", desc: "Edit the 4 animated numbers under the hero." },
   {
     to: "/admin/services",
     title: "Services",
@@ -20,12 +22,13 @@ const cards = [
     title: "Reviews",
     desc: "Curate the testimonials shown on the homepage.",
   },
+  { to: "/admin/whychoose", title: "Why Choose Us", desc: "Edit the 6 cards in 'Several Things Define Us'." },
   {
     to: "/admin/socials",
     title: "Social Media",
     desc: "Update WhatsApp, Instagram, Email and more.",
   },
-  { to: "/admin/branding", title: "Branding", desc: "Primary color and logo upload." },
+  { to: "/admin/branding", title: "Branding", desc: "Primary color and logo upload (color now live again)." },
   {
     to: "/admin/community",
     title: "Community",

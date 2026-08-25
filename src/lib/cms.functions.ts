@@ -41,6 +41,13 @@ export type SiteSettings = {
   community_telegram_url: string | null;
   community_whatsapp_url: string | null;
   community_instagram_url: string | null;
+  hero_title: string | null;
+  hero_subtitle: string | null;
+  hero_badge: string | null;
+  stat_years: number | null;
+  stat_projects: number | null;
+  stat_clients: number | null;
+  stat_satisfaction: number | null;
 };
 
 // ---- Admin session gate ----
@@ -102,8 +109,12 @@ export const getSiteSocials = createServerFn({ method: "GET" }).handler(async ()
 
 export const getSiteSettings = createServerFn({ method: "GET" }).handler(async () => {
   const sb = await publicClient();
-  const { data, error } = await sb.from("site_settings").select("logo_url,primary_color,footer_copyright,footer_tagline,community_telegram_url,community_whatsapp_url,community_instagram_url").eq("id", 1).maybeSingle();
-  if (error) throw new Error(error.message);
+  const { data, error } = await sb.from("site_settings").select("logo_url,primary_color,footer_copyright,footer_tagline,community_telegram_url,community_whatsapp_url,community_instagram_url,hero_title,hero_subtitle,hero_badge,stat_years,stat_projects,stat_clients,stat_satisfaction").eq("id", 1).maybeSingle();
+  if (error) {
+    // Fallback if new columns not yet migrated
+    const { data: legacy } = await sb.from("site_settings").select("logo_url,primary_color,footer_copyright,footer_tagline,community_telegram_url,community_whatsapp_url,community_instagram_url").eq("id", 1).maybeSingle();
+    return ({ ...(legacy ?? {}), hero_title: null, hero_subtitle: null, hero_badge: null, stat_years: null, stat_projects: null, stat_clients: null, stat_satisfaction: null } as SiteSettings);
+  }
   return (data ?? {
     logo_url: null,
     primary_color: null,
@@ -112,6 +123,13 @@ export const getSiteSettings = createServerFn({ method: "GET" }).handler(async (
     community_telegram_url: null,
     community_whatsapp_url: null,
     community_instagram_url: null,
+    hero_title: null,
+    hero_subtitle: null,
+    hero_badge: null,
+    stat_years: null,
+    stat_projects: null,
+    stat_clients: null,
+    stat_satisfaction: null,
   }) as SiteSettings;
 });
 
@@ -257,15 +275,48 @@ const settingsInput = z.object({
   community_telegram_url: z.string().nullish(),
   community_whatsapp_url: z.string().nullish(),
   community_instagram_url: z.string().nullish(),
+  hero_title: z.string().nullish(),
+  hero_subtitle: z.string().nullish(),
+  hero_badge: z.string().nullish(),
+  stat_years: z.number().int().min(0).max(100).nullish(),
+  stat_projects: z.number().int().min(0).max(100000).nullish(),
+  stat_clients: z.number().int().min(0).max(100000).nullish(),
+  stat_satisfaction: z.number().int().min(0).max(100).nullish(),
 });
 export const adminUpdateSettings = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => settingsInput.parse(d))
   .handler(async ({ data }) => {
     const sb = await admin();
-    const { error } = await sb.from("site_settings").update({ ...data }).eq("id", 1);
-    if (error) throw new Error(error.message);
+    const { error } = await (sb.from("site_settings") as any).update({ ...data }).eq("id", 1);
+    if (error) {
+      // Fallback if new columns not yet migrated — try legacy fields only
+      if (String(error.message).includes("hero_") || String(error.message).includes("stat_")) {
+        const legacy: Record<string, unknown> = {};
+        for (const k of ["logo_url","primary_color","footer_copyright","footer_tagline","community_telegram_url","community_whatsapp_url","community_instagram_url"]) if (k in data) legacy[k] = (data as any)[k];
+        const { error: e2 } = await (sb.from("site_settings") as any).update(legacy).eq("id", 1);
+        if (e2) throw new Error(e2.message);
+        return { ok: true };
+      }
+      throw new Error(error.message);
+    }
     return { ok: true };
   });
+
+// Why Choose Us CMS (requires Supabase table site_whychoose — see SQL below; fallback to empty)
+export type WhyChoose = { id: string; title: string; desc: string | null; sort_order: number };
+export const getSiteWhyChoose = createServerFn({ method: "GET" }).handler(async () => {
+  const sb: any = await publicClient();
+  const { data, error } = await sb.from("site_whychoose").select("id,title,desc,sort_order").order("sort_order");
+  if (error) return [] as WhyChoose[];
+  return (data ?? []) as WhyChoose[];
+});
+const whyChooseInput = z.object({ id: z.string().uuid().optional(), title: z.string().min(1), desc: z.string().nullish(), sort_order: z.number().int().default(0) });
+export const adminUpsertWhyChoose = createServerFn({ method: "POST" }).inputValidator((d: unknown) => whyChooseInput.parse(d)).handler(async ({ data }) => {
+  const sb: any = await admin(); const { error } = await sb.from("site_whychoose").upsert(data); if (error) throw new Error(error.message); return { ok: true };
+});
+export const adminDeleteWhyChoose = createServerFn({ method: "POST" }).inputValidator((d: { id: string }) => d).handler(async ({ data }) => {
+  const sb: any = await admin(); const { error } = await sb.from("site_whychoose").delete().eq("id", data.id); if (error) throw new Error(error.message); return { ok: true };
+});
 
 // Image upload (base64 data URL -> Storage). Returns public URL.
 const uploadInput = z.object({

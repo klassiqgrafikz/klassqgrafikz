@@ -130,6 +130,19 @@ function RootComponent() {
 }
 
 function BrandInjector() {
-  // Monochrome forced — ignore CMS primary_color
+  useEffect(() => {
+    let cancelled = false;
+    import("@/lib/cms.functions").then(({ getSiteSettings }) => {
+      getSiteSettings().then((s) => {
+        if (cancelled) return;
+        if (s?.primary_color) {
+          document.documentElement.style.setProperty("--primary", s.primary_color);
+          document.documentElement.style.setProperty("--primary-glow", s.primary_color);
+          document.documentElement.style.setProperty("--ring", s.primary_color);
+        }
+      }).catch(() => {});
+    });
+    return () => { cancelled = true; };
+  }, []);
   return null;
 }

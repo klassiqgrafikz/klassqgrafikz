@@ -13,7 +13,7 @@ import { Reveal } from "@/lib/Reveal";
 import { reviews as fallbackReviews } from "@/lib/site-data";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { getPinnedReviews, getSiteProjects, getSiteSettings } from "@/lib/cms.functions";
+import { getPinnedReviews, getSiteProjects, getSiteSettings, getSiteServices, getSiteWhyChoose } from "@/lib/cms.functions";
 import useEmblaCarousel from "embla-carousel-react";
 import klassiqLogo from "@/assets/hero-logo.jpeg";
 
@@ -151,7 +151,10 @@ function Hero() {
   const loadSettings = useServerFn(getSiteSettings);
   const { data: settings } = useQuery({ queryKey: ["cms", "settings"], queryFn: () => loadSettings() });
   const heroLogo = settings?.logo_url || klassiqLogo;
-  const typed = useTypewriter("Welcome to Klassiq Grafikz Concepts");
+  const heroTitle = settings?.hero_title || "Welcome to Klassiq Grafikz Concepts";
+  const heroSubtitle = settings?.hero_subtitle || "Klassiq Grafikz — we build fast, beautiful brands that rank, convert and stay memorable. From SMEs to large organisations, we help you grow with design that works.";
+  const heroBadge = settings?.hero_badge || "#1 Creative Studio in Lagos";
+  const typed = useTypewriter(heroTitle);
 
   return (
     <section className="mx-auto max-w-6xl px-6 pt-10 pb-12 md:pt-14">
@@ -159,14 +162,14 @@ function Hero() {
         <div>
           <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs font-medium">
             <span className="h-2 w-2 rounded-full bg-black" />
-            #1 Creative Studio in Lagos
+            {heroBadge}
           </div>
           <h1 className="mt-5 min-h-[3.25rem] font-display text-4xl font-extrabold leading-[0.95] tracking-tight md:min-h-[4.5rem] md:text-5xl lg:text-[48px]">
             {typed}
             <span className="ml-0.5 inline-block h-[1em] w-[3px] translate-y-1 bg-black animate-caret" aria-hidden />
           </h1>
           <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-zinc-600">
-            Klassiq Grafikz — we build fast, beautiful brands that rank, convert and stay memorable. From SMEs to large organisations, we help you grow with design that works.
+            {heroSubtitle}
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <Link to="/contact">
@@ -198,13 +201,19 @@ function Hero() {
 }
 
 function StatsBar() {
+  const loadSettings = useServerFn(getSiteSettings);
+  const { data: s } = useQuery({ queryKey: ["cms", "settings"], queryFn: () => loadSettings() });
+  const years = s?.stat_years ?? 7;
+  const projects = s?.stat_projects ?? 150;
+  const clients = s?.stat_clients ?? 500;
+  const satisfaction = s?.stat_satisfaction ?? 100;
   return (
     <section className="border-y border-zinc-200 bg-zinc-50">
       <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-6 py-8 md:grid-cols-4">
-        <AnimatedStat target={7} suffix="+" label="Years in Lagos" />
-        <AnimatedStat target={150} suffix="+" label="Projects Done" />
-        <AnimatedStat target={500} suffix="+" label="Happy Clients" />
-        <AnimatedStat target={100} suffix="%" label="Satisfaction" />
+        <AnimatedStat target={years} suffix="+" label="Years in Lagos" />
+        <AnimatedStat target={projects} suffix="+" label="Projects Done" />
+        <AnimatedStat target={clients} suffix="+" label="Happy Clients" />
+        <AnimatedStat target={satisfaction} suffix="%" label="Satisfaction" />
       </div>
     </section>
   );
@@ -255,6 +264,9 @@ function AboutSection() {
 }
 
 function ServicesSection() {
+  const load = useServerFn(getSiteServices);
+  const { data } = useQuery({ queryKey: ["cms", "services"], queryFn: () => load() });
+  const display = (data && data.length > 0) ? data.map((s) => ({ title: s.title, desc: s.subtitle || "" })) : services;
   return (
     <section className="bg-zinc-50">
       <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
@@ -264,7 +276,7 @@ function ServicesSection() {
           <p className="mt-3 text-sm leading-relaxed text-zinc-600">From stunning designs to powerful platforms, we provide everything you need to succeed online.</p>
         </div>
         <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {services.map((s) => (
+          {display.map((s) => (
             <Reveal key={s.title}>
               <div className="flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-6 hover:shadow-sm transition">
                 <div className="grid h-10 w-10 place-items-center rounded-xl bg-black text-white">
@@ -456,6 +468,9 @@ function Testimonials() {
 }
 
 function WhyChooseUs() {
+  const load = useServerFn(getSiteWhyChoose);
+  const { data } = useQuery({ queryKey: ["cms", "whychoose"], queryFn: () => load() });
+  const items = (data && data.length > 0) ? data.map((w) => ({ title: w.title, desc: w.desc || "" })) : whyChoose;
   return (
     <section className="mx-auto max-w-6xl px-6 py-16 md:py-20">
       <div className="mx-auto max-w-2xl text-center">
@@ -463,7 +478,7 @@ function WhyChooseUs() {
         <h2 className="mt-2 font-display text-3xl font-bold tracking-tight md:text-4xl">Several Things Define Us As a Company</h2>
       </div>
       <div className="mt-10 grid gap-5 md:grid-cols-3">
-        {whyChoose.map((w) => (
+        {items.map((w) => (
           <div key={w.title} className="rounded-2xl border border-zinc-200 p-6">
             <div className="grid h-9 w-9 place-items-center rounded-lg bg-black text-white"><Check className="h-4 w-4" /></div>
             <div className="mt-4 font-display text-sm font-bold">{w.title}</div>
