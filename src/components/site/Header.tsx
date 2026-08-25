@@ -16,7 +16,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6 py-3 sm:py-3.5">
         <Link to="/" className="flex items-center gap-2.5">
           <img src={klassiqLogo} alt="Klassiq Grafikz" className="h-9 w-9 rounded-lg object-cover" />
           <div className="leading-tight">

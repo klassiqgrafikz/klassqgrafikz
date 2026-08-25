@@ -137,6 +137,7 @@ function Home() {
       <Hero />
       <StatsBar />
       <AboutSection />
+      <ServicesSection />
       <PortfolioGrid />
       <Testimonials />
       <WhyChooseUs />
@@ -155,18 +156,18 @@ function Hero() {
   const typed = useTypewriter(heroTitle);
 
   return (
-    <section className="mx-auto max-w-6xl px-6 pt-10 pb-12 md:pt-14">
-      <div className="grid gap-10 md:grid-cols-2 md:items-center">
+    <section className="mx-auto max-w-6xl px-4 sm:px-6 pt-8 sm:pt-10 pb-10 sm:pb-12 md:pt-14 overflow-hidden">
+      <div className="grid gap-8 sm:gap-10 md:grid-cols-2 md:items-center">
         <div>
           <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs font-medium">
             <span className="h-2 w-2 rounded-full bg-black" />
             {heroBadge}
           </div>
-          <h1 className="mt-5 min-h-[3.25rem] font-display text-4xl font-extrabold leading-[0.95] tracking-tight md:min-h-[4.5rem] md:text-5xl lg:text-[48px]">
+          <h1 className="mt-5 min-h-[2.5rem] sm:min-h-[3.25rem] font-display text-[28px] sm:text-4xl font-extrabold leading-[0.95] tracking-tight break-words md:min-h-[4.5rem] md:text-5xl lg:text-[48px]">
             {typed}
             <span className="ml-0.5 inline-block h-[1em] w-[3px] translate-y-1 bg-black animate-caret" aria-hidden />
           </h1>
-          <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-zinc-600">
+          <p className="mt-4 max-w-xl text-sm sm:text-[15px] leading-relaxed text-zinc-600 break-words">
             {heroSubtitle}
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
@@ -206,8 +207,8 @@ function StatsBar() {
   const clients = s?.stat_clients ?? 500;
   const satisfaction = s?.stat_satisfaction ?? 100;
   return (
-    <section className="border-y border-zinc-200 bg-zinc-50">
-      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-6 py-8 md:grid-cols-4">
+    <section className="border-y border-zinc-200 bg-zinc-50 overflow-hidden">
+      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 sm:gap-6 px-4 sm:px-6 py-6 sm:py-8 md:grid-cols-4">
         <AnimatedStat target={years} suffix="+" label="Years in Lagos" />
         <AnimatedStat target={projects} suffix="+" label="Projects Done" />
         <AnimatedStat target={clients} suffix="+" label="Happy Clients" />
@@ -219,8 +220,8 @@ function StatsBar() {
 
 function AboutSection() {
   return (
-    <section className="bg-black py-16 md:py-20">
-      <div className="mx-auto max-w-6xl px-6">
+    <section className="bg-black py-12 sm:py-16 md:py-20 overflow-hidden">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="mx-auto max-w-3xl text-center">
             <div className="text-xs font-semibold uppercase tracking-widest text-zinc-400">About Us</div>
             <h2 className="mt-2 font-display text-3xl font-bold leading-tight tracking-tight text-white md:text-4xl">We Build Digital Experiences That Inspire</h2>
@@ -242,30 +243,30 @@ function ServicesSection() {
   const display = (data && data.length > 0) ? data.map((s) => ({ title: s.title, desc: s.subtitle || "" })) : services;
   return (
     <section className="bg-zinc-50">
-      <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16">
         <div className="mx-auto max-w-2xl text-center">
           <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Our Services</div>
-          <h2 className="mt-2 font-display text-3xl font-bold tracking-tight md:text-4xl">What We Offer</h2>
-          <p className="mt-3 text-sm leading-relaxed text-zinc-600">From stunning designs to powerful platforms, we provide everything you need to succeed online.</p>
+          <h2 className="mt-2 font-display text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">What We Offer</h2>
+          <p className="mt-2 text-xs sm:text-sm leading-relaxed text-zinc-600">From stunning designs to powerful platforms, we provide everything you need to succeed online.</p>
         </div>
-        <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-4">
           {display.map((s) => (
             <Reveal key={s.title}>
-              <div className="flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-6 hover:shadow-sm transition">
-                <div className="grid h-10 w-10 place-items-center rounded-xl bg-black text-white">
-                  <Check className="h-5 w-5" />
+              <div className="flex h-full flex-col rounded-xl sm:rounded-2xl border border-zinc-200 bg-white p-3 sm:p-4 hover:shadow-sm transition">
+                <div className="grid h-8 w-8 place-items-center rounded-lg bg-black text-white">
+                  <Check className="h-4 w-4" />
                 </div>
-                <div className="mt-4 font-display text-base font-bold">{s.title}</div>
-                <div className="mt-1 text-sm leading-relaxed text-zinc-600">{s.desc}</div>
-                <Link to="/services" className="mt-4 inline-flex items-center gap-1 text-sm font-medium hover:gap-2 transition-all">
-                  Learn more <ArrowUpRight className="h-4 w-4" />
+                <div className="mt-3 font-display text-xs sm:text-sm font-bold leading-tight line-clamp-2">{s.title}</div>
+                <div className="mt-1 text-[11px] sm:text-xs leading-relaxed text-zinc-600 line-clamp-3">{s.desc}</div>
+                <Link to="/services" className="mt-3 inline-flex items-center gap-1 text-[11px] sm:text-xs font-medium hover:gap-1.5 transition-all">
+                  Learn more <ArrowUpRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                 </Link>
               </div>
             </Reveal>
           ))}
         </div>
         <div className="mt-8 text-center">
-          <Link to="/services" className="inline-flex items-center rounded-full border border-zinc-200 bg-white px-6 py-3 text-sm font-medium hover:bg-zinc-50">View All Services</Link>
+          <Link to="/services" className="inline-flex items-center rounded-full border border-zinc-200 bg-white px-5 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-medium hover:bg-zinc-50">View All Services</Link>
         </div>
       </div>
     </section>
@@ -295,12 +296,12 @@ function PortfolioGrid() {
   }, [emblaApi, lightboxOpen]);
 
   return (
-    <section className="bg-black py-16 md:py-20">
-      <div className="mx-auto max-w-6xl px-6">
+    <section className="bg-black py-12 sm:py-16 md:py-20 overflow-hidden">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <div className="text-xs font-semibold uppercase tracking-widest text-zinc-400">Our Portfolio</div>
-          <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-white md:text-4xl">Recent Projects</h2>
+          <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold tracking-tight text-white md:text-4xl">Recent Projects</h2>
         </div>
         <Link to="/services" className="hidden rounded-full border border-white/20 bg-white px-5 py-2.5 text-sm font-medium text-black hover:bg-zinc-100 md:inline-flex">See All Our Works</Link>
       </div>
@@ -395,34 +396,34 @@ function Testimonials() {
   }, [emblaApi]);
 
   return (
-    <section className="bg-zinc-50">
-      <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
+    <section className="bg-zinc-50 overflow-hidden">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 md:py-20">
         <div className="mx-auto max-w-2xl text-center">
           <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Client Testimonials</div>
-          <h2 className="mt-2 font-display text-3xl font-bold tracking-tight md:text-4xl">Trusted by 200+ Businesses</h2>
-          <div className="mt-2 text-sm text-zinc-500">5.0 · 168 Google Reviews</div>
+          <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold tracking-tight md:text-4xl">Trusted by 200+ Businesses</h2>
+          <div className="mt-2 text-xs sm:text-sm text-zinc-500">5.0 · 168 Google Reviews</div>
         </div>
 
-        <div className="relative mt-10">
+        <div className="relative mt-8">
           <div ref={emblaRef} className="overflow-hidden">
-            <div className="flex gap-5">
+            <div className="flex touch-pan-y gap-3 sm:gap-4">
               {reviews.map((r) => (
-                <figure key={r.name} className="min-w-0 flex-[0_0_100%] rounded-2xl border border-zinc-200 bg-white p-6 md:flex-[0_0_calc(50%-10px)] md:p-8">
-                  <div className="flex gap-1 text-black">{Array.from({ length: 5 }).map((_, i) => (<Star key={i} className="h-4 w-4 fill-black" />))}</div>
-                  <blockquote className="mt-4 text-[15px] font-medium leading-relaxed">"{r.body}"</blockquote>
-                  <figcaption className="mt-6 flex items-center gap-3 border-t border-zinc-100 pt-4">
-                    <div className="grid h-10 w-10 place-items-center rounded-full bg-black text-xs font-bold text-white">{r.initials}</div>
-                    <div>
-                      <div className="text-sm font-semibold">{r.name}</div>
-                      <div className="text-xs text-zinc-500">{r.location}</div>
+                <figure key={r.name} className="min-w-0 flex-[0_0_88%] sm:flex-[0_0_45%] lg:flex-[0_0_30%] rounded-xl sm:rounded-2xl border border-zinc-200 bg-white p-4 sm:p-5">
+                  <div className="flex gap-0.5 text-black">{Array.from({ length: 5 }).map((_, i) => (<Star key={i} className="h-3 w-3 sm:h-3.5 sm:w-3.5 fill-black" />))}</div>
+                  <blockquote className="mt-3 text-xs sm:text-sm font-medium leading-relaxed line-clamp-4">"{r.body}"</blockquote>
+                  <figcaption className="mt-4 flex items-center gap-2.5 border-t border-zinc-100 pt-3">
+                    <div className="grid h-8 w-8 place-items-center rounded-full bg-black text-[11px] font-bold text-white">{r.initials}</div>
+                    <div className="min-w-0">
+                      <div className="text-xs sm:text-sm font-semibold truncate">{r.name}</div>
+                      <div className="text-[11px] text-zinc-500 truncate">{r.location}</div>
                     </div>
                   </figcaption>
                 </figure>
               ))}
             </div>
           </div>
-          <button type="button" aria-label="Previous" onClick={scrollPrev} className="absolute -left-3 top-1/2 hidden h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-zinc-200 bg-white shadow-sm md:grid"><ChevronLeft className="h-5 w-5" /></button>
-          <button type="button" aria-label="Next" onClick={scrollNext} className="absolute -right-3 top-1/2 hidden h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-zinc-200 bg-white shadow-sm md:grid"><ChevronRight className="h-5 w-5" /></button>
+          <button type="button" aria-label="Previous" onClick={scrollPrev} className="absolute -left-2 top-1/2 hidden h-8 w-8 -translate-y-1/2 place-items-center rounded-full border border-zinc-200 bg-white shadow-sm md:grid"><ChevronLeft className="h-4 w-4" /></button>
+          <button type="button" aria-label="Next" onClick={scrollNext} className="absolute -right-2 top-1/2 hidden h-8 w-8 -translate-y-1/2 place-items-center rounded-full border border-zinc-200 bg-white shadow-sm md:grid"><ChevronRight className="h-4 w-4" /></button>
         </div>
 
         <div className="mt-6 flex items-center justify-center gap-1.5">
@@ -451,12 +452,12 @@ function WhyChooseUs() {
   const { data } = useQuery({ queryKey: ["cms", "whychoose"], queryFn: () => load() });
   const items = (data && data.length > 0) ? data.map((w) => ({ title: w.title, desc: (w as any).description || (w as any).desc || "" })) : whyChoose;
   return (
-    <section className="mx-auto max-w-6xl px-6 py-16 md:py-20">
+    <section className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 md:py-20 overflow-hidden">
       <div className="mx-auto max-w-2xl text-center">
         <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Why Choose Us</div>
-        <h2 className="mt-2 font-display text-3xl font-bold tracking-tight md:text-4xl">Several Things Define Us As a Company</h2>
+        <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold tracking-tight md:text-4xl">Several Things Define Us As a Company</h2>
       </div>
-      <div className="mt-10 grid gap-5 md:grid-cols-3">
+      <div className="mt-8 sm:mt-10 grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {items.map((w) => (
           <div key={w.title} className="rounded-2xl border border-zinc-200 p-6">
             <div className="grid h-9 w-9 place-items-center rounded-lg bg-black text-white"><Check className="h-4 w-4" /></div>
@@ -471,8 +472,8 @@ function WhyChooseUs() {
 
 function FinalCTA() {
   return (
-    <section className="bg-black text-white">
-      <div className="mx-auto max-w-6xl px-6 py-14 text-center md:py-16">
+    <section className="bg-black text-white overflow-hidden">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-14 text-center md:py-16">
         <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">Ready to Build Your Dream Website?</h2>
         <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-zinc-300">Let's discuss your project and create something amazing together.</p>
         <div className="mt-7 flex flex-wrap justify-center gap-3">

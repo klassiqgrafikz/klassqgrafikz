@@ -22,7 +22,7 @@ export function Footer() {
     <footer className="border-t border-zinc-200 bg-white">
       {/* newsletter strip like slatech */}
       <div className="border-b border-zinc-100 bg-zinc-50">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-8 md:flex-row md:items-center md:justify-between">
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 sm:px-6 py-8 md:flex-row md:items-center md:justify-between">
           <div>
             <div className="font-display text-lg font-bold">Subscribe to our newsletter</div>
             <div className="mt-1 text-sm text-zinc-500">Get latest insights and updates — no spam.</div>
@@ -34,7 +34,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-6xl px-6 py-12">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8 sm:py-12">
         <div className="grid gap-10 md:grid-cols-12">
           <div className="md:col-span-5">
             <div className="flex items-center gap-3">
@@ -98,7 +98,7 @@ export function Footer() {
       </div>
 
       <div className="border-t border-zinc-200">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-5 text-xs text-zinc-500 md:flex-row md:items-center md:justify-between">
+        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 sm:px-6 py-5 text-xs text-zinc-500 md:flex-row md:items-center md:justify-between">
           <p>{copyright}</p>
           <p>{tagline}</p>
         </div>
