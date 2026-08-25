@@ -107,13 +107,28 @@ export const getSiteSocials = createServerFn({ method: "GET" }).handler(async ()
   return (data ?? []) as Social[];
 });
 
+async function readHeroStatsFallback(sb: any): Promise<Partial<SiteSettings>> {
+  try {
+    const { data, error } = await sb.storage.from("branding").download("cms/hero-stats.json");
+    if (error || !data) return {};
+    const text = await (data as Blob).text();
+    return JSON.parse(text);
+  } catch { return {}; }
+}
+
 export const getSiteSettings = createServerFn({ method: "GET" }).handler(async () => {
   const sb = await publicClient();
   const { data, error } = await sb.from("site_settings").select("logo_url,primary_color,footer_copyright,footer_tagline,community_telegram_url,community_whatsapp_url,community_instagram_url,hero_title,hero_subtitle,hero_badge,stat_years,stat_projects,stat_clients,stat_satisfaction").eq("id", 1).maybeSingle();
   if (error) {
-    // Fallback if new columns not yet migrated
+    // Fallback if new columns not yet migrated — merge legacy + storage JSON
     const { data: legacy } = await sb.from("site_settings").select("logo_url,primary_color,footer_copyright,footer_tagline,community_telegram_url,community_whatsapp_url,community_instagram_url").eq("id", 1).maybeSingle();
-    return ({ ...(legacy ?? {}), hero_title: null, hero_subtitle: null, hero_badge: null, stat_years: null, stat_projects: null, stat_clients: null, stat_satisfaction: null } as SiteSettings);
+    const fallback = await readHeroStatsFallback(sb);
+    return ({ ...(legacy ?? {}), hero_title: fallback.hero_title ?? null, hero_subtitle: fallback.hero_subtitle ?? null, hero_badge: fallback.hero_badge ?? null, stat_years: fallback.stat_years ?? null, stat_projects: fallback.stat_projects ?? null, stat_clients: fallback.stat_clients ?? null, stat_satisfaction: fallback.stat_satisfaction ?? null } as SiteSettings);
+  }
+  // Also merge storage fallback if DB columns are null (allows pre-migration edits to show)
+  if (data && (data.hero_title == null || (data as any).stat_years == null)) {
+    const fallback = await readHeroStatsFallback(sb);
+    return { ...fallback, ...data, hero_title: (data as any).hero_title ?? fallback.hero_title ?? null, hero_subtitle: (data as any).hero_subtitle ?? fallback.hero_subtitle ?? null, hero_badge: (data as any).hero_badge ?? fallback.hero_badge ?? null, stat_years: (data as any).stat_years ?? fallback.stat_years ?? null, stat_projects: (data as any).stat_projects ?? fallback.stat_projects ?? null, stat_clients: (data as any).stat_clients ?? fallback.stat_clients ?? null, stat_satisfaction: (data as any).stat_satisfaction ?? fallback.stat_satisfaction ?? null } as SiteSettings;
   }
   return (data ?? {
     logo_url: null,
@@ -289,12 +304,27 @@ export const adminUpdateSettings = createServerFn({ method: "POST" })
     const sb = await admin();
     const { error } = await (sb.from("site_settings") as any).update({ ...data }).eq("id", 1);
     if (error) {
-      // Fallback if new columns not yet migrated — try legacy fields only
-      if (String(error.message).includes("hero_") || String(error.message).includes("stat_")) {
+      // Fallback if new columns not yet migrated — use Storage JSON for hero/stats
+      if (String(error.message).includes("hero_") || String(error.message).includes("stat_") || String((error as any).code) === "42703") {
         const legacy: Record<string, unknown> = {};
         for (const k of ["logo_url","primary_color","footer_copyright","footer_tagline","community_telegram_url","community_whatsapp_url","community_instagram_url"]) if (k in data) legacy[k] = (data as any)[k];
-        const { error: e2 } = await (sb.from("site_settings") as any).update(legacy).eq("id", 1);
-        if (e2) throw new Error(e2.message);
+        if (Object.keys(legacy).length) {
+          const { error: e2 } = await (sb.from("site_settings") as any).update(legacy).eq("id", 1);
+          if (e2) throw new Error(e2.message);
+        }
+        // Persist hero/stats to Storage fallback so edits survive without migration
+        const heroStats: Record<string, unknown> = {};
+        for (const k of ["hero_title","hero_subtitle","hero_badge","stat_years","stat_projects","stat_clients","stat_satisfaction"]) if (k in data) heroStats[k] = (data as any)[k];
+        if (Object.keys(heroStats).length) {
+          // Merge with existing
+          let existing: Record<string, unknown> = {};
+          try {
+            const { data: blob } = await (sb as any).storage.from("branding").download("cms/hero-stats.json");
+            if (blob) existing = JSON.parse(await (blob as Blob).text());
+          } catch {}
+          const merged = { ...existing, ...heroStats };
+          await (sb as any).storage.from("branding").upload("cms/hero-stats.json", new Blob([JSON.stringify(merged)], { type: "application/json" }), { upsert: true, contentType: "application/json" });
+        }
         return { ok: true };
       }
       throw new Error(error.message);
@@ -302,20 +332,67 @@ export const adminUpdateSettings = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-// Why Choose Us CMS (requires Supabase table site_whychoose — see SQL below; fallback to empty)
+// Why Choose Us CMS (DB table if migrated, else Storage JSON fallback at branding/cms/whychoose.json)
+async function readWhyChooseFallback(sb: any): Promise<WhyChoose[]> {
+  try {
+    const { data, error } = await sb.storage.from("branding").download("cms/whychoose.json");
+    if (error || !data) return [];
+    const text = await (data as Blob).text();
+    const arr = JSON.parse(text);
+    return Array.isArray(arr) ? arr : [];
+  } catch { return []; }
+}
+async function writeWhyChooseFallback(sb: any, items: WhyChoose[]) {
+  await sb.storage.from("branding").upload("cms/whychoose.json", new Blob([JSON.stringify(items)], { type: "application/json" }), { upsert: true, contentType: "application/json" });
+}
 export type WhyChoose = { id: string; title: string; description: string | null; sort_order: number };
 export const getSiteWhyChoose = createServerFn({ method: "GET" }).handler(async () => {
   const sb: any = await publicClient();
   const { data, error } = await sb.from("site_whychoose").select("id,title,description,sort_order").order("sort_order");
-  if (error) return [] as WhyChoose[];
+  if (error) {
+    if (String((error as any).code) === "PGRST205" || String(error.message).includes("site_whychoose")) {
+      return readWhyChooseFallback(sb);
+    }
+    return [] as WhyChoose[];
+  }
+  if (!data || (data as any[]).length === 0) {
+    const fb = await readWhyChooseFallback(sb);
+    if (fb.length) return fb;
+  }
   return (data ?? []) as WhyChoose[];
 });
 const whyChooseInput = z.object({ id: z.string().uuid().optional(), title: z.string().min(1), description: z.string().nullish(), sort_order: z.number().int().default(0) });
 export const adminUpsertWhyChoose = createServerFn({ method: "POST" }).inputValidator((d: unknown) => whyChooseInput.parse(d)).handler(async ({ data }) => {
-  const sb: any = await admin(); const { error } = await sb.from("site_whychoose").upsert(data); if (error) throw new Error(error.message); return { ok: true };
+  const sb: any = await admin();
+  const { error } = await sb.from("site_whychoose").upsert(data);
+  if (error) {
+    if (String((error as any).code) === "PGRST205" || String(error.message).includes("site_whychoose")) {
+      const existing = await readWhyChooseFallback(sb);
+      const id = (data as any).id || crypto.randomUUID();
+      const idx = existing.findIndex((w) => w.id === id);
+      const item: WhyChoose = { id, title: (data as any).title, description: (data as any).description ?? null, sort_order: (data as any).sort_order ?? 0 };
+      if (idx >= 0) existing[idx] = item; else existing.push(item);
+      existing.sort((a, b) => a.sort_order - b.sort_order);
+      await writeWhyChooseFallback(sb, existing);
+      return { ok: true };
+    }
+    throw new Error(error.message);
+  }
+  return { ok: true };
 });
 export const adminDeleteWhyChoose = createServerFn({ method: "POST" }).inputValidator((d: { id: string }) => d).handler(async ({ data }) => {
-  const sb: any = await admin(); const { error } = await sb.from("site_whychoose").delete().eq("id", data.id); if (error) throw new Error(error.message); return { ok: true };
+  const sb: any = await admin();
+  const { error } = await sb.from("site_whychoose").delete().eq("id", data.id);
+  if (error) {
+    if (String((error as any).code) === "PGRST205" || String(error.message).includes("site_whychoose")) {
+      const existing = await readWhyChooseFallback(sb);
+      const filtered = existing.filter((w) => w.id !== data.id);
+      await writeWhyChooseFallback(sb, filtered);
+      return { ok: true };
+    }
+    throw new Error(error.message);
+  }
+  return { ok: true };
 });
 
 // Image upload (base64 data URL -> Storage). Returns public URL.
