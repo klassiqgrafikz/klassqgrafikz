@@ -47,7 +47,6 @@ const services = [
 ];
 
 const fallbackProjects = [
-  { src: "/images/project-1.jpg", alt: "Business registration project display", tag: "Corporate" },
   { src: "/images/project-2.png", alt: "Nebiz Cakes n Events design project", tag: "Branding" },
   { src: "/images/project-3.png", alt: "Edited client photo for Klassiq Grafikz", tag: "Portrait" },
   { src: "/images/project-4.png", alt: "Document printing and delivery design project", tag: "Print" },
