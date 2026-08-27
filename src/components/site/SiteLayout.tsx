@@ -31,6 +31,14 @@ function ReadingProgress() {
 }
 
 export function SiteLayout({ children }: { children: ReactNode }) {
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if ((e.target as HTMLElement).tagName === 'IMG') e.preventDefault();
+    };
+    document.addEventListener('contextmenu', handler);
+    return () => document.removeEventListener('contextmenu', handler);
+  }, []);
+
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-white text-foreground">
       <ReadingProgress />
