@@ -125,7 +125,7 @@ function AnimatedStat({ target, suffix, label }: { target: number; suffix: strin
         {value}
         {suffix}
       </div>
-      <div className="mt-1 text-xs font-medium uppercase tracking-widest text-zinc-500">{label}</div>
+      <div className="mt-1 text-xs font-medium uppercase tracking-widest text-muted-foreground">{label}</div>
     </div>
   );
 }
@@ -165,7 +165,7 @@ function Hero() {
             {typed}
             <span className="ml-0.5 inline-block h-[1em] w-[3px] translate-y-1 bg-black animate-caret" aria-hidden />
           </h1>
-          <p className="mt-4 max-w-xl text-sm sm:text-[15px] leading-relaxed text-zinc-600 break-words">
+          <p className="mt-4 max-w-xl text-sm sm:text-[15px] leading-relaxed text-muted-foreground break-words">
             {heroSubtitle}
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
@@ -173,12 +173,12 @@ function Hero() {
               <span className="inline-flex h-11 items-center rounded-full bg-black px-7 text-sm font-medium text-white hover:bg-zinc-800 transition">Get a Free Quote</span>
             </Link>
             <Link to="/services">
-              <span className="inline-flex h-11 items-center rounded-full border border-zinc-200 bg-white px-7 text-sm font-medium hover:bg-zinc-50 transition">Our Services</span>
+              <span className="inline-flex h-11 items-center rounded-full border border-zinc-200 bg-white px-7 text-sm font-medium hover:bg-zinc-50 transition dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-white">Our Services</span>
             </Link>
           </div>
-          <div className="mt-6 flex items-center gap-2 text-xs text-zinc-500">
-            <span className="inline-flex items-center gap-1.5 font-medium text-black"><Star className="h-3.5 w-3.5 fill-black" /> 5.0 Google Rating</span>
-            <span className="h-3 w-px bg-zinc-200" /> 150+ Projects · 500+ Happy Clients
+          <div className="mt-6 flex items-center gap-2 text-xs">
+            <span className="inline-flex items-center gap-1.5 font-medium text-foreground"><Star className="h-3.5 w-3.5 fill-current" /> 5.0 Google Rating</span>
+            <span className="h-3 w-px bg-border" /> <Muted>150+ Projects · 500+ Happy Clients</Muted>
           </div>
         </div>
 
@@ -187,9 +187,9 @@ function Hero() {
             <img src={heroLogo} alt="Klassiq Grafikz" className="aspect-[4/3] w-full object-cover" />
           </div>
           <div className="absolute -bottom-4 -left-4 hidden rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm md:block">
-            <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Projects Done</div>
+            <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Projects Done</div>
             <div className="mt-1 font-display text-2xl font-bold">150+</div>
-            <div className="text-xs text-zinc-500">Across branding, motion & web</div>
+            <div className="text-xs text-muted-foreground">Across branding, motion & web</div>
           </div>
         </div>
       </div>
@@ -214,15 +214,23 @@ function StatsBar() {
   );
 }
 
+// Helper components for semantic text colors
+function Muted({ children }: { children: React.ReactNode }) {
+  return <span className="text-muted-foreground">{children}</span>;
+}
+function Dim({ children }: { children: React.ReactNode }) {
+  return <span className="text-foreground/70">{children}</span>;
+}
+
 function AboutSection() {
   return (
     <>
       <section className="bg-black py-12 sm:py-16 md:py-20 overflow-hidden">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="mx-auto max-w-3xl text-center">
-              <div className="text-xs font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">About Us</div>
-              <h2 className="mt-2 font-display text-3xl font-bold leading-tight tracking-tight text-white md:text-4xl">We Build Digital Experiences That Inspire</h2>
-              <p className="mt-4 text-[15px] leading-relaxed text-zinc-300 dark:text-zinc-400">
+              <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">About Us</div>
+              <h2 className="mt-2 font-display text-3xl font-bold leading-tight tracking-tight text-foreground md:text-4xl">We Build Digital Experiences That Inspire</h2>
+              <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
                 Klassiq Grafikz combines creativity with technology to deliver brands that look stunning and perform. From SMEs to large firms, we help you build a stronger presence and scale with confidence.
               </p>
               <Link to="/services" className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-black hover:bg-zinc-100 dark:bg-zinc-800 dark:text-white">
@@ -244,9 +252,9 @@ function ServicesSection() {
     <section className="bg-zinc-50">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16">
         <div className="mx-auto max-w-2xl text-center">
-          <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Our Services</div>
+          <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Our Services</div>
           <h2 className="mt-2 font-display text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">What We Offer</h2>
-          <p className="mt-2 text-xs sm:text-sm leading-relaxed text-zinc-600">From stunning designs to powerful platforms, we provide everything you need to succeed online.</p>
+          <p className="mt-2 text-xs sm:text-sm leading-relaxed text-muted-foreground">From stunning designs to powerful platforms, we provide everything you need to succeed online.</p>
         </div>
         <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-4">
           {display.map((s) => (
@@ -256,7 +264,7 @@ function ServicesSection() {
                   <Check className="h-4 w-4" />
                 </div>
                 <div className="mt-3 font-display text-xs sm:text-sm font-bold leading-tight line-clamp-2">{s.title}</div>
-                <div className="mt-1 text-[11px] sm:text-xs leading-relaxed text-zinc-600 line-clamp-3">{s.desc}</div>
+                <div className="mt-1 text-[11px] sm:text-xs leading-relaxed text-muted-foreground line-clamp-3">{s.desc}</div>
                 <Link to="/services" className="mt-3 inline-flex items-center gap-1 text-[11px] sm:text-xs font-medium hover:gap-1.5 transition-all">
                   Learn more <ArrowUpRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                 </Link>
@@ -301,8 +309,8 @@ function PortfolioGrid() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <div className="text-xs font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Our Portfolio</div>
-            <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold tracking-tight text-white md:text-4xl">Recent Projects</h2>
+            <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Our Portfolio</div>
+            <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold tracking-tight text-foreground md:text-4xl">Recent Projects</h2>
           </div>
           <Link to="/services" className="hidden rounded-full border border-white/20 bg-white px-5 py-2.5 text-sm font-medium text-black hover:bg-zinc-100 md:inline-flex dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700">See All Our Works</Link>
         </div>
@@ -343,7 +351,7 @@ function PortfolioGrid() {
                   </div>
                   <div className="p-4">
                     <div className="text-sm font-semibold leading-tight line-clamp-1">{slide.alt}</div>
-                    <div className="text-xs text-zinc-500">{slide.tag}</div>
+                    <div className="text-muted-foreground text-xs">{slide.tag}</div>
                   </div>
                 </button>
               </div>
@@ -371,7 +379,7 @@ function PortfolioGrid() {
               <DialogDescription className="mt-1 text-sm font-medium text-black">{projectSlides[activeIndex]?.alt}</DialogDescription>
             </div>
             <div className="flex items-center gap-2">
-              <div className="mr-2 text-xs text-zinc-500"><span className="font-mono text-black">{String(activeIndex + 1).padStart(2, "0")}</span> / {String(projectSlides.length).padStart(2, "0")}</div>
+              <div className="mr-2 text-xs text-muted-foreground"><span className="font-mono text-foreground">{String(activeIndex + 1).padStart(2, "0")}</span> / {String(projectSlides.length).padStart(2, "0")}</div>
               <button type="button" aria-label="Previous" onClick={() => go(-1)} className="grid h-10 w-10 place-items-center rounded-full border border-zinc-200 hover:bg-zinc-50"><ChevronLeft className="h-5 w-5" /></button>
               <button type="button" aria-label="Next" onClick={() => go(1)} className="grid h-10 w-10 place-items-center rounded-full border border-zinc-200 hover:bg-zinc-50"><ChevronRight className="h-5 w-5" /></button>
             </div>
@@ -408,9 +416,9 @@ function Testimonials() {
     <section className="bg-zinc-50 overflow-hidden">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 md:py-20">
         <div className="mx-auto max-w-2xl text-center">
-          <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Client Testimonials</div>
+          <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Client Testimonials</div>
           <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold tracking-tight md:text-4xl">Trusted by 200+ Businesses</h2>
-          <div className="mt-2 text-xs sm:text-sm text-zinc-500">5.0 · 168 Google Reviews</div>
+          <div className="mt-2 text-xs sm:text-sm text-muted-foreground">5.0 · 168 Google Reviews</div>
         </div>
 
         <div className="relative mt-8">
@@ -418,13 +426,13 @@ function Testimonials() {
             <div className="flex touch-pan-y gap-3 sm:gap-4">
               {reviews.map((r) => (
                 <figure key={r.name} className="min-w-0 flex-[0_0_88%] sm:flex-[0_0_45%] lg:flex-[0_0_30%] rounded-xl sm:rounded-2xl border border-zinc-200 bg-white p-4 sm:p-5">
-                  <div className="flex gap-0.5 text-black">{Array.from({ length: 5 }).map((_, i) => (<Star key={i} className="h-3 w-3 sm:h-3.5 sm:w-3.5 fill-black" />))}</div>
+                  <div className="flex gap-0.5 text-foreground">{Array.from({ length: 5 }).map((_, i) => (<Star key={i} className="h-3 w-3 sm:h-3.5 sm:w-3.5 fill-current" />))}</div>
                   <blockquote className="mt-3 text-xs sm:text-sm font-medium leading-relaxed line-clamp-4">"{r.body}"</blockquote>
                   <figcaption className="mt-4 flex items-center gap-2.5 border-t border-zinc-100 pt-3">
                     <div className="grid h-8 w-8 place-items-center rounded-full bg-black text-[11px] font-bold text-white">{r.initials}</div>
                     <div className="min-w-0">
                       <div className="text-xs sm:text-sm font-semibold truncate">{r.name}</div>
-                      <div className="text-[11px] text-zinc-500 truncate">{r.location}</div>
+                      <div className="text-[11px] text-muted-foreground truncate">{r.location}</div>
                     </div>
                   </figcaption>
                 </figure>
@@ -443,11 +451,11 @@ function Testimonials() {
 
         <div className="mt-10 grid gap-4 md:grid-cols-2">
           <div className="rounded-2xl border border-zinc-200 bg-white p-6 text-center">
-            <p className="text-sm text-zinc-600">Want to say something nice about us?</p>
+            <p className="text-sm text-muted-foreground">Want to say something nice about us?</p>
             <Link to="/reviews" className="mt-4 inline-flex rounded-full bg-black px-6 py-2.5 text-sm font-medium text-white hover:bg-zinc-800">Add a Review</Link>
           </div>
           <div className="rounded-2xl border border-zinc-200 bg-white p-6 text-center">
-            <p className="text-sm text-zinc-600">Others still said 1 or 2 things about us</p>
+            <p className="text-sm text-muted-foreground">Others still said 1 or 2 things about us</p>
             <Link to="/reviews" className="mt-4 inline-flex rounded-full border border-zinc-200 bg-white px-6 py-2.5 text-sm font-medium hover:bg-zinc-50">More Testimonials</Link>
           </div>
         </div>
@@ -463,7 +471,7 @@ function WhyChooseUs() {
   return (
     <section className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 md:py-20 overflow-hidden">
       <div className="mx-auto max-w-2xl text-center">
-        <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Why Choose Us</div>
+        <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Why Choose Us</div>
         <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold tracking-tight md:text-4xl">Several Things Define Us As a Company</h2>
       </div>
       <div className="mt-8 sm:mt-10 grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3">
@@ -471,7 +479,7 @@ function WhyChooseUs() {
           <div key={w.title} className="rounded-xl sm:rounded-2xl border border-zinc-200 p-4 sm:p-6">
             <div className="grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-lg bg-black text-white"><Check className="h-3.5 w-3.5 sm:h-4 sm:w-4" /></div>
             <div className="mt-3 sm:mt-4 font-display text-xs sm:text-sm font-bold leading-tight">{w.title}</div>
-            <div className="mt-1 text-[11px] sm:text-sm leading-relaxed text-zinc-600 line-clamp-3">{w.desc}</div>
+            <div className="mt-1 text-[11px] sm:text-sm leading-relaxed text-muted-foreground line-clamp-3">{w.desc}</div>
           </div>
         ))}
       </div>
@@ -481,13 +489,13 @@ function WhyChooseUs() {
 
 function FinalCTA() {
   return (
-    <section className="bg-black text-white overflow-hidden">
+    <section className="bg-black overflow-hidden">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-14 text-center md:py-16">
         <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">Ready to Build Your Dream Website?</h2>
-        <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-zinc-300">Let's discuss your project and create something amazing together.</p>
+        <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-foreground">Let's discuss your project and create something amazing together.</p>
         <div className="mt-7 flex flex-wrap justify-center gap-3">
-          <Link to="/contact"><span className="inline-flex h-11 items-center rounded-full bg-white px-7 text-sm font-medium text-black hover:bg-zinc-100">Get Started Today</span></Link>
-          <a href="https://wa.me/2347050495704" target="_blank" rel="noreferrer" className="inline-flex h-11 items-center rounded-full border border-white/20 px-7 text-sm font-medium hover:bg-white/10">Chat on WhatsApp</a>
+          <Link to="/contact"><span className="inline-flex h-11 items-center rounded-full bg-white px-7 text-sm font-medium text-black hover:bg-zinc-100 dark:bg-zinc-800 dark:text-white">Get Started Today</span></Link>
+          <a href="https://wa.me/2347050495704" target="_blank" rel="noreferrer" className="inline-flex h-11 items-center rounded-full border border-white/20 px-7 text-sm font-medium hover:bg-white/10 dark:border-zinc-800 dark:hover:bg-zinc-800">Chat on WhatsApp</a>
         </div>
       </div>
     </section>
@@ -496,17 +504,17 @@ function FinalCTA() {
 
 function ContactBand() {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-16 md:py-20">
+    <section className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 md:py-20">
       <div className="grid gap-8 rounded-3xl border border-zinc-200 bg-zinc-50 p-6 md:grid-cols-2 md:p-8">
         <div>
-          <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Get In Touch</div>
+          <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Get In Touch</div>
           <h2 className="mt-2 font-display text-3xl font-bold tracking-tight">Start Your Project Today</h2>
-          <p className="mt-3 text-sm leading-relaxed text-zinc-600">Fill the form and we respond within 24 hours with a free quote.</p>
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">Fill the form and we respond within 24 hours with a free quote.</p>
           <div className="mt-6 space-y-3 text-sm">
             <div><span className="font-semibold">Office:</span> Lagos, Nigeria</div>
             <div><span className="font-semibold">Phone:</span> <a href="tel:+2347050495704" className="underline">+234 705 049 5704</a></div>
             <div><span className="font-semibold">Email:</span> <a href="mailto:klassiqgrafikz@gmail.com" className="underline">klassiqgrafikz@gmail.com</a></div>
-            <div className="text-zinc-500">Mon–Fri 8am–6pm · Sat 9am–3pm</div>
+            <div className="text-muted-foreground">Mon–Fri 8am–6pm · Sat 9am–3pm</div>
           </div>
         </div>
         <form onSubmit={(e) => e.preventDefault()} className="grid gap-3 rounded-2xl border border-zinc-200 bg-white p-6">
@@ -519,7 +527,7 @@ function ContactBand() {
           <select className="input h-11 rounded-xl bg-white"><option>Service Needed — Select a service</option><option>Website Design</option><option>Branding</option><option>E-Commerce</option></select>
           <textarea placeholder="Your Message *" rows={4} className="input rounded-xl" />
           <button className="h-11 rounded-full bg-black text-sm font-medium text-white hover:bg-zinc-800">Send Message</button>
-          <div className="text-center text-xs text-zinc-500">We respond within 24 hours. Your info is safe.</div>
+          <div className="text-center text-xs text-muted-foreground">We respond within 24 hours. Your info is safe.</div>
         </form>
       </div>
     </section>
